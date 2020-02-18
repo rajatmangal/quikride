@@ -35,9 +35,14 @@ passport.use(new LocalStrategy(
         if (err) { return done(err); }
         if (!user) {  return done(null, false, {message: 'No user with that email'}) }
         if (await bcrypt.compare(password, user.password)) { 
-            return done(null, false, {message: 'Incorrect Password'});
         }
-        return done(null, user);
+        bcrypt.compare(password, user.password, function (err, result) {
+            if (result == true) {
+                return done(null, user);
+            } else {
+                return done(null, false, {message: 'Incorrect Password'});
+            }
+          });
       });
     }
 ));
