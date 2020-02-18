@@ -13,6 +13,7 @@
     "bcrypt": "^3.0.8",
     "body-parser": "^1.19.0",
     "chai": "^4.2.0",
+    "cookie-parser": "^1.4.4",
     "ejs": "^3.0.1",
     "express": "^4.17.1",
     "express-flash": "0.0.2",
@@ -22,7 +23,8 @@
     "mongoose": "^5.9.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^6.0.1"
+    "passport-local-mongoose": "^6.0.1",
+    "password-validator": "^5.0.3"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",

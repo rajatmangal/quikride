@@ -6,12 +6,13 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const flash = require('express-flash')
+const flash = require('express-flash');
+const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const methodOverride = require('method-override')
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-// const initializePassport = require('./passport-config');
+const passwordValidator = require('password-validator');
 const app = express();
 
 const User = require('./models/user');
@@ -21,17 +22,20 @@ mongoose.connect('mongodb://localhost/users', {useNewUrlParser: true, useUnified
 var db = mongoose.connection;
 
 app.set('view-engine', 'ejs')
-app.use(flash())
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 }));
+app.use(cookieParser());
+app.use(flash());
 
 
 passport.use(new LocalStrategy(
     function(username, password, done) {
+    console.log(username);
       User.findOne({ username: username }, async function (err, user) {
+        console.log(user);
         if (err) { return done(err); }
         if (!user) {  return done(null, false, {message: 'No user with that email'}) }
         if (await bcrypt.compare(password, user.password)) { 
@@ -83,29 +87,44 @@ app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
 
 app.post('/register', checkNotAuthenticated,async (req,res) => {
     try{
-        const hashedPassword = await bcrypt.hash(req.body.password,10);
         var firstName = req.body.firstName;
         var lastName = req.body.lastName;
         var username = req.body.username;
         var email = req.body.email;
-        console.log(firstName)
-        console.log(lastName)
-        console.log(username)
-        console.log(email)
-        var newUser = new User({firstName: firstName, lastName: lastName, username: username, email: email,password:hashedPassword});
-        await User.register(newUser, req.body.password, function(err, user) {
-            if(err) {
-            console.log(err);
-            return res.render('/register.ejs');
-            }
-            else {
-                passport.authenticate('local')(req, res, function() {
-                res.redirect('/');
+        var passwordCheck =  new passwordValidator();
+        passwordCheck
+            .is().min(8)                                    // Minimum length 8
+            .is().max(20)                                  // Maximum length 100
+            .has().uppercase()                              // Must have uppercase letters
+            .has().lowercase()
+            .has().symbols()                              // Must have lowercase letters
+            .has().digits()                                 // Must have digits
+            .has().not().spaces()                           // Should not have spaces
+            .is().not().oneOf(['Passw0rd', 'Password123']); // Blacklist these values
+        if(!passwordCheck.validate(req.body.password)) {
+            return res.render('register.ejs', {
+                message: "Your password must have a least length of 8 and should include atleast 1 digit, 1 Uppercase Letter ,1 Lowercase Letter and 1 special character."
             });
-            console.log("Added")
-            }
-        }); 
-        res.redirect('/login');
+        }
+        else {
+            const hashedPassword = await bcrypt.hash(req.body.password,10);
+            var newUser = new User({firstName: firstName, lastName: lastName, username: username, email: email,password:hashedPassword});
+            await User.register(newUser, req.body.password, function(err, user) {
+                if(err) {
+                    // console.log(err.message);
+                    req.flash('error', err.message);
+                    // console.log(req.flash('error'));
+                    return res.render('register.ejs', {
+                        message: err.message
+                    });
+                }
+                else {
+                }
+                    passport.authenticate("local")(req, res, function() {
+                    return res.redirect('/');
+                });
+            });
+        }
     } catch (e){
         console.log(e)
         res.redirect('/register');

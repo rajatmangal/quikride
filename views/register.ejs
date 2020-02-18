@@ -7,6 +7,9 @@
 </head>
 <body>
     <h1>Register</h1>
+    <% if(typeof message != 'undefined') { %>
+        <%= message %>
+    <% } %>
     <form action="/register" method='POST'>
 
         <label for="firstName">First Name</label>
@@ -17,8 +20,8 @@
         <input type="text" id="lastName" name=
         "lastName" required>
 
-        <label for="userName">User Name</label>
-        <input type="text" id="userName" name=
+        <label for="username">User Name</label>
+        <input type="text" id="username" name=
         "username" required>
 
         <label for="email">Email</label>
