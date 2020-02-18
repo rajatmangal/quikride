@@ -7,6 +7,9 @@
 </head>
 <body>
     <h1>Register</h1>
+    <% if(typeof message != 'undefined') { %>
+        <%= message %>
+    <% } %>
     <form action="/register" method='POST'>
 
         <label for="firstName">First Name</label>
@@ -17,8 +20,8 @@
         <input type="text" id="lastName" name=
         "lastName" required>
 
-        <label for="userName">User Name</label>
-        <input type="text" id="userName" name=
+        <label for="username">User Name</label>
+        <input type="text" id="username" name=
         "username" required>
 
         <label for="email">Email</label>
@@ -28,6 +31,10 @@
         <label for="password">Password</label>
         <input type="password" id="password" name=
         "password" required>
+
+        <label for="password2">Retype Password</label>
+        <input type="password" id="password2" name=
+        "password2" required>
 
         <button type="submit">Register</button>
     </form>

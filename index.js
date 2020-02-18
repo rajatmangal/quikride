@@ -3,60 +3,33 @@ if(process.env.NODE_ENV !== 'production') {
 }
 
 const express = require('express');
-const bcrypt = require('bcrypt');
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const flash = require('express-flash')
+const flash = require('express-flash');
+const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const methodOverride = require('method-override')
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-// const initializePassport = require('./passport-config');
+const passwordValidator = require('password-validator');
+const mongoose = require('mongoose');
 const app = express();
-
 const User = require('./models/user');
+const passConfig = require('./config/passport-config')
+const regConfig = require('./config/register-config')
 const port = process.env.PORT || 3000;
 
 mongoose.connect('mongodb://localhost/users', {useNewUrlParser: true, useUnifiedTopology: true});
 var db = mongoose.connection;
 
 app.set('view-engine', 'ejs')
-app.use(flash())
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 }));
 
-
-passport.use(new LocalStrategy(
-    function(username, password, done) {
-      User.findOne({ username: username }, async function (err, user) {
-        if (err) { return done(err); }
-        if (!user) {  return done(null, false, {message: 'No user with that email'}) }
-        if (await bcrypt.compare(password, user.password)) { 
-        }
-        bcrypt.compare(password, user.password, function (err, result) {
-            if (result == true) {
-                return done(null, user);
-            } else {
-                return done(null, false, {message: 'Incorrect Password'});
-            }
-          });
-      });
-    }
-));
-
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
-});
-
+app.use(cookieParser());
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method'))
@@ -81,35 +54,8 @@ app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
     failureFlash: true 
 }));
 
-app.post('/register', checkNotAuthenticated,async (req,res) => {
-    try{
-        const hashedPassword = await bcrypt.hash(req.body.password,10);
-        var firstName = req.body.firstName;
-        var lastName = req.body.lastName;
-        var username = req.body.username;
-        var email = req.body.email;
-        console.log(firstName)
-        console.log(lastName)
-        console.log(username)
-        console.log(email)
-        var newUser = new User({firstName: firstName, lastName: lastName, username: username, email: email,password:hashedPassword});
-        await User.register(newUser, req.body.password, function(err, user) {
-            if(err) {
-            console.log(err);
-            return res.render('/register.ejs');
-            }
-            else {
-                passport.authenticate('local')(req, res, function() {
-                res.redirect('/');
-            });
-            console.log("Added")
-            }
-        }); 
-        res.redirect('/login');
-    } catch (e){
-        console.log(e)
-        res.redirect('/register');
-    }
+app.post('/register', checkNotAuthenticated, async (req,res) => {
+    regConfig.registerUser(req,res);
 });
 
 app.delete('/logout', (req,res) => {
@@ -130,6 +76,8 @@ function checkNotAuthenticated(req, res, next) {
     }
     next();
 }
-app.listen(port);
+app.listen(port, (res,req) => {
+    console.log(`Listening to port ${port}`);
+});
 
 
