@@ -1,11 +1,30 @@
 const mongoose = require('mongoose');
 const passwordValidator = require('password-validator');
-function registerUser(res, req) {
+const passport = require('passport');
+const bcrypt = require('bcrypt');
+const LocalStrategy = require('passport-local').Strategy;
+const User = require('../models/user');
+
+
+
+async function registerUser(req, res) {
     try{
         var firstName = req.body.firstName;
         var lastName = req.body.lastName;
         var username = req.body.username;
+        if(username.length < 6 || username.length > 20) {
+            return res.render('register.ejs', {
+                message: "username should have a minimum length of 6 and maximum of 20"
+            });
+        }
         var email = req.body.email;
+        var password = req.body.password;
+        var password2 = req.body.password2;
+        if(password !== password2) {
+            return res.render('register.ejs', {
+                message: "Those Passwords didn't match. Please try again."
+            });
+        }
         var passwordCheck =  new passwordValidator();
         passwordCheck
             .is().min(8)                                    // Minimum length 8
@@ -26,15 +45,14 @@ function registerUser(res, req) {
             var newUser = new User({firstName: firstName, lastName: lastName, username: username, email: email,password:hashedPassword});
             await User.register(newUser, req.body.password, function(err, user) {
                 if(err) {
-                    // console.log(err.message);
                     req.flash('error', err.message);
-                    // console.log(req.flash('error'));
                     return res.render('register.ejs', {
                         message: err.message
                     });
                 }
                 else {
                 }
+                    console.log("New User Saved");
                     passport.authenticate("local")(req, res, function() {
                     return res.redirect('/');
                 });
@@ -47,4 +65,4 @@ function registerUser(res, req) {
 }
 
 
-module.exports = registerUser;
+module.exports.registerUser = registerUser;
