@@ -88,7 +88,7 @@ app.post('/register', checkNotAuthenticated,async (req,res) => {
         console.log(username)
         console.log(email)
         var newUser = new User({firstName: firstName, lastName: lastName, username: username, email: email,password:hashedPassword});
-        await User.register(newUser, hashedPassword, function(err, user) {
+        await User.register(newUser, req.body.password, function(err, user) {
             if(err) {
             console.log(err);
             return res.render('/register.ejs');
