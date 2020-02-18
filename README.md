@@ -11,3 +11,8 @@
     - / : home page
     - /login: Login Page
     - /register: Registeration Page
+
+##To run tests:
+1. run 
+`$ npm test`
+in your CLI
