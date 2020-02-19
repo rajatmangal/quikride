@@ -29,6 +29,7 @@ app.use(session({
     saveUninitialized: false
 }));
 
+app.use('/admin', adminRouter);
 app.use(cookieParser());
 app.use(flash());
 app.use(passport.initialize());
@@ -63,8 +64,6 @@ app.delete('/logout', (req,res) => {
     req.logOut();
     res.redirect('/login');
 })
-
-app.use('/admin', adminRouter);
 
 function checkAuthentication(req, res, next) {
     if(req.isAuthenticated()) {
