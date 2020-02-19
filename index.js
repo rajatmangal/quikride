@@ -11,6 +11,7 @@ const methodOverride = require('method-override')
 const bodyParser = require('body-parser');
 const passwordValidator = require('password-validator');
 const mongoose = require('mongoose');
+const adminRouter = require('./routers/admin.router');
 const app = express();
 const User = require('./models/user');
 const passConfig = require('./config/passport-config')
@@ -62,6 +63,8 @@ app.delete('/logout', (req,res) => {
     req.logOut();
     res.redirect('/login');
 })
+
+app.use('/admin', adminRouter);
 
 function checkAuthentication(req, res, next) {
     if(req.isAuthenticated()) {
