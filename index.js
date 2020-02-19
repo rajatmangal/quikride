@@ -11,6 +11,7 @@ const methodOverride = require('method-override')
 const bodyParser = require('body-parser');
 const passwordValidator = require('password-validator');
 const mongoose = require('mongoose');
+const adminRouter = require('./routers/admin.router');
 const app = express();
 const User = require('./models/user');
 const passConfig = require('./config/passport-config')
@@ -28,6 +29,7 @@ app.use(session({
     saveUninitialized: false
 }));
 
+app.use('/admin', adminRouter);
 app.use(cookieParser());
 app.use(flash());
 app.use(passport.initialize());

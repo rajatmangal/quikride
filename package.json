@@ -10,6 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "admin-bro": "^1.6.6",
+    "admin-bro-expressjs": "^0.4.0",
+    "admin-bro-mongoose": "^0.4.0",
     "bcrypt": "^3.0.8",
     "body-parser": "^1.19.0",
     "chai": "^4.2.0",
@@ -17,6 +20,7 @@
     "ejs": "^3.0.1",
     "express": "^4.17.1",
     "express-flash": "0.0.2",
+    "express-formidable": "^1.2.0",
     "express-session": "^1.17.0",
     "method-override": "^3.0.0",
     "mocha": "^7.0.1",
