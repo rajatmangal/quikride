@@ -2,6 +2,7 @@ if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 
+const http = require('http');
 const express = require('express');
 const passport = require('passport');
 const flash = require('express-flash');
@@ -16,12 +17,19 @@ const app = express();
 const User = require('./models/user');
 const passConfig = require('./config/passport-config')
 const regConfig = require('./config/register-config')
+const chatApp = require('./chat/chat');
 const port = process.env.PORT || 3000;
+
+const server = http.createServer(app);
+app.set('view-engine', 'ejs')
+app.set('views',__dirname + "/public");
+console.log(__dirname + "/public");
+chatApp.connectChat(server);
+app.use(express.static(__dirname + '/public'));
 
 mongoose.connect('mongodb://localhost/users', {useNewUrlParser: true, useUnifiedTopology: true});
 var db = mongoose.connection;
 
-app.set('view-engine', 'ejs')
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -65,6 +73,10 @@ app.delete('/logout', (req,res) => {
     res.redirect('/login');
 })
 
+app.get('/chat', (req,res) => {
+    res.render('chat.ejs')
+})
+
 function checkAuthentication(req, res, next) {
     if(req.isAuthenticated()) {
         return next();
@@ -78,7 +90,7 @@ function checkNotAuthenticated(req, res, next) {
     }
     next();
 }
-app.listen(port, (res,req) => {
+server.listen(port, (res,req) => {
     console.log(`Listening to port ${port}`);
 });
 
