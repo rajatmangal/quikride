@@ -2,11 +2,24 @@ const AdminBro = require('admin-bro')
 const AdminBroExpress = require('admin-bro-expressjs');
 const AdminBroMongoose = require('admin-bro-mongoose')
 const mongoose = require('mongoose');
-const Users = require('../models/user')
+const users = require('../models/user')
 AdminBro.registerAdapter(AdminBroMongoose)
 const adminBro = new AdminBro({
   databases: [mongoose],
   rootPath: '/admin',
+  branding: {
+      logo: 'https://i.ibb.co/Xtfx7Hn/logo-470.png',
+      companyName: 'Quik Ride'
+  },
+  resources: [{
+      resource: users,
+      options:{
+        parent: {
+            name: 'Users Management',
+            icon: 'fas fa-users',
+        }
+      }
+  }],
 })
 
 
