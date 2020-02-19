@@ -11,15 +11,17 @@ const locationTemplate = document.getElementById("location-template").innerHTML;
 socket.on('message', (message) => {
     console.log(message);
     const html = Mustache.render(messageTemplate, {
-        message: message
+        message: message.text,
+        time: moment(message.createdAt).format('dddd h:mm a')
     });
     messages.insertAdjacentHTML('beforeend',html)
 })
 
-socket.on('locationMessage', (url) => {
-    console.log(url)
+socket.on('locationMessage', (link) => {
+    // console.log(link)
     const html = Mustache.render(locationTemplate, {
-        url:url
+        url:link.url,
+        time: moment(link.createdAt).format('dddd h:mm a')
     });
     messages.insertAdjacentHTML('beforeend',html)
 });
@@ -43,6 +45,7 @@ sendLoc.addEventListener('click', (e) => {
         return alert('Geolocation is not supported by your browser.')
     }
     navigator.geolocation.getCurrentPosition( (position) => {
+        console.log("start");
         sendMessage.setAttribute('disabled','disabled');
         sendLoc.setAttribute('disabled','disabled');
         socket.emit('location', {
@@ -50,6 +53,7 @@ sendLoc.addEventListener('click', (e) => {
             lon: position.coords.longitude
         }, (message) => {
             console.log(message);
+            console.log("start");
             sendMessage.removeAttribute('disabled');
             sendLoc.removeAttribute('disabled');
         })
