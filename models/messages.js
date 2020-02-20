@@ -4,7 +4,7 @@ var passportLocalMongoose = require('passport-local-mongoose');
 
 var MessageSchema = new mongoose.Schema({
     sender: {
-        type: mongoose.ObjectId,
+        type: String,
         required: true
     },
     message: {
@@ -12,7 +12,7 @@ var MessageSchema = new mongoose.Schema({
         required: true
     },
     thread: {
-        type: mongoose.ObjectId,
+        type: Number,
         required: true
     },
     created_at: {
