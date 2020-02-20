@@ -42,6 +42,10 @@ app.get('/', checkAuthentication, (req,res) => {
     res.render('index.ejs',{ name: req.user.username});
 });
 
+app.get('/map', checkAuthentication, (req,res) => {
+    res.render('map.ejs',{ name: req.user.username});
+});
+
 app.get('/login', checkNotAuthenticated, (req,res) => {
     res.render('login.ejs');
 });
