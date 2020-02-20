@@ -1,5 +1,8 @@
 const socket = io();
 
+
+const id = document.getElementsByTagName("body")[0].className;
+console.log(id);
 const formData = document.getElementById("formData");
 const messageField =  document.getElementById("message");
 const sendMessage = document.getElementById("sendMessage");
@@ -7,6 +10,8 @@ const sendLoc = document.getElementById("sendLoc");
 const messages = document.getElementById("messages");
 const messageTemplate = document.getElementById("message-template").innerHTML;
 const locationTemplate = document.getElementById("location-template").innerHTML;
+const userId = document.getElementById("userId").value;
+console.log(userId);
 
 socket.on('message', (message) => {
     console.log(message);
@@ -59,3 +64,6 @@ sendLoc.addEventListener('click', (e) => {
         })
     });
 });
+
+
+socket.emit("join", {room:id});

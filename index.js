@@ -18,6 +18,7 @@ const User = require('./models/user');
 const passConfig = require('./config/passport-config')
 const regConfig = require('./config/register-config')
 const chatApp = require('./chat/chat');
+const thread = require('./models/thread');
 const port = process.env.PORT || 3000;
 
 const server = http.createServer(app);
@@ -73,9 +74,42 @@ app.delete('/logout', (req,res) => {
     res.redirect('/login');
 })
 
-app.get('/chat', (req,res) => {
-    res.render('chat.ejs')
+app.get('/chat/:id', checkAuthentication, (req,res) => {
+    thread.findOne({group_name:req.params.id}, (err,res1) => {
+        if(res1===null) {
+            //craete a new thread
+            var newThread = new thread({ users: [req.user._id], group_name: req.params.id, created_by: new mongoose.Types.ObjectId(), created_at: new Date().getTime()});
+            thread.create(newThread, (err,res2) => {
+                 if(err) {
+                     throw err;
+                 }
+                 else {
+                    res.render('chat.ejs', {id: req.params.id, userId: req.user._id})
+                 }
+             });
+            
+        } else {
+            thread.findOne({ users: req.user._id}, (err,res2) => {
+                if(res2 == null) {
+                    res.send("Sorry not authorized");
+                } else{
+                    res.render('chat.ejs', {id: req.params.id, userId: req.user._id})
+                }
+            });
+        }
+    })
+    // var newMessage = new messages({ sender: new mongoose.Types.ObjectId(), message:message, thread: new mongoose.Types.ObjectId(), created_at: new Date().getTime()});
+    // messages.create(newMessage, (err,res) => {
+    //         if(err) {
+    //             throw err;
+    //         }
+    //         else {
+    //         io.emit('message', chatUtil.generateMessage(message));
+    //         callback("Delivered");
+    //         }
+    // });
 })
+
 
 function checkAuthentication(req, res, next) {
     if(req.isAuthenticated()) {
