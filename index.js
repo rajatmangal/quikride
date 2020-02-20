@@ -18,7 +18,11 @@ const passConfig = require('./config/passport-config')
 const regConfig = require('./config/register-config')
 const port = process.env.PORT || 3000;
 
-mongoose.connect('mongodb://localhost/users', {useNewUrlParser: true, useUnifiedTopology: true});
+if(process.env.USE_MONGO_CLUSTER) { 
+    mongoose.connect('mongodb+srv://mongoadmin:cmpt470carpool@cluster0-yeuix.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
+} else {
+    mongoose.connect('mongodb://localhost/users', {useNewUrlParser: true, useUnifiedTopology: true});
+}
 var db = mongoose.connection;
 
 app.set('view-engine', 'ejs')
