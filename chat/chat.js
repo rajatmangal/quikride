@@ -15,13 +15,16 @@ function connectChat(server) {
             socket.broadcast.to(id).emit('message', chatUtil.generateMessage("A new user has joined"));
         })
         socket.on('sendMessage', (message, callback) => {
-            var newMessage = new messages({ sender: new mongoose.Types.ObjectId(), message:message, thread: new mongoose.Types.ObjectId(), created_at: new Date().getTime()});
+            console.log(message.message);
+            console.log(message.username);
+            console.log(message);
+            var newMessage = new messages({ sender: message.username, message:message.message, thread: parseInt(message.id), created_at: new Date().getTime()});
             messages.create(newMessage, (err,res) => {
                  if(err) {
                      throw err;
                  }
                  else {
-                    io.emit('message', chatUtil.generateMessage(message));
+                    io.emit('message', chatUtil.generateMessage(message.message));
                     callback("Delivered");
                  }
              });

@@ -12,7 +12,17 @@
             <span id="userId"><%=userId%></span>
         </div>
         <div class="chat__main">
-            <div id="messages" class="chat__messages"></div>
+            <div id="messages" class="chat__messages">
+                <% for (var i = 0 ; i < messages.length ; i++) {%>
+                    <div class="message">
+                        <p>
+                            <span class="message__name"><%= messages[i].sender%></span>
+                            <span class="message__meta"><%= messages[i].created_at%></span>
+                        </p>
+                        <p><%= messages[i].message%></p>
+                    </div>
+                <% } %>
+            </div>
             <div class="compose">
                 <form id="formData">
                     <input type="text" id="message" placeholder="Type message Here">

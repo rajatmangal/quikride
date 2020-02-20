@@ -19,6 +19,7 @@ const passConfig = require('./config/passport-config')
 const regConfig = require('./config/register-config')
 const chatApp = require('./chat/chat');
 const thread = require('./models/thread');
+const messages = require('./models/messages');
 const port = process.env.PORT || 3000;
 
 const server = http.createServer(app);
@@ -84,7 +85,7 @@ app.get('/chat/:id', checkAuthentication, (req,res) => {
                      throw err;
                  }
                  else {
-                    res.render('chat.ejs', {id: req.params.id, userId: req.user._id})
+                    res.render('chat.ejs', {id: req.params.id, userId: req.user.username})
                  }
              });
             
@@ -93,21 +94,20 @@ app.get('/chat/:id', checkAuthentication, (req,res) => {
                 if(res2 == null) {
                     res.send("Sorry not authorized");
                 } else{
-                    res.render('chat.ejs', {id: req.params.id, userId: req.user._id})
+                    messages.find({thread: req.params.id}, (err,res3) =>{
+                        if(err) {
+                            throw err;
+                        } else{
+                            console.log(typeof res3)
+                            console.log(res3);
+
+                            res.render('chat.ejs', {id: req.params.id, userId: req.user.username, messages: res3})
+                        }
+                    });
                 }
             });
         }
     })
-    // var newMessage = new messages({ sender: new mongoose.Types.ObjectId(), message:message, thread: new mongoose.Types.ObjectId(), created_at: new Date().getTime()});
-    // messages.create(newMessage, (err,res) => {
-    //         if(err) {
-    //             throw err;
-    //         }
-    //         else {
-    //         io.emit('message', chatUtil.generateMessage(message));
-    //         callback("Delivered");
-    //         }
-    // });
 })
 
 

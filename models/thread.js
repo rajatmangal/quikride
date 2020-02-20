@@ -4,15 +4,15 @@ var passportLocalMongoose = require('passport-local-mongoose');
 
 var threadSchema = new mongoose.Schema({
     users: [{
-        type: mongoose.ObjectId,
+        type: String,
         required : true
     }],
     group_name: {
-        type: String,
+        type: Number,
         required : true
     },
     created_by: {
-        type: mongoose.ObjectId,
+        type: String,
         required : true
     },
     created_at: {

@@ -10,8 +10,8 @@ const sendLoc = document.getElementById("sendLoc");
 const messages = document.getElementById("messages");
 const messageTemplate = document.getElementById("message-template").innerHTML;
 const locationTemplate = document.getElementById("location-template").innerHTML;
-const userId = document.getElementById("userId").value;
-console.log(userId);
+const username = document.getElementById("userId").innerText;
+console.log("UserId is", username);
 
 socket.on('message', (message) => {
     console.log(message);
@@ -36,7 +36,11 @@ formData.addEventListener('submit', (e) => {
     sendMessage.setAttribute('disabled','disabled');
     sendLoc.setAttribute('disabled','disabled');
     const message = messageField.value;
-    socket.emit("sendMessage", message, (message) => {
+    socket.emit("sendMessage", {
+        message: message,
+        username:username,
+        id:id
+     },  (message) => {
         console.log("Message has been delivered", message)
         sendMessage.removeAttribute('disabled');
         messageField.value = "";
