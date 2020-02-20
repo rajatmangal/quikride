@@ -42,6 +42,28 @@ app.get('/', checkAuthentication, (req,res) => {
     res.render('index.ejs',{ name: req.user.username});
 });
 
+app.get('/verify', checkNotAuthenticated, (req,res) => {
+    res.render('verify.ejs');
+});
+
+app.post('/verify', checkNotAuthenticated, async (req,res) => {
+    try {
+        const {emailToken} = req.body;
+        const user = await User.findOne({'emailToken': emailToken});
+        if (!user) {
+            req.flash('error', 'User associated with this token not found');
+            res.redirect('/verify');
+            return;
+        }
+        user.emailConfirmed = true;
+        user.emailToken = '';
+        await user.save();
+        res.redirect('/login');
+    } catch(error) {
+        console.log(error);
+    }
+});
+
 app.get('/login', checkNotAuthenticated, (req,res) => {
     res.render('login.ejs');
 });

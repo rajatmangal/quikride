@@ -29,6 +29,14 @@ var UserSchema = new mongoose.Schema({
     minLength: 8,
     maxLength: 20
   },
+  emailConfirmed: {
+    type : Boolean,
+    required : true,
+    default : false
+  },
+  emailToken: {
+    type : String
+  },
 });
 
 // This adds some methods to the UserSchema
