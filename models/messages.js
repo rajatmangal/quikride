@@ -12,7 +12,7 @@ var MessageSchema = new mongoose.Schema({
         required: true
     },
     thread: {
-        type: String,
+        type: Number,
         required: true
     },
     created_at: {

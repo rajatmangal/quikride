@@ -22,7 +22,6 @@ const thread = require('./models/thread');
 const messages = require('./models/messages');
 const port = process.env.PORT || 3000;
 
-
 const server = http.createServer(app);
 app.set('view-engine', 'ejs')
 app.set('views',__dirname + "/public");
