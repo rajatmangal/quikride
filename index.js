@@ -106,11 +106,28 @@ app.delete('/logout', (req,res) => {
     res.redirect('/login');
 })
 
-app.get('/chat/:id', checkAuthentication, (req,res) => {
-    thread.findOne({group_name:req.params.id}, (err,res1) => {
+app.get('/chats', checkAuthentication, async (req,res) => {
+    const users = await User.find({}, (err,res) => {
+        if(err) {
+            throw err;
+        }
+        console.log(res)
+    });
+    res.render('chats.ejs', {
+        user: req.user,
+        users: users
+    })
+});
+
+app.get('/chat/:id1/:id2', checkAuthentication, (req,res) => {
+    console.log(typeof(req.params.id1));
+    console.log(req.params.id2);
+
+    thread.findOne({$or: [{'group_name': req.params.id1+ req.params.id2}, {'group_name':  req.params.id2+ req.params.id1}]}, (err,res1) => {
+        console.log(res1)
         if(res1===null) {
-            //craete a new thread
-            var newThread = new thread({ users: [req.user._id], group_name: req.params.id, created_by: new mongoose.Types.ObjectId(), created_at: new Date().getTime()});
+            //create a new thread
+            var newThread = new thread({ users: [mongoose.Types.ObjectId(req.params.id1), mongoose.Types.ObjectId(req.params.id2)], group_name: req.params.id1+ req.params.id2, created_by: new mongoose.Types.ObjectId(), created_at: new Date().getTime()});
             thread.create(newThread, (err,res2) => {
                  if(err) {
                      throw err;

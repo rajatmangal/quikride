@@ -8,7 +8,7 @@ var threadSchema = new mongoose.Schema({
         required : true
     }],
     group_name: {
-        type: Number,
+        type: String,
         required : true
     },
     created_by: {
