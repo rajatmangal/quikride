@@ -57,9 +57,7 @@ async function registerUser(req, res) {
                     console.log("New User Saved");
                     const html = `Verify email with this token: ${emailToken}`;
                     await mailer.sendEmail('donotreply@quikride.com', email, 'Quikride: verify your email', html);
-                    passport.authenticate("local")(req, res, function() {
                     return res.redirect('/verify');
-                });
             });
         }
     } catch (e){
