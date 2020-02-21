@@ -2,7 +2,7 @@ const socket = io();
 
 
 const id = document.getElementsByTagName("body")[0].className;
-console.log(id);
+console.log("Id is" ,id);
 const formData = document.getElementById("formData");
 const messageField =  document.getElementById("message");
 const sendMessage = document.getElementById("sendMessage");

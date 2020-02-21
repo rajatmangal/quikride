@@ -111,7 +111,6 @@ app.get('/chats', checkAuthentication, async (req,res) => {
         if(err) {
             throw err;
         }
-        console.log(res)
     });
     res.render('chats.ejs', {
         user: req.user,
@@ -120,11 +119,7 @@ app.get('/chats', checkAuthentication, async (req,res) => {
 });
 
 app.get('/chat/:id1/:id2', checkAuthentication, (req,res) => {
-    console.log(typeof(req.params.id1));
-    console.log(req.params.id2);
-
     thread.findOne({$or: [{'group_name': req.params.id1+ req.params.id2}, {'group_name':  req.params.id2+ req.params.id1}]}, (err,res1) => {
-        console.log(res1)
         if(res1===null) {
             //create a new thread
             var newThread = new thread({ users: [mongoose.Types.ObjectId(req.params.id1), mongoose.Types.ObjectId(req.params.id2)], group_name: req.params.id1+ req.params.id2, created_by: new mongoose.Types.ObjectId(), created_at: new Date().getTime()});
@@ -133,7 +128,7 @@ app.get('/chat/:id1/:id2', checkAuthentication, (req,res) => {
                      throw err;
                  }
                  else {
-                    res.render('chat.ejs', {id: req.params.id, userId: req.user.username})
+                    res.render('chat.ejs', {id: req.params.id1+ req.params.id2, userId: req.user.username})
                  }
              });
             
@@ -142,14 +137,11 @@ app.get('/chat/:id1/:id2', checkAuthentication, (req,res) => {
                 if(res2 == null) {
                     res.send("Sorry not authorized");
                 } else{
-                    messages.find({thread: req.params.id}, (err,res3) =>{
+                    messages.find({thread: res1.group_name}, (err,res3) =>{
                         if(err) {
                             throw err;
                         } else{
-                            console.log(typeof res3)
-                            console.log(res3);
-
-                            res.render('chat.ejs', {id: req.params.id, userId: req.user.username, messages: res3})
+                            res.render('chat.ejs', {id: res1.group_name, userId: req.user.username, messages: res3})
                         }
                     });
                 }

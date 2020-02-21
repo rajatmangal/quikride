@@ -17,8 +17,8 @@ function connectChat(server) {
         socket.on('sendMessage', (message, callback) => {
             console.log(message.message);
             console.log(message.username);
-            console.log(message);
-            var newMessage = new messages({ sender: message.username, message:message.message, thread: parseInt(message.id), created_at: new Date().getTime()});
+            console.log(message.id);
+            var newMessage = new messages({ sender: message.username, message:message.message, thread: message.id, created_at: new Date().getTime()});
             messages.create(newMessage, (err,res) => {
                  if(err) {
                      throw err;
