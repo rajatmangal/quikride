@@ -57,6 +57,7 @@ async function registerUser(req, res) {
                     console.log("New User Saved");
                     const html = `Verify email with this token: ${emailToken}`;
                     await mailer.sendEmail('donotreply@quikride.com', email, 'Quikride: verify your email', html);
+                    console.log("Verification email sent");
                     return res.redirect('/verify');
             });
         }
