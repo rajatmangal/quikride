@@ -29,6 +29,7 @@ app.set('views',__dirname + "/public");
 console.log(__dirname + "/public");
 chatApp.connectChat(server);
 app.use(express.static(__dirname + '/public'));
+app.set('views', __dirname + '/views');
 
 if(process.env.USE_MONGO_CLUSTER) { 
     mongoose.connect('mongodb+srv://mongoadmin:cmpt470carpool@cluster0-yeuix.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
