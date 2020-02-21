@@ -18,6 +18,7 @@ passport.serializeUser(function(user, done) {
       User.findOne({ username: username }, async function (err, user) {
         if (err) { return done(err); }
         if (!user) {  return done(null, false, {message: 'No user with that email'}) }
+        if (!user.emailConfirmed) {  return done(null, false, {message: 'Please confirm your account via email to log in.'}) }
         if (await bcrypt.compare(password, user.password)) { 
         }
         bcrypt.compare(password, user.password, function (err, result) {

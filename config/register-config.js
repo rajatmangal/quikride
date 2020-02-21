@@ -4,7 +4,8 @@ const passport = require('passport');
 const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
-
+var randomString = require('random-string');
+const mailer = require('./mailer-config');
 
 
 async function registerUser(req, res) {
@@ -42,8 +43,9 @@ async function registerUser(req, res) {
         }
         else {
             const hashedPassword = await bcrypt.hash(req.body.password,10);
-            var newUser = new User({firstName: firstName, lastName: lastName, username: username, email: email,password:hashedPassword});
-            await User.register(newUser, req.body.password, function(err, user) {
+            var emailToken = randomString();
+            var newUser = new User({firstName: firstName, lastName: lastName, username: username, email: email ,password:hashedPassword, emailToken:emailToken});
+            await User.register(newUser, req.body.password, async function(err, user) {
                 if(err) {
                     req.flash('error', err.message);
                     return res.render('register.ejs', {
@@ -53,9 +55,10 @@ async function registerUser(req, res) {
                 else {
                 }
                     console.log("New User Saved");
-                    passport.authenticate("local")(req, res, function() {
-                    return res.redirect('/');
-                });
+                    const html = `Verify email with this token: ${emailToken}`;
+                    await mailer.sendEmail('donotreply@quikride.com', email, 'Quikride: verify your email', html);
+                    console.log("Verification email sent");
+                    return res.redirect('/verify');
             });
         }
     } catch (e){
