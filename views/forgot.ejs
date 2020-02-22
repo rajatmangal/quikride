@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password</title>
+</head>
+<body>
+    <h1>Forgot Password</h1>
+    <% if(typeof message != 'undefined') { %>
+        <%= message %>
+    <% } %>
+    <form action="/forgot" method='POST'>
+        <label for="forgot">Email</label>
+        <input type="email" id="forgot" name=
+        "forgot" required>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

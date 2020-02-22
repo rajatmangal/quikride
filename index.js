@@ -17,10 +17,13 @@ const app = express();
 const User = require('./models/user');
 const passConfig = require('./config/passport-config')
 const regConfig = require('./config/register-config')
+const resetConfig = require('./config/reset-config')
 const chatApp = require('./chat/chat');
 const thread = require('./models/thread');
 const messages = require('./models/messages');
 const moment = require('moment');
+var randomString = require('random-string');
+const mailer = require('./config/mailer-config');
 const port = process.env.PORT || 3000;
 
 const server = http.createServer(app);
@@ -79,6 +82,49 @@ app.post('/verify', checkNotAuthenticated, async (req,res) => {
         console.log(error);
     }
 });
+
+app.get('/forgot', checkNotAuthenticated, (req,res) => {
+    res.render('forgot.ejs');
+});
+
+app.post('/forgot', checkNotAuthenticated, async (req,res) => {
+    try {
+        const {forgot} = req.body;
+        const user = await User.findOne({'email': forgot});
+        if (!user) {
+            res.render('forgot.ejs', {
+                message: 'User associated with this email not found'
+            })
+            return;
+        }
+        var token = randomString();
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 3600000; //1 hour
+        await user.save();
+        const html = `Reset your password by clicking this link (link expires in 1 hour): <a href="http://localhost:3000/reset/${token}" target="_blank">http://localhost:3000/reset/${token}</a>`;
+        await mailer.sendEmail('donotreply@quikride.com', forgot, 'Quikride: reset password', html);
+        console.log("Reset password email sent");
+        res.render('forgot.ejs', {
+            message: "Email to reset password has been sent"
+        })
+    } catch(error) {
+        console.log(error);
+    }
+});
+
+app.get('/reset/:token', checkNotAuthenticated, async (req,res) => {
+    var user = await User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() }});
+    if (!user) {
+        req.flash('error', 'Password reset token is invalid or has expired.');
+        return res.redirect('/forgot');
+    }
+    res.render('reset.ejs', {token: req.params.token});
+});
+
+app.post('/reset/:token', checkNotAuthenticated, async (req,res) => {
+    await resetConfig.resetPassword(req, res);
+});
+
 app.get('/map', checkAuthentication, (req,res) => {
     res.render('map.ejs',{ name: req.user.username});
 });

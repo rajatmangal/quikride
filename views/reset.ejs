@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password</title>
+</head>
+<body>
+    <h1>Reset Password</h1>
+    <% if(typeof message != 'undefined') { %>
+        <%= message %>
+    <% } %>
+    <form action="/reset/<%= token %>" method='POST'>
+
+        <label for="newPassword">Password</label>
+        <input type="password" id="newPassword" name=
+        "newPassword" required>
+
+        <label for="newPassword2">Retype Password</label>
+        <input type="password" id="newPassword2" name=
+        "newPassword2" required>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
