@@ -37,6 +37,14 @@ var UserSchema = new mongoose.Schema({
   emailToken: {
     type : String
   },
+  resetPasswordToken: {
+    type : String,
+    default: ''
+  },
+  resetPasswordExpires: {
+    type : Date,
+    default:''
+  },
 });
 
 // This adds some methods to the UserSchema
