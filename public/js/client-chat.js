@@ -17,7 +17,8 @@ socket.on('message', (message) => {
     console.log(message);
     const html = Mustache.render(messageTemplate, {
         message: message.text,
-        time: moment(message.createdAt).format('dddd h:mm a')
+        time: moment(message.createdAt).format('dddd h:mm a'),
+        user: message.username
     });
     messages.insertAdjacentHTML('beforeend',html)
 })
@@ -26,7 +27,8 @@ socket.on('locationMessage', (link) => {
     // console.log(link)
     const html = Mustache.render(locationTemplate, {
         url:link.url,
-        time: moment(link.createdAt).format('dddd h:mm a')
+        time: moment(link.createdAt).format('dddd h:mm a'),
+        user: link.username
     });
     messages.insertAdjacentHTML('beforeend',html)
 });
@@ -59,7 +61,9 @@ sendLoc.addEventListener('click', (e) => {
         sendLoc.setAttribute('disabled','disabled');
         socket.emit('location', {
             lat: position.coords.latitude,
-            lon: position.coords.longitude
+            lon: position.coords.longitude,
+            username:username,
+            id:id
         }, (message) => {
             console.log(message);
             console.log("start");

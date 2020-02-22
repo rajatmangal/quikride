@@ -36,7 +36,7 @@
     <script id="message-template" type="text/html">
         <div class="message">
             <p>
-                <span class="message__name">UserName</span>
+                <span class="message__name">{{user}}</span>
                 <span class="message__meta">{{time}}</span>
             </p>
             <p>{{message}}</p>
@@ -45,7 +45,7 @@
     <script id="location-template" type="text/html">
         <div class="message">
             <p>
-                <span class="message__name">UserName</span>
+                <span class="message__name">{{user}}</span>
                 <span class="message__meta">{{time}}</span>
             </p>
             <p><a href="{{url}}" target="_blank">My Current Location</a></p>

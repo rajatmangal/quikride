@@ -1,15 +1,18 @@
 
-const generateMessage = (text) => {
+const generateMessage = (message) => {
     return {
-        text: text,
-        createdAt: new Date().getTime()
+        text: message.message,
+        createdAt: new Date().getTime(),
+        username: message.username
     }
 }
 
-const generateLink = (url) => {
+const generateLink = (coords) => {
+    let url = `http://google.com/maps?q=${coords.lat},${coords.lon}`;
     return {
         url: url,
-        createdAt: new Date().getTime()
+        createdAt: new Date().getTime(),
+        username: coords.username
     }
 }
 

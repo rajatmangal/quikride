@@ -117,17 +117,17 @@ app.get('/chats', checkAuthentication, async (req,res) => {
     })
 });
 
-app.get('/chat/:id1/:id2', checkAuthentication, (req,res) => {
-    thread.findOne({$or: [{'group_name': req.params.id1+ req.params.id2}, {'group_name':  req.params.id2+ req.params.id1}]}, (err,res1) => {
+app.get('/chat/:id', checkAuthentication, (req,res) => {
+    thread.findOne({$or: [{'group_name': req.user._id.toString()+ req.params.id}, {'group_name':  req.params.id+ req.user._id.toString()}]}, (err,res1) => {
         if(res1===null) {
             //create a new thread
-            var newThread = new thread({ users: [mongoose.Types.ObjectId(req.params.id1), mongoose.Types.ObjectId(req.params.id2)], group_name: req.params.id1+ req.params.id2, created_by: new mongoose.Types.ObjectId(), created_at: new Date().getTime()});
+            var newThread = new thread({ users: [req.user._id, mongoose.Types.ObjectId(req.params.id)], group_name: req.user._id.toString()+ req.params.id, created_by: new mongoose.Types.ObjectId(), created_at: new Date().getTime()});
             thread.create(newThread, (err,res2) => {
                  if(err) {
                      throw err;
                  }
                  else {
-                    res.render('chat.ejs', {id: req.params.id1+ req.params.id2, userId: req.user.username})
+                    res.render('chat.ejs', {id: req.user._id.toString()+ req.params.id, userId: req.user.username})
                  }
              });
             
