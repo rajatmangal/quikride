@@ -2,6 +2,7 @@ if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 
+const http = require('http');
 const express = require('express');
 const passport = require('passport');
 const flash = require('express-flash');
@@ -16,7 +17,19 @@ const app = express();
 const User = require('./models/user');
 const passConfig = require('./config/passport-config')
 const regConfig = require('./config/register-config')
+const chatApp = require('./chat/chat');
+const thread = require('./models/thread');
+const messages = require('./models/messages');
+const moment = require('moment');
 const port = process.env.PORT || 3000;
+
+const server = http.createServer(app);
+chatApp.connectChat(server);
+
+app.set('view-engine', 'ejs')
+app.use(express.static(__dirname + '/public'));
+app.set('views', __dirname + '/views');
+
 
 if(process.env.USE_MONGO_CLUSTER) { 
     mongoose.connect('mongodb+srv://mongoadmin:cmpt470carpool@cluster0-yeuix.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
@@ -25,7 +38,6 @@ if(process.env.USE_MONGO_CLUSTER) {
 }
 var db = mongoose.connection;
 
-app.set('view-engine', 'ejs')
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -94,6 +106,51 @@ app.delete('/logout', (req,res) => {
     res.redirect('/login');
 })
 
+app.get('/chats', checkAuthentication, async (req,res) => {
+    const users = await User.find({}, (err,res) => {
+        if(err) {
+            throw err;
+        }
+    });
+    res.render('chats.ejs', {
+        user: req.user,
+        users: users
+    })
+});
+
+app.get('/chat/:id', checkAuthentication, (req,res) => {
+    thread.findOne({$or: [{'group_name': req.user._id.toString()+ req.params.id}, {'group_name':  req.params.id+ req.user._id.toString()}]}, (err,res1) => {
+        if(res1===null) {
+            //create a new thread
+            var newThread = new thread({ users: [req.user._id, mongoose.Types.ObjectId(req.params.id)], group_name: req.user._id.toString()+ req.params.id, created_by: new mongoose.Types.ObjectId(), created_at: moment(new Date().getTime()).format('MMMM Do YYYY h:mm a')});
+            thread.create(newThread, (err,res2) => {
+                 if(err) {
+                     throw err;
+                 }
+                 else {
+                    res.render('chat.ejs', {id: req.user._id.toString()+ req.params.id, userId: req.user.username})
+                 }
+             });
+            
+        } else {
+            thread.findOne({ users: req.user._id}, (err,res2) => {
+                if(res2 == null) {
+                    res.send("Sorry not authorized");
+                } else{
+                    messages.find({thread: res1.group_name}, (err,res3) =>{
+                        if(err) {
+                            throw err;
+                        } else{
+                            res.render('chat.ejs', {id: res1.group_name, userId: req.user.username, messages: res3})
+                        }
+                    });
+                }
+            });
+        }
+    })
+})
+
+
 function checkAuthentication(req, res, next) {
     if(req.isAuthenticated()) {
         return next();
@@ -107,7 +164,7 @@ function checkNotAuthenticated(req, res, next) {
     }
     next();
 }
-app.listen(port, (res,req) => {
+server.listen(port, (res,req) => {
     console.log(`Listening to port ${port}`);
 });
 
