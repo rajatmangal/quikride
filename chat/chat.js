@@ -17,7 +17,7 @@ function connectChat(server) {
             //io.to(id).emit('message', chatUtil.generateMessage("A new user has joined"));
         })
         socket.on('sendMessage', (message, callback) => {
-            var newMessage = new messages({ sender: message.username, message:message.message, thread: message.id, created_at: moment(new Date().getTime()).format('dddd h:mm a')});
+            var newMessage = new messages({ sender: message.username, message:message.message, thread: message.id, created_at: moment(new Date().getTime()).format('MMMM Do YYYY h:mm a')});
             messages.create(newMessage, (err,res) => {
                  if(err) {
                      throw err;
@@ -32,7 +32,7 @@ function connectChat(server) {
         
         socket.on('location', (coords, callback) => {
             let url = `http://google.com/maps?q=${coords.lat},${coords.lon}`;
-            var newMessage = new messages({ sender: coords.username, message:url, thread: coords.id, created_at: moment(new Date().getTime()).format('dddd h:mm a')});
+            var newMessage = new messages({ sender: coords.username, message:url, thread: coords.id, created_at: moment(new Date().getTime()).format('MMMM Do YYYY h:mm a')});
             messages.create(newMessage, (err,res) => {
                  if(err) {
                      throw err;

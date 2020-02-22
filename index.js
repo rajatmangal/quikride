@@ -20,6 +20,7 @@ const regConfig = require('./config/register-config')
 const chatApp = require('./chat/chat');
 const thread = require('./models/thread');
 const messages = require('./models/messages');
+const moment = require('moment');
 const port = process.env.PORT || 3000;
 
 const server = http.createServer(app);
@@ -121,7 +122,7 @@ app.get('/chat/:id', checkAuthentication, (req,res) => {
     thread.findOne({$or: [{'group_name': req.user._id.toString()+ req.params.id}, {'group_name':  req.params.id+ req.user._id.toString()}]}, (err,res1) => {
         if(res1===null) {
             //create a new thread
-            var newThread = new thread({ users: [req.user._id, mongoose.Types.ObjectId(req.params.id)], group_name: req.user._id.toString()+ req.params.id, created_by: new mongoose.Types.ObjectId(), created_at: new Date().getTime()});
+            var newThread = new thread({ users: [req.user._id, mongoose.Types.ObjectId(req.params.id)], group_name: req.user._id.toString()+ req.params.id, created_by: new mongoose.Types.ObjectId(), created_at: moment(new Date().getTime()).format('MMMM Do YYYY h:mm a')});
             thread.create(newThread, (err,res2) => {
                  if(err) {
                      throw err;
