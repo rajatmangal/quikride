@@ -3,6 +3,8 @@ const AdminBroExpress = require('admin-bro-expressjs');
 const AdminBroMongoose = require('admin-bro-mongoose')
 const mongoose = require('mongoose');
 const users = require('../models/user')
+const messages = require('../models/messages')
+const thread = require('../models/thread')
 AdminBro.registerAdapter(AdminBroMongoose)
 const adminBro = new AdminBro({
   databases: [mongoose],
@@ -19,7 +21,25 @@ const adminBro = new AdminBro({
             icon: 'fas fa-users',
         }
       }
-  }],
+  },
+  {
+    resource: messages,
+    options:{
+      parent: {
+          name: 'Chat Messenger',
+          icon: 'fas fa-comments',
+      }
+    }
+},
+{
+    resource: thread,
+    options:{
+      parent: {
+          name: 'Chat Messenger',
+          icon: 'fas fa-comments',
+      }
+    }
+}],
 })
 
 
