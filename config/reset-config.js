@@ -4,9 +4,6 @@ const passport = require('passport');
 const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
-var randomString = require('random-string');
-const mailer = require('./mailer-config');
-
 
 async function resetPassword(req, res) {
     try{
