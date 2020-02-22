@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
-<body>
+<%- include ('partials/header') %>
     <h1>Login</h1>
     <% if(messages.error) { %>
         <%= messages.error %>
@@ -23,5 +16,4 @@
     <a href="/forgot">Forgot Password?</a>
     <br><br>
     <a href='/admin'>Admin Panel</a>
-</body>
-</html>
+<%- include ('partials/footer') %>

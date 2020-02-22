@@ -15,6 +15,7 @@ router.get('/chats', authentication.checkAuthentication, async (req,res) => {
             throw err;
         }
     });
+    res.locals.title = "Chats";
     res.render('chats.ejs', {
         user: req.user,
         users: users
@@ -31,6 +32,7 @@ router.get('/chat/:id', authentication.checkAuthentication, (req,res) => {
                      throw err;
                  }
                  else {
+                    res.locals.title = "Chat";
                     res.render('chat.ejs', {id: req.user._id.toString()+ req.params.id, userId: req.user.username})
                  }
              });
@@ -44,6 +46,7 @@ router.get('/chat/:id', authentication.checkAuthentication, (req,res) => {
                         if(err) {
                             throw err;
                         } else{
+                            res.locals.title = "Chat";
                             res.render('chat.ejs', {id: res1.group_name, userId: req.user.username, messages: res3})
                         }
                     });

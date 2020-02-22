@@ -6,14 +6,17 @@ const regConfig = require('../config/register-config')
 const router = new express.Router();
 
 router.get('/', authentication.checkAuthentication, (req,res) => {
+    res.locals.title = "Home Page";
     res.render('index.ejs',{ name: req.user.username});
 });
 
 router.get('/login', authentication.checkNotAuthenticated, (req,res) => {
+    res.locals.title = "Login";
     res.render('login.ejs');
 });
 
 router.get('/register', authentication.checkNotAuthenticated, (req,res) => {
+    res.locals.title = "Register";
     res.render('register.ejs');
 });
 

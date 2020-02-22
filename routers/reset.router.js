@@ -8,6 +8,7 @@ const User = require('../models/user');
 const router = new express.Router();
 
 router.get('/forgot', authentication.checkNotAuthenticated, (req,res) => {
+    res.locals.title = "Forget Password";
     res.render('forgot.ejs');
 });
 
@@ -16,6 +17,7 @@ router.post('/forgot', authentication.checkNotAuthenticated, async (req,res) => 
         const {forgot} = req.body;
         const user = await User.findOne({'email': forgot});
         if (!user) {
+            res.locals.title = "Forget Password";
             res.render('forgot.ejs', {
                 message: 'User associated with this email not found'
             })
@@ -28,6 +30,7 @@ router.post('/forgot', authentication.checkNotAuthenticated, async (req,res) => 
         const html = `Reset your password by clicking this link (link expires in 1 hour): <a href="http://localhost:3000/reset/${token}" target="_blank">http://localhost:3000/reset/${token}</a>`;
         await mailer.sendEmail('donotreply@quikride.com', forgot, 'Quikride: reset password', html);
         console.log("Reset password email sent");
+        res.locals.title = "Forget Password";
         res.render('forgot.ejs', {
             message: "Email to reset password has been sent"
         })
@@ -42,6 +45,7 @@ router.get('/reset/:token', authentication.checkNotAuthenticated, async (req,res
         req.flash('error', 'Password reset token is invalid or has expired.');
         return res.redirect('/forgot');
     }
+    res.locals.title = "Reset Password";
     res.render('reset.ejs', {token: req.params.token});
 });
 

@@ -4,6 +4,7 @@ const authentication = require('../utils/authentication.util')
 const router = new express.Router();
 
 router.get('/verify', authentication.checkNotAuthenticated, (req,res) => {
+    res.locals.title = "Verify Email";
     res.render('verify.ejs');
 });
 

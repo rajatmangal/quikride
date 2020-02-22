@@ -1,8 +1,8 @@
+<%- include ('partials/header') %>
 <h1>Hi, <%= name %></h1>
 <a href="/chats">Chats</a>
 <br>
 <form action="/logout?_method=DELETE" method="POST">
     <button type="submit">Log Out</button>
 </form>
-
-<br>
+<%- include ('partials/footer') %>
