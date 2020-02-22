@@ -32,7 +32,6 @@ function connectChat(server) {
         
         socket.on('location', (coords, callback) => {
             let url = `http://google.com/maps?q=${coords.lat},${coords.lon}`;
-            console.log("hi")
             var newMessage = new messages({ sender: coords.username, message:url, thread: coords.id, created_at: moment(new Date().getTime()).format('MMMM Do YYYY h:mm a')});
             messages.create(newMessage, (err,res) => {
                  if(err) {
