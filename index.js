@@ -42,6 +42,7 @@ app.use(require('./routers/user.router'));
 app.use(require('./routers/verify.router'));
 app.use(require('./routers/chat.router'));
 app.use(require('./routers/map.router'));
+app.use(require('./routers/reset.router'));
 
 //Start the Server
 server.listen(port, (res,req) => {
