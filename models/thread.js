@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+var user = require('./user')
 var passportLocalMongoose = require('passport-local-mongoose');
 
 
@@ -13,11 +14,20 @@ var threadSchema = new mongoose.Schema({
     },
     created_by: {
         type: String,
-        required : true
+        required : true,
     },
     created_at: {
-        type: String,
+        type: Number,
         required : true
+    },
+    last_updated: {
+        type: Number,
+    },
+    last_message: {
+        type: String,
+    },
+    last_sender: {
+        type: String,
     }
 });
 
