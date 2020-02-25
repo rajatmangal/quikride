@@ -1,6 +1,7 @@
 const socketIO = require('socket.io');
 const chatUtil = require('./chat-utils')
 const messages = require('../models/messages');
+const thread = require('../models/thread');
 const mongoose = require('mongoose');
 const moment = require('moment');
 
@@ -17,31 +18,45 @@ function connectChat(server) {
             //io.to(id).emit('message', chatUtil.generateMessage("A new user has joined"));
         })
         socket.on('sendMessage', (message, callback) => {
-            var newMessage = new messages({ sender: message.username, message:message.message, thread: message.id, created_at: moment(new Date().getTime()).format('MMMM Do YYYY h:mm a')});
+            var newMessage = new messages({ sender: message.username, message:message.message, thread: message.id, created_at: new Date().getTime()});
             messages.create(newMessage, (err,res) => {
                  if(err) {
                      throw err;
                  }
                  else {
-                    socket.join(message.id);
-                    io.to(message.id).emit('message', chatUtil.generateMessage(message));
-                    callback("Delivered");
+                    thread.update({group_name: message.id},{$set: {last_updated: new Date().getTime(), last_message: message.message, last_sender: message.username}}, function(err, result) {
+                        if(err) {
+                            throw err;
+                        }
+                        else {
+                            socket.join(message.id);
+                            io.to(message.id).emit('message', chatUtil.generateMessage(message));
+                            callback("Delivered");
+                        }
+                    }); 
                  }
              });
         });
         
         socket.on('location', (coords, callback) => {
             let url = `http://google.com/maps?q=${coords.lat},${coords.lon}`;
-            var newMessage = new messages({ sender: coords.username, message:url, thread: coords.id, created_at: moment(new Date().getTime()).format('MMMM Do YYYY h:mm a')});
+            var newMessage = new messages({ sender: coords.username, message: url, thread: coords.id, created_at: new Date().getTime()});
             messages.create(newMessage, (err,res) => {
                  if(err) {
                      throw err;
                  }
                  else {
-                    socket.join(coords.id);
-                    io.to(coords.id).emit('locationMessage', chatUtil.generateLink(coords));
-                    callback('Location Shared');
-                 }
+                    thread.update({group_name: coords.id},{$set: {last_updated: new Date().getTime(), last_message: url, last_sender: coords.username}}, function(err, result) {
+                        if(err) {
+                            throw err;
+                        }
+                        else {
+                            socket.join(coords.id);
+                            io.to(coords.id).emit('locationMessage', chatUtil.generateLink(coords));
+                            callback('Location Shared');
+                        }
+                    });
+                }
              });
             
         });
