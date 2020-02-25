@@ -35,20 +35,22 @@ socket.on('locationMessage', (link) => {
 
 formData.addEventListener('submit', (e) => {
     e.preventDefault();
-    sendMessage.setAttribute('disabled','disabled');
-    sendLoc.setAttribute('disabled','disabled');
     const message = messageField.value;
-    socket.emit("sendMessage", {
-        message: message,
-        username:username,
-        id:id
-     },  (message) => {
-        console.log("Message has been delivered", message)
-        sendMessage.removeAttribute('disabled');
-        messageField.value = "";
-        messageField.focus();
-        sendLoc.removeAttribute('disabled');
-    });
+    if(message.length > 0) {
+        sendMessage.setAttribute('disabled','disabled');
+        sendLoc.setAttribute('disabled','disabled');
+        socket.emit("sendMessage", {
+            message: message,
+            username:username,
+            id:id
+        },  (message) => {
+            console.log("Message has been delivered", message)
+            sendMessage.removeAttribute('disabled');
+            messageField.value = "";
+            messageField.focus();
+            sendLoc.removeAttribute('disabled');
+        });
+    }
 });
 
 sendLoc.addEventListener('click', (e) => {

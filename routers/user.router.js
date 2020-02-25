@@ -6,6 +6,7 @@ const regConfig = require('../config/register-config')
 const thread = require('../models/thread');
 const messages = require('../models/messages');
 const router = new express.Router();
+const moment = require("moment");
 
 router.get('/', authentication.checkAuthentication, (req,res) => {
     thread.find({ users: req.user.username}, async (err,res2) => {
@@ -16,17 +17,15 @@ router.get('/', authentication.checkAuthentication, (req,res) => {
             function compare(a,b) {
                 let comparison = 0;
                 if (a.last_updated >= b.last_updated) {
-                    comparison = 1;
-                } else if (a.last_updated < b.last_updated) {
                     comparison = -1;
+                } else if (a.last_updated < b.last_updated) {
+                    comparison = 1;
                 }
                 return comparison;
             }
             res2.sort(compare);
-            res2.slice(0,4);
-            var sender = res2;
+            var sender = res2.slice(0,4);
             for(var i = 0 ; i < sender.length ; i++) {
-                console.log("hi2")
                 let count = 0;
                 for(var j = 0 ; j < sender[i].users.length ; j++) {
                     if(sender[i].users[j] != req.user.username) {
@@ -34,13 +33,13 @@ router.get('/', authentication.checkAuthentication, (req,res) => {
                         count++;
                     }
                 }
+                sender[i].time = moment(sender[i].last_updated).format('MMMM Do YYYY, h:mm:ss a');
                 if(count == 0) {
                     sender[i].sender = "You";
                 }
             }
-            console.log(sender);
             res.locals.title = "Home Page";
-            res.render('index.ejs',{ name: req.user.username, messages: sender});
+            res.render('index.ejs',{ name: req.user.username, messages: sender,moment:moment});
         }
     });
 });

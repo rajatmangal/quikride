@@ -37,7 +37,7 @@ router.get('/chat/:id', authentication.checkAuthentication, (req,res) => {
                 }
             });
             // users: [req.user._id, mongoose.Types.ObjectId(req.params.id)]
-            var newThread = new thread({ users: [user1.username, user2.username], group_name: req.user._id.toString()+ req.params.id, created_by: new mongoose.Types.ObjectId(), created_at: new Date().getTime()});
+            var newThread = new thread({ users: [user1.username, user2.username], group_name: req.user._id.toString()+ req.params.id, created_by: new mongoose.Types.ObjectId(), created_at: new Date().getTime(), id: req.params.id});
             thread.create(newThread, (err,res2) => {
                  if(err) {
                      throw err;
@@ -60,7 +60,6 @@ router.get('/chat/:id', authentication.checkAuthentication, (req,res) => {
                             var mes = res3;
                             for(var i = 0; i < mes.length ; i++) {
                                 mes[i].created = moment(mes[i].created_at).format('MMMM Do YYYY h:mm a')
-                                console.log(mes[i].created)
                             }
                             res.locals.title = "Chat";
                             res.render('chat.ejs', {id: res1.group_name, userId: req.user.username, messages: mes})

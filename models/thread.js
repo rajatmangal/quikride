@@ -28,6 +28,10 @@ var threadSchema = new mongoose.Schema({
     },
     last_sender: {
         type: String,
+    },
+    id: {
+        type: String,
+        required : true
     }
 });
 
