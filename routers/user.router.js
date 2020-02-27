@@ -44,6 +44,11 @@ router.get('/', authentication.checkAuthentication, (req,res) => {
     });
 });
 
+router.get('/home', authentication.checkNotAuthenticated, (req,res) => {
+    res.locals.title = "Home";
+    res.render('home.ejs');
+});
+
 router.get('/login', authentication.checkNotAuthenticated, (req,res) => {
     res.locals.title = "Login";
     res.render('login.ejs');
@@ -66,7 +71,7 @@ router.post('/register', authentication.checkNotAuthenticated, async (req,res) =
 
 router.delete('/logout', (req,res) => {
     req.logOut();
-    res.redirect('/login');
+    res.redirect('/home');
 })
 
 module.exports = router
