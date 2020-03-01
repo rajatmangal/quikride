@@ -41,7 +41,7 @@ var UserSchema = new mongoose.Schema({
     type : String,
     default: ''
   },
-  resetPasswordExpires: {
+  linkExpires: {
     type : Date,
     default:''
   },

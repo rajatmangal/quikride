@@ -2,9 +2,9 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <div class="container">
-        <% if(messages.error) { %>
-            <%= messages.error %>
-        <% } %>
+      <% if(typeof message != 'undefined') { %>
+        <%= message %>
+      <% } %>
         <!-- Outer Row -->
         <div class="row justify-content-center">
           <div class="col-xl-10 col-lg-12 col-md-9">
@@ -18,7 +18,7 @@
                       <div class="text-center">
                         <h1 class="h4 text-gray-900 mb-2">Verify Email</h1>
                       </div>
-                      <form class="user" action="/verify" method='POST'>
+                      <form class="user" action="/verify/<%= token %>" method='POST'>
                         <div class="form-group">
                           <input type="text" class="form-control form-control-user" id="emailToken" aria-describedby="emailHelp" placeholder="Enter the Token" name="emailToken" required>
                         </div>
@@ -30,6 +30,12 @@
                       </div>
                       <div class="text-center">
                         <a class="small" href="/login">Already have an account? Login!</a>
+                        <script>
+                          setTimeout(function () {
+                             // after 5 seconds
+                             window.location = "/login";
+                          }, 5000)
+                        </script>
                       </div>
                     </div>
                   </div>
