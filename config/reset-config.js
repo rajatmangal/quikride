@@ -7,7 +7,7 @@ const User = require('../models/user');
 
 async function resetPassword(req, res) {
     try{
-        var user = await User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } });
+        var user = await User.findOne({ resetPasswordToken: req.params.token, linkExpires: { $gt: Date.now() } });
         var password = req.body.newPassword;
         var password2 = req.body.newPassword2;
         if(password !== password2) {
@@ -37,7 +37,7 @@ async function resetPassword(req, res) {
 
             user.password = hashedPassword;
             user.resetPasswordToken = '';
-            user.resetPasswordExpires = null;
+            user.linkExpires = null;
             await user.save();
             console.log('New password saved');
             return res.redirect('/login');
