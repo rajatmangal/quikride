@@ -37,7 +37,7 @@ router.get('/chat/:id', authentication.checkAuthentication, (req,res) => {
                 }
             });
             // users: [req.user._id, mongoose.Types.ObjectId(req.params.id)]
-            var newThread = new thread({ users: [user1.username, user2.username], group_name: req.user._id.toString()+ req.params.id, created_by: new mongoose.Types.ObjectId(), created_at: new Date().getTime(), id: req.params.id});
+            var newThread = new thread({ users: [user1.username, user2.username], group_name: req.user._id.toString()+ req.params.id, created_by: new mongoose.Types.ObjectId(), created_at: new Date().getTime(), id: req.params.id, last_message: "", last_sender: "", last_updated: new Date().getTime()});
             thread.create(newThread, (err,res2) => {
                  if(err) {
                      throw err;

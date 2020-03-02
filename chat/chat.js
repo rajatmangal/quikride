@@ -28,16 +28,32 @@ function connectChat(server) {
                      throw err;
                  }
                  else {
-                    thread.update({group_name: message.id},{$set: {last_updated: new Date().getTime(), last_message: message.message, last_sender: message.username}}, function(err, result) {
+                    thread.update({group_name: message.id},{$set: {last_updated: new Date().getTime(), last_message: message.message, last_sender: message.username}}, async function(err, result) {
                         if(err) {
                             throw err;
                         }
                         else {
                             socket.join(message.id);
                             io.to(message.id).emit('message', chatUtil.generateMessage(message));
+                            const receiver = await thread.find({group_name: message.id}, (err,res) => {
+                                if(err) {
+                                    throw err;
+                                }
+                            });
+                            for(let i = 0; i < receiver[0].users.length; i++) {
+                                console.log(receiver[0].users[i])
+                                if(receiver[0].users[i] !== message.username) {
+                                    thread.find({ users: receiver[0].users[i]}, async (err,res2) => {
+                                        if(res2 != null) {
+                                            var sender = chatUtil.generateMessages(res2,receiver[0].users[i]);
+                                            console.log(sender);
+                                            io.to(receiver[0].users[i]).emit('message', {messages:sender, moment:moment})
+                                        }
+                                    });
+                                }
+                            }
                             //send this to the other member of the group
-                            console.log(result);
-                            io.to("rmangal3").emit('message', "Hello")
+                            
                             // io.emit
                             callback("Delivered");
                         }
