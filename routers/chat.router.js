@@ -25,7 +25,7 @@ router.get('/chats', authentication.checkAuthentication, async (req,res) => {
 router.get('/chat/:id', authentication.checkAuthentication, (req,res) => {
     thread.findOne({$or: [{'group_name': req.user._id.toString()+ req.params.id}, {'group_name':  req.params.id+ req.user._id.toString()}]}, async(err,res1) => {
         if(res1===null) {
-            //create a new threa
+            //create a new thread
             user1 = await User.findOne({_id : mongoose.Types.ObjectId(req.params.id)}, (err,res2) => {
                 if(err) {
                     throw error

@@ -2,15 +2,19 @@ const socketIO = require('socket.io');
 const chatUtil = require('./chat-utils')
 const messages = require('../models/messages');
 const thread = require('../models/thread');
+const user = require('../models/user');
 const mongoose = require('mongoose');
 const moment = require('moment');
 
 function connectChat(server) {
     const io = socketIO(server);
     io.on('connection', (socket) => {
+        // console.log(server);
+        // console.log(socket);
         console.log('New Websocket Connection');
         socket.on('join', (id) => {
-            socket.join(id);
+            // console.log(id);
+            socket.join(id.room);
             //io.to.emit (send message to everyone in room)
             //socket.broadcast.to.emit (send message to everyone in room except yourself)
             // socket.emit('message', chatUtil.generateMessage("Welcome!"));
@@ -31,6 +35,10 @@ function connectChat(server) {
                         else {
                             socket.join(message.id);
                             io.to(message.id).emit('message', chatUtil.generateMessage(message));
+                            //send this to the other member of the group
+                            console.log(result);
+                            io.to("rmangal3").emit('message', "Hello")
+                            // io.emit
                             callback("Delivered");
                         }
                     }); 
@@ -61,7 +69,14 @@ function connectChat(server) {
             
         });
 
-
+        // socket.on('user', async (user) => {
+        //     await thread.update({username: user},{$set: {socket_id: socket.id}}, function(err, result) {
+        //         if(err) {
+        //             throw err;
+        //         }
+        //         socket.emit("message",socket.id);
+        //     });
+        // })
         socket.on('disconnect', () => {
             // io.emit('message', chatUtil.generateMessage("A user has left"))
         });

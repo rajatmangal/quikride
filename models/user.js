@@ -45,6 +45,9 @@ var UserSchema = new mongoose.Schema({
     type : Date,
     default:''
   },
+  socket_id: {
+    type : String
+  },
 });
 
 // This adds some methods to the UserSchema
