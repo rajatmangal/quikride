@@ -12,15 +12,17 @@ const messageTemplate = document.getElementById("message-template").innerHTML;
 const locationTemplate = document.getElementById("location-template").innerHTML;
 const username = document.getElementById("userId").innerText;
 console.log("UserId is", username);
+messages.scrollTop = messages.scrollHeight - messages.clientHeight;
 
 socket.on('message', (message) => {
-    console.log(message);
+    // console.log(message);
     const html = Mustache.render(messageTemplate, {
         message: message.text,
         time: moment(message.createdAt).format('MMMM Do YYYY h:mm a'),
         user: message.username
     });
     messages.insertAdjacentHTML('beforeend',html)
+    messages.scrollTop = messages.scrollHeight - messages.clientHeight;
 })
 
 socket.on('locationMessage', (link) => {
@@ -31,6 +33,7 @@ socket.on('locationMessage', (link) => {
         user: link.username
     });
     messages.insertAdjacentHTML('beforeend',html)
+    messages.scrollTop = messages.scrollHeight - messages.clientHeight;
 });
 
 formData.addEventListener('submit', (e) => {
@@ -44,7 +47,7 @@ formData.addEventListener('submit', (e) => {
             username:username,
             id:id
         },  (message) => {
-            console.log("Message has been delivered", message)
+            // console.log("Message has been delivered", message)
             sendMessage.removeAttribute('disabled');
             messageField.value = "";
             messageField.focus();
