@@ -2,7 +2,7 @@ const socket = io();
 
 
 const id = document.getElementsByTagName("body")[0].className;
-console.log("Id is" ,id);
+// console.log("Id is" ,id);
 const formData = document.getElementById("formData");
 const messageField =  document.getElementById("message");
 const sendMessage = document.getElementById("sendMessage");
@@ -11,7 +11,7 @@ const messages = document.getElementById("messages");
 const messageTemplate = document.getElementById("message-template").innerHTML;
 const locationTemplate = document.getElementById("location-template").innerHTML;
 const username = document.getElementById("userId").innerText;
-console.log("UserId is", username);
+// console.log("UserId is", username);
 messages.scrollTop = messages.scrollHeight - messages.clientHeight;
 
 socket.on('message', (message) => {
@@ -61,7 +61,7 @@ sendLoc.addEventListener('click', (e) => {
         return alert('Geolocation is not supported by your browser.')
     }
     navigator.geolocation.getCurrentPosition( (position) => {
-        console.log("start");
+        // console.log("start");
         sendMessage.setAttribute('disabled','disabled');
         sendLoc.setAttribute('disabled','disabled');
         socket.emit('location', {
@@ -70,8 +70,8 @@ sendLoc.addEventListener('click', (e) => {
             username:username,
             id:id
         }, (message) => {
-            console.log(message);
-            console.log("start");
+            // console.log(message);
+            // console.log("start");
             sendMessage.removeAttribute('disabled');
             sendLoc.removeAttribute('disabled');
         })

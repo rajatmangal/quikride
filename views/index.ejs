@@ -1,6 +1,7 @@
 <%- include ('partials/header') %>
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/f8ba3ce874.js" crossorigin="anonymous"></script>
     <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
@@ -101,12 +102,12 @@
             <span class="badge badge-danger badge-counter">7</span>
           </a>
           <!-- Dropdown - Messages -->
-          <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown">
+          <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown"  id="message-dropdown">
             <h6 class="dropdown-header">
               Message Center
             </h6>
             <div id = "messages">
-              <% for (var i = 0 ; i < messages.length ; i++) { %>
+              <% for (var i = 0 ; i < messages.length && i < 4 ; i++) { %>
                 <a class="dropdown-item d-flex align-items-center" href="/chat/<%=messages[i].id%>">
                   <div class="dropdown-list-image mr-3">
                     <img class="rounded-circle" src="https://source.unsplash.com/fn_BT9fwg_E/60x60" alt="">
@@ -118,7 +119,23 @@
                   </div>
                 </a>
               <% } %>
-              <a class="dropdown-item text-center small text-gray-500" href="/chats">Read More Messages</a>
+              <div id = additionalMessages>
+                <% for (var i = 4 ; i < messages.length ; i++) { %>
+                  <a class="dropdown-item d-flex align-items-center" href="/chat/<%=messages[i].id%>">
+                    <div class="dropdown-list-image mr-3">
+                      <img class="rounded-circle" src="https://source.unsplash.com/fn_BT9fwg_E/60x60" alt="">
+                      <div class="status-indicator bg-success"></div>
+                    </div>
+                    <div class="font-weight-bold">
+                      <div class="text-truncate"><%= messages[i].last_message%></div>
+                      <div class="small text-gray-500"><%= messages[i].last_sender%> · <%=moment(messages[i].last_updated).format('MMMM Do YYYY, h:mm:ss a');%></div>
+                    </div>
+                  </a>
+                <% } %>
+              </div>
+              <% if(messages.length > 4) { %>
+                <a class="dropdown-item text-center small text-gray-500" id="readMore">Read More Messages</a>
+              <% } %>
             </div>
           </div>
         </li>

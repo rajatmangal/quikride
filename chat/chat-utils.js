@@ -28,10 +28,6 @@ const generateMessages = async (res2, user) => {
     }
     res2.sort(compare);
     var sender = res2;
-    if(res2.length > 4) {
-        sender = res2.slice(0,4);
-    } 
-    console.log(sender);
     for(var k = 0 ; k < sender.length ; k++) {
         let count = 0;
         if(sender[k].last_message === "") {
@@ -47,7 +43,6 @@ const generateMessages = async (res2, user) => {
             var id = await User.findOne({username: sender[k].last_sender}, (err,user) => {
                 if(err) throw err;
             })
-            console.log(id)
             sender[k].id = id._id.toString();
             if(count == 0) {
                 sender[k].lastsender = "You";
