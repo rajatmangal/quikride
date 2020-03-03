@@ -1,4 +1,4 @@
-
+var User = require("../models/user");
 const generateMessage = (message) => {
     return {
         text: message.message,
@@ -16,7 +16,7 @@ const generateLink = (coords) => {
     }
 }
 
-const generateMessages = (res2, user) => {
+const generateMessages = async (res2, user) => {
     function compare(a,b) {
         let comparison = 0;
         if (a.last_updated >= b.last_updated) {
@@ -31,10 +31,12 @@ const generateMessages = (res2, user) => {
     if(res2.length > 4) {
         sender = res2.slice(0,4);
     } 
+    console.log(sender);
     for(var k = 0 ; k < sender.length ; k++) {
         let count = 0;
         if(sender[k].last_message === "") {
             sender.splice(k, 1)
+            k--;
         } else{
             for(var j = 0 ; j < sender[k].users.length ; j++) {
                 if(sender[k].users[j] != user) {
@@ -42,9 +44,13 @@ const generateMessages = (res2, user) => {
                     count++;
                 }
             }
-            console.log(sender[k].last_updated)
+            var id = await User.findOne({username: sender[k].last_sender}, (err,user) => {
+                if(err) throw err;
+            })
+            console.log(id)
+            sender[k].id = id._id.toString();
             if(count == 0) {
-                sender[k].sender = "You";
+                sender[k].lastsender = "You";
             }
         }
     }

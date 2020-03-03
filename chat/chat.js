@@ -13,7 +13,6 @@ function connectChat(server) {
         // console.log(socket);
         console.log('New Websocket Connection');
         socket.on('join', (id) => {
-            // console.log(id);
             socket.join(id.room);
             //io.to.emit (send message to everyone in room)
             //socket.broadcast.to.emit (send message to everyone in room except yourself)
@@ -41,12 +40,10 @@ function connectChat(server) {
                                 }
                             });
                             for(let i = 0; i < receiver[0].users.length; i++) {
-                                console.log(receiver[0].users[i])
                                 if(receiver[0].users[i] !== message.username) {
                                     thread.find({ users: receiver[0].users[i]}, async (err,res2) => {
                                         if(res2 != null) {
-                                            var sender = chatUtil.generateMessages(res2,receiver[0].users[i]);
-                                            console.log(sender);
+                                            var sender = await chatUtil.generateMessages(res2,receiver[0].users[i]);
                                             io.to(receiver[0].users[i]).emit('message', {messages:sender, moment:moment})
                                         }
                                     });
