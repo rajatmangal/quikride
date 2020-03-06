@@ -1,6 +1,6 @@
 <%- include ('partials/header') %>
     <p>User:<%= user._id%></p>
     <% for ( let i = 0 ; i < users.length ; i++) {%>
-        <a href='chat/<%=users[i]._id%>'><p><%=users[i]._id%></p></a>
+        <a href='chat/<%=users[i]._id%>'><p><%=users[i].username%></p></a>
     <%}%>
 <%- include ('partials/footer') %>
