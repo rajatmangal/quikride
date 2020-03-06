@@ -45,7 +45,7 @@ async function registerUser(req, res) {
         else {
             const hashedPassword = await bcrypt.hash(req.body.password,10);
             var emailToken = randomString();
-            var newUser = new User({firstName: firstName, lastName: lastName, username: username, email: email ,password:hashedPassword, emailToken:emailToken});
+            var newUser = new User({firstName: firstName, lastName: lastName, username: username, email: email ,password:hashedPassword, emailToken:emailToken, linkExpires: Date.now() + 3600000});
             await User.register(newUser, req.body.password, async function(err, user) {
                 if(err) {
                     req.flash('error', err.message);
@@ -57,10 +57,12 @@ async function registerUser(req, res) {
                 else {
                 }
                     console.log("New User Saved");
-                    const html = `Verify email with this token: ${emailToken}`;
+                    const html = `Verify your account by clicking this link (link expires in 1 hour): <a href="http://localhost:3000/verify/${emailToken}" target="_blank">http://localhost:3000/verify/${emailToken}</a>`;
                     await mailer.sendEmail('donotreply@quikride.com', email, 'Quikride: verify your email', html);
                     console.log("Verification email sent");
-                    return res.redirect('/verify');
+                    return res.render('register.ejs', {
+                        message: "Success! Check your email for the verification link."
+                    });
             });
         }
     } catch (e){
