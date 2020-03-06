@@ -1,0 +1,4 @@
+#message-dropdown {
+    max-height: 50vh; 
+    overflow: scroll;
+}
