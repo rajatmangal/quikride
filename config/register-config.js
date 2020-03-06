@@ -37,6 +37,7 @@ async function registerUser(req, res) {
             .has().not().spaces()                           // Should not have spaces
             .is().not().oneOf(['Passw0rd', 'Password123']); // Blacklist these values
         if(!passwordCheck.validate(req.body.password)) {
+            res.locals.title = "Register";
             return res.render('register.ejs', {
                 message: "Your password must have a least length of 8 and should include atleast 1 digit, 1 Uppercase Letter ,1 Lowercase Letter and 1 special character."
             });
@@ -48,6 +49,7 @@ async function registerUser(req, res) {
             await User.register(newUser, req.body.password, async function(err, user) {
                 if(err) {
                     req.flash('error', err.message);
+                    res.locals.title = "Register";
                     return res.render('register.ejs', {
                         message: err.message
                     });
