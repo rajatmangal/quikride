@@ -46,6 +46,8 @@ app.use(require('./routers/chat.router'));
 app.use(require('./routers/map.router'));
 app.use(require('./routers/reset.router'));
 app.use(require('./routers/posts.router'));
+app.use(require('./routers/driver_register.router'));
+app.use(require('./routers/rideSharePosts.router'));
 
 //Start the Server
 server.listen(port, (res,req) => {

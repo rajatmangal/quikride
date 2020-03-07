@@ -10,24 +10,27 @@
               <div class="col-lg-8">
                 <div class="p-5">
                   <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4">Create a Post!</h1>
-                    <% if(isDriver) { %>
-                        <a type="button" href="/post/create/rideshare">Share a Ride!</a>
+                    <% if(userfound) {%> 
+                      <h1 class="h4 text-gray-900 mb-4">Already registered as Driver!</h1>
+                      <a href="/post/create">Create post!</a>
                     <% } %>
+                    <% if(!userfound){ %>
+                    <h1 class="h4 text-gray-900 mb-4">Driver Registeration</h1>
                   </div>
-                  <form class="user" action="/post/create" method='POST'>
+                  <form class="user" action="/driver/registration" method='POST'>
                     <div class="form-group row">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control form-control-user" id="PickUpLocation" placeholder="Pick Up Location" name="pickUpLocation" required>
+                        <input type="text" class="form-control form-control-user" id="fullNameOnLicencse" placeholder="Full Name on License" name="fullNameOnLicencse" required>
                       </div>
                     <div class="form-group">
-                      <input type="text" class="form-control form-control-user" id="DropOffLocation" placeholder="Drop Off Location" name="dropOffLocation" required>
+                      <input type="text" class="form-control form-control-user" id="licenseClass" placeholder="License Class" name="licenseClass" required>
                     </div>
                     <div class="form-group">
-                        <textarea type="textarea" class="form-control" id="Description" placeholder="Message" name="description" rows="3" required></textarea>
+                        <input type="text" class="form-control" id="licenseNumber" placeholder="License #" name="licenseNumber" required>
                         </div>
-                    <button type="submit" class="btn btn-primary btn-user btn-block">Post!</button>
+                    <button type="submit" class="btn btn-primary btn-user btn-block">Register!</button>
+                    <% } %>
                 </div>
               </div>
               <div class="col-lg-2"></div>
