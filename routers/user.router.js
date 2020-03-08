@@ -60,6 +60,17 @@ router.get('/auth/facebook/callback',
   passport.authenticate('facebook', { successRedirect: '/',
                                       failureRedirect: '/login' }));
 
+router.get('/auth/google', passport.authenticate('google', {
+    scope:['profile','email']
+}));
+
+router.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  });
+
 router.delete('/logout', (req,res) => {
     req.logOut();
     res.redirect('/home');

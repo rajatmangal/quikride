@@ -2,6 +2,7 @@ const passport = require('passport');
 const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/user');
 var configAuth = require('./auth');
 
@@ -60,4 +61,31 @@ passport.use(new FacebookStrategy({
       }
     });
   }
+));
+
+passport.use(new GoogleStrategy({
+  clientID: configAuth.googleAuth.clientID,
+  clientSecret: configAuth.googleAuth.clientSecret,
+  callbackURL: configAuth.googleAuth.callbackURL
+},
+function(accessToken, refreshToken, profile, cb) {
+  User.findOne({ googleId: profile.id }, function (err, user) {
+    if (err) { return cb(err); }
+      if (user) {  return cb(null, user); }
+      else {
+        var newUser = new User();
+        newUser.googleId = profile.id;
+        newUser.firstName = profile.name.givenName;
+        newUser.lastName = profile.name.familyName;
+        newUser.username = profile.displayName;
+        newUser.email = profile.emails[0].value;
+        newUser.emailConfirmed = true;
+
+        newUser.save(function(err) {
+          if (err) {throw err;}
+          return cb(null, newUser);
+        })
+      }
+  });
+}
 ));
