@@ -16,7 +16,7 @@
                 <div class="col-lg-6">
                     <div class="p-5">
                     <div class="text-center">
-                        <h1 class="h4 text-gray-900 mb-2">Account successfully verified! Redirecting to login page in 5 seconds...</h1>
+                        <h1 class="h4 text-gray-900 mb-2">Account successfully verified! Redirecting to login page in 3 seconds...</h1>
                     </div>
                     <form class="user" action="/verify/<%= token %>" method='POST'>
                       
@@ -26,9 +26,9 @@
                         <a class="small" href="/login">Not automatically redirected? Click here</a>
                         <script>
                           setTimeout(function () {
-                             // after 5 seconds go to login page
+                             // after 3 seconds go to login page
                              window.location = "/login";
-                          }, 5000)
+                          }, 3000)
                         </script>
                     </div>
                     </div>

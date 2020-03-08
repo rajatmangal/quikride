@@ -54,6 +54,12 @@ router.post('/register', authentication.checkNotAuthenticated, async (req,res) =
     regConfig.registerUser(req,res);
 });
 
+router.get('/auth/facebook', passport.authenticate('facebook'));
+
+router.get('/auth/facebook/callback',
+  passport.authenticate('facebook', { successRedirect: '/',
+                                      failureRedirect: '/login' }));
+
 router.delete('/logout', (req,res) => {
     req.logOut();
     res.redirect('/home');
