@@ -9,9 +9,9 @@ router.get('/post/create', authentication.checkAuthentication, async (req, res)=
     res.locals.title = "Create Post";
     const userCurrent = await driversModel.findOne({'username':req.user.username});
     if(userCurrent){
-        res.render('createPost.ejs', {isDriver: true});
+        res.render('createPost.ejs', {user: req.user, isDriver: true});
     }
-    res.render('createPost.ejs', {isDriver:false});
+    res.render('createPost.ejs', {user: req.user, isDriver:false});
     console.log('reached!');
 });
 
@@ -24,7 +24,7 @@ router.get('/posts', authentication.checkAuthentication, async (req, res)=>{
     });
     console.log(posts);
     res.locals.title = "Posts";
-    res.render('posts.ejs', {posts: posts});
+    res.render('posts.ejs', {user: req.user, posts: posts});
 });
 
 router.post('/post/create', authentication.checkAuthentication, async (req, res)=>{

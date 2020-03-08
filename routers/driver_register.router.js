@@ -12,12 +12,13 @@ router.get('/driver/registration', authentication.checkAuthentication, async (re
         userFound = true ;
         res.locals.title="Driver exists.";
         res.render('registerDriver.ejs', {
-            userfound: true
+            userfound: true,
+            user: req.user,
         });
         return ;
     }else{
         res.locals.title= "Register as a driver";
-        res.render('registerDriver.ejs', {userfound:false});
+        res.render('registerDriver.ejs', {user: req.user,userfound:false});
         return;
     }
 });

@@ -2,3 +2,13 @@
     max-height: 50vh; 
     overflow: scroll;
 }
+ 
+.logo {
+    text-decoration: none;
+    color: #858796;
+}
+
+.logo:hover {
+    text-decoration: none;
+    color: #858796;
+}

@@ -17,7 +17,7 @@ router.get('/', authentication.checkAuthentication, (req,res) => {
         } else {
             var sender = await chatUtil.generateMessages(res2, req.user.username);
             res.locals.title = "Home Page";
-            res.render('index.ejs',{ name: req.user.username, messages: sender,moment:moment});
+            res.render('index.ejs',{ user: req.user, messagesList: sender,moment:moment});
         }
     });
 });
