@@ -44,13 +44,14 @@ var UserSchema = new mongoose.Schema({
     type : Date,
     default:''
   },
-  socket_id: {
-    type : String
-  },
   facebookId: {
     type: String,
     default: ''
   },
+  isDriver: {
+    type: Boolean,
+    default: false
+  }
 });
 
 // This adds some methods to the UserSchema

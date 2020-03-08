@@ -3,22 +3,34 @@ var passportLocalMongoose = require('passport-local-mongoose');
 
 
 var driversSchema = new mongoose.Schema({
-    username: [{
+    username: {
         type: String,
         required: true
-    }],
-    fullNameOnLicencse: [{
+    },
+    userid : {
         type: String,
         required: true
-    }],
-    licenseClass: [{
+    },
+    fullNameOnLicense: {
         type: String,
         required: true
-    }],
-    licenseNumber: [{
+    },
+    licenseClass: {
         type: String,
         required: true
-    }]
+    },
+    licenseNumber: {
+        type: String,
+        required: true
+    },
+    carName: {
+        type: String,
+        required: true
+    },
+    carModel: {
+        type: String,
+        required: true
+    }
 });
 
 module.exports = mongoose.model("drivers", driversSchema);

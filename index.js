@@ -49,6 +49,10 @@ app.use(require('./routers/posts.router'));
 app.use(require('./routers/driver_register.router'));
 app.use(require('./routers/rideSharePosts.router'));
 
+app.get("*", function(req, res) {
+	res.render("404.ejs");
+});
+
 //Start the Server
 server.listen(port, (res,req) => {
     console.log(`Listening to port ${port}`);

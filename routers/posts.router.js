@@ -7,11 +7,10 @@ const router = new express.Router();
 
 router.get('/post/create', authentication.checkAuthentication, async (req, res)=>{
     res.locals.title = "Create Post";
-    const userCurrent = await driversModel.findOne({'username':req.user.username});
-    if(userCurrent){
-        res.render('createPost.ejs', {isDriver: true});
+    if(req.user.isDriver){
+        return res.render('createPost.ejs', {user: req.user, isDriver: true});
     }
-    res.render('createPost.ejs', {isDriver:false});
+    return res.render('createPost.ejs', {user: req.user, isDriver:false});
     console.log('reached!');
 });
 
@@ -24,7 +23,7 @@ router.get('/posts', authentication.checkAuthentication, async (req, res)=>{
     });
     console.log(posts);
     res.locals.title = "Posts";
-    res.render('posts.ejs', {posts: posts});
+    res.render('posts.ejs', {user: req.user, posts: posts});
 });
 
 router.post('/post/create', authentication.checkAuthentication, async (req, res)=>{
@@ -33,7 +32,7 @@ router.post('/post/create', authentication.checkAuthentication, async (req, res)
         res.status(400).send(error.details[0].message);
         return;
     }
-    var post  = new postsModel({username: req.user.username, pickuplocation: req.body.pickUpLocation, 
+    var post  = new postsModel({username: req.user.username, userId:req.user._id.toString(), pickuplocation: req.body.pickUpLocation, 
         dropofflocation:req.body.dropOffLocation, 
         usermessage: req.body.description, ridecost: 0});
     await postsModel.create(post, (err, pos)=>{
