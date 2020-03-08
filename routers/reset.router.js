@@ -16,6 +16,11 @@ router.post('/forgot', authentication.checkNotAuthenticated, async (req,res) => 
     try {
         const {forgot} = req.body;
         const user = await User.findOne({'email': forgot});
+        if (user.facebookId != '' || user.facebookId != null) {
+            return res.render('forgot.ejs', {
+                message: "Email associated with Facebook login. Unable to reset password."
+            });
+        }
         if (!user) {
             res.locals.title = "Forget Password";
             res.render('forgot.ejs', {

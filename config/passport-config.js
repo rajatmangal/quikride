@@ -1,7 +1,9 @@
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 const User = require('../models/user');
+var configAuth = require('./auth');
 
 passport.serializeUser(function(user, done) {
     done(null, user.id);
@@ -30,4 +32,32 @@ passport.serializeUser(function(user, done) {
           });
       });
     }
+));
+
+passport.use(new FacebookStrategy({
+  clientID: configAuth.facebookAuth.clientID,
+  clientSecret: configAuth.facebookAuth.clientSecret,
+  callbackURL: configAuth.facebookAuth.callbackURL,
+  profileFields: configAuth.facebookAuth.profileFields
+},
+  function(accessToken, refreshToken, profile, done) {
+    User.findOne({ 'facebookId': profile.id }, async function (err, user) {
+      if (err) { return done(err); }
+      if (user) {  return done(null, user); }
+      else {
+        var newUser = new User();
+        newUser.facebookId = profile.id;
+        newUser.firstName = profile.name.givenName;
+        newUser.lastName = profile.name.familyName;
+        newUser.username = profile.displayName;
+        newUser.email = profile.emails[0].value;
+        newUser.emailConfirmed = true;
+
+        newUser.save(function(err) {
+          if (err) {throw err;}
+          return done(null, newUser);
+        })
+      }
+    });
+  }
 ));

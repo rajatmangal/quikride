@@ -25,7 +25,6 @@ var UserSchema = new mongoose.Schema({
   },
   password: {
     type : String,
-    required : true,
     minLength: 8,
     maxLength: 20
   },
@@ -47,6 +46,10 @@ var UserSchema = new mongoose.Schema({
   },
   socket_id: {
     type : String
+  },
+  facebookId: {
+    type: String,
+    default: ''
   },
 });
 
