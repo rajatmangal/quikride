@@ -7,11 +7,10 @@ const router = new express.Router();
 
 router.get('/post/create', authentication.checkAuthentication, async (req, res)=>{
     res.locals.title = "Create Post";
-    const userCurrent = await driversModel.findOne({'username':req.user.username});
-    if(userCurrent){
-        res.render('createPost.ejs', {user: req.user, isDriver: true});
+    if(req.user.isDriver){
+        return res.render('createPost.ejs', {user: req.user, isDriver: true});
     }
-    res.render('createPost.ejs', {user: req.user, isDriver:false});
+    return res.render('createPost.ejs', {user: req.user, isDriver:false});
     console.log('reached!');
 });
 
