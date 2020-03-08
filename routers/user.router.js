@@ -5,6 +5,7 @@ const authentication = require('../utils/authentication.util')
 const regConfig = require('../config/register-config')
 const thread = require('../models/thread');
 const messages = require('../models/messages');
+const posts = require('../models/posts');
 const router = new express.Router();
 const moment = require("moment");
 const chatUtil = require("../chat/chat-utils");
@@ -13,11 +14,17 @@ router.get('/', authentication.checkAuthentication, (req,res) => {
     thread.find({ users: req.user.username}, async (err,res2) => {
         if(res2 == null) {
             res.locals.title = "Home Page";
-            res.render('index.ejs',{ name: req.user.username , messages: []});
+            res.render('index.ejs',{ name: req.user.username , messages: [] });
         } else {
             var sender = await chatUtil.generateMessages(res2, req.user.username);
+            const posts1 = await posts.find({}, (err, res5)=>{
+                if(err){
+                    res.status(404).send('No posts found!');
+                    return;
+                }
+            });
             res.locals.title = "Home Page";
-            res.render('index.ejs',{ name: req.user.username, messages: sender,moment:moment});
+            res.render('index.ejs',{ user: req.user, messagesList: sender,moment:moment, posts: posts1});
         }
     });
 });

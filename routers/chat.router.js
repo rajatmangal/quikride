@@ -47,7 +47,7 @@ router.get('/chat/:id', authentication.checkAuthentication, async (req,res) => {
                  }
                  else {
                     res.locals.title = "Chat";
-                    res.render('chat.ejs', {id: req.user._id.toString()+ req.params.id, userId: user1.username})
+                    res.render('chat.ejs', {user: req.user, id: req.user._id.toString()+ req.params.id, userId: user1.username})
                  }
              });
             
@@ -65,7 +65,7 @@ router.get('/chat/:id', authentication.checkAuthentication, async (req,res) => {
                                 mes[i].created = moment(mes[i].created_at).format('MMMM Do YYYY h:mm a')
                             }
                             res.locals.title = "Chat";
-                            res.render('chat.ejs', {id: res1.group_name, userId: user1.username, messages: mes})
+                            res.render('chat.ejs', {user: req.user, id: res1.group_name, userId: user1.username, messages: mes})
                         }
                     });
                 }

@@ -2,26 +2,30 @@ const mongoose = require('mongoose');
 var passportLocalMongoose = require('passport-local-mongoose');
 
 var postsSchema = new mongoose.Schema({
-    username: [{
+    username: {
         type: String,
         required: true
-    }],
-    pickuplocation: [{
+    },
+    userId: {
         type: String,
         required: true
-    }],
-    dropofflocation: [{
+    },
+    pickuplocation: {
         type: String,
         required: true
-    }],
-    usermessage: [{
+    },
+    dropofflocation: {
         type: String,
         required: true
-    }],
-    ridecost: [{
+    },
+    usermessage: {
+        type: String,
+        required: true
+    },
+    ridecost: {
         type: Number,
         required: true
-    }]
+    }
 });
 
 module.exports = mongoose.model("posts", postsSchema);

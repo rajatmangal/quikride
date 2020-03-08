@@ -1,12 +1,13 @@
 const express = require('express');
 const postsModel = require('../models/shareRidePosts');
 const authentication = require('../utils/authentication.util');
+const chatUtil = require('../chat/chat-utils');
 const Joi = require('joi');
 const router = new express.Router();
 
 router.get('/post/create/rideshare', authentication.checkAuthentication, (req, res)=>{
     res.locals.title = "Create Ride Share Post";
-    res.render('createRideSharePosts.ejs');
+    res.render('createRideSharePosts.ejs', {user: req.user});
     console.log('reached!');
 });
 
@@ -19,7 +20,7 @@ router.get('/posts/rideshare', authentication.checkAuthentication, async (req, r
     });
     console.log(posts);
     res.locals.title = "Posts";
-    res.render('rideSharePosts.ejs', {posts: posts});
+    res.render('rideSharePosts.ejs', {user: req.user,posts: posts});
 });
 
 router.post('/post/create/rideshare', authentication.checkAuthentication, async (req, res)=>{

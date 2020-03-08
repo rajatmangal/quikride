@@ -12,12 +12,13 @@ router.get('/driver/registration', authentication.checkAuthentication, async (re
         userFound = true ;
         res.locals.title="Driver exists.";
         res.render('registerDriver.ejs', {
-            userfound: true
+            userfound: true,
+            user: req.user,
         });
         return ;
     }else{
         res.locals.title= "Register as a driver";
-        res.render('registerDriver.ejs', {userfound:false});
+        res.render('registerDriver.ejs', {user: req.user,userfound:false});
         return;
     }
 });
@@ -35,8 +36,8 @@ router.post('/driver/registration', authentication.checkAuthentication, async (r
         }
     });
     console.log(posts);
-    var driver_reg  = new driversModel({username: req.user.username, 
-        fullNameOnLicencse: req.body.fullNameOnLicencse, licenseClass:req.body.licenseClass, 
+    var driver_reg  = new driversModel({username: req.user.username, userid: req.user._id, 
+        fullNameOnLicense: req.body.fullNameOnLicense, licenseClass:req.body.licenseClass, 
         licenseNumber: req.body.licenseNumber});
     await driversModel.create(driver_reg, (err, pos)=>{
         if(err) {
