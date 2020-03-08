@@ -68,24 +68,24 @@ passport.use(new GoogleStrategy({
   clientSecret: configAuth.googleAuth.clientSecret,
   callbackURL: configAuth.googleAuth.callbackURL
 },
-function(accessToken, refreshToken, profile, cb) {
-  User.findOne({ googleId: profile.id }, function (err, user) {
-    if (err) { return cb(err); }
-      if (user) {  return cb(null, user); }
-      else {
-        var newUser = new User();
-        newUser.googleId = profile.id;
-        newUser.firstName = profile.name.givenName;
-        newUser.lastName = profile.name.familyName;
-        newUser.username = profile.displayName;
-        newUser.email = profile.emails[0].value;
-        newUser.emailConfirmed = true;
+  function(accessToken, refreshToken, profile, cb) {
+    User.findOne({ googleId: profile.id }, function (err, user) {
+      if (err) { return cb(err); }
+        if (user) {  return cb(null, user); }
+        else {
+          var newUser = new User();
+          newUser.googleId = profile.id;
+          newUser.firstName = profile.name.givenName;
+          newUser.lastName = profile.name.familyName;
+          newUser.username = profile.displayName;
+          newUser.email = profile.emails[0].value;
+          newUser.emailConfirmed = true;
 
-        newUser.save(function(err) {
-          if (err) {throw err;}
-          return cb(null, newUser);
-        })
-      }
-  });
-}
+          newUser.save(function(err) {
+            if (err) {throw err;}
+            return cb(null, newUser);
+          })
+        }
+    });
+  }
 ));
