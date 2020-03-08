@@ -1,0 +1,23 @@
+<%- include ('partials/header') %>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <div class="row">
+        <h2 style="margin:auto; text-align: center;">Ride Request Posts!</h2>
+         <% for(var i=0; i<posts.length; i++) {%>
+            <div class="card" style="width: 15rem; margin:auto; margin-bottom: 10px;">
+                <div class="card-body">
+                <h5 class="card-title"><%= posts[i].username %></h5>
+                <p class="card-text"><%= posts[i].usermessage %></p>
+                </div>
+                <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Pick Up:</strong> <%= posts[i].pickuplocation %></li>
+                <li class="list-group-item"><strong>Drop Off:</strong> <%= posts[i].dropofflocation %></li>
+                <li class="list-group-item"><strong>Pay Out:</strong> <%= posts[i].ridecost %></li>
+                </ul>
+                <div class="card-body">
+                <a href="#" class="card-link">Start Chat!</a>
+                </div>
+            </div>
+          <% } %>
+    </div>
+<%- include ('partials/footer') %>

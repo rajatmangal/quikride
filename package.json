@@ -22,6 +22,7 @@
     "express-flash": "0.0.2",
     "express-formidable": "^1.2.0",
     "express-session": "^1.17.0",
+    "joi": "^14.3.1",
     "method-override": "^3.0.0",
     "mocha": "^7.0.1",
     "moment": "^2.24.0",

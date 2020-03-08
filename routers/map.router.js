@@ -8,3 +8,5 @@ router.get('/map', authentication.checkAuthentication, (req,res) => {
 });
 
 module.exports = router
+
+

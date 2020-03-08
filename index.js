@@ -36,6 +36,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method'))
 app.use(bodyParser.urlencoded({extended : false}));
+app.use(express.json());
+
 
 //Routers
 app.use(require('./routers/user.router'));
@@ -43,6 +45,9 @@ app.use(require('./routers/verify.router'));
 app.use(require('./routers/chat.router'));
 app.use(require('./routers/map.router'));
 app.use(require('./routers/reset.router'));
+app.use(require('./routers/posts.router'));
+app.use(require('./routers/driver_register.router'));
+app.use(require('./routers/rideSharePosts.router'));
 
 //Start the Server
 server.listen(port, (res,req) => {
