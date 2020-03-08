@@ -22,6 +22,14 @@ var driversSchema = new mongoose.Schema({
     licenseNumber: {
         type: String,
         required: true
+    },
+    carName: {
+        type: String,
+        required: true
+    },
+    carModel: {
+        type: String,
+        required: true
     }
 });
 

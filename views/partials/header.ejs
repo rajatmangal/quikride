@@ -105,11 +105,19 @@
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Create New Post</span></span>
               </a>
             </li> 
-            <li class="nav-item dropdown no-arrow">
-              <a class="nav-link dropdown-toggle" href="/driver/registration">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Register as a Driver</span></span>
-              </a>
-            </li>
+            <% if(!user.isDriver) {%>
+              <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle" href="/driver/registration">
+                  <span class="mr-2 d-none d-lg-inline text-gray-600 small">Register as a Driver</span></span>
+                </a>
+              </li>
+            <% } else { %>
+              <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle" href="/driver/registration">
+                  <span class="mr-2 d-none d-lg-inline text-gray-600 small">Driver's Profile</span></span>
+                </a>
+              </li>
+            <% } %>
             <li class="nav-item dropdown no-arrow">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Hi, <span id="username"><%= user.username %></span></span>

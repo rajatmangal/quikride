@@ -5,6 +5,10 @@
         #map {
             height: 90vh;
         }
+        #posts {
+            height: 90vh;
+            overflow: scroll;
+        }
         /* Optional: Makes the sample page fill the window. */
         html, body {
             height: 100%;
@@ -14,20 +18,22 @@
     </style>
     <div class="row">
         <div class="col-lg-4">
-            <% for(var i=0; i<posts.length; i++) {%>
-                <div class="card posts-cards">
-                    <h5 class="card-header"><%= posts[i].username %></h5>
-                    <div class="card-body">
-                    <h5 class="card-title"><%= posts[i].usermessage %></h5>
-                    <p class="card-text">
-                        Pick Up Location: <%= posts[i].pickuplocation %>
-                        <br>
-                        Drop Off Location: <%= posts[i].dropofflocation %>
-                    </p>
-                    <a href="/chat/<%= posts[i].userId %>"  class="btn btn-primary">Chat</a>
+            <div id="posts">
+                <% for(var i=0; i<posts.length; i++) {%>
+                    <div class="card posts-cards">
+                        <h5 class="card-header"><%= posts[i].username %></h5>
+                        <div class="card-body">
+                        <h5 class="card-title"><%= posts[i].usermessage %></h5>
+                        <p class="card-text">
+                            Pick Up Location: <%= posts[i].pickuplocation %>
+                            <br>
+                            Drop Off Location: <%= posts[i].dropofflocation %>
+                        </p>
+                        <a href="/chat/<%= posts[i].userId %>"  class="btn btn-primary">Chat</a>
+                        </div>
                     </div>
-                </div>
-            <% } %>
+                <% } %>
+            </div>
         </div>
         <div class="col-lg-8">
             <div id="map"></div>
