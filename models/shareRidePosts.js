@@ -3,26 +3,26 @@ var passportLocalMongoose = require('passport-local-mongoose');
 
 
 var shareRidePostsSchema = new mongoose.Schema({
-    username: [{
+    username: {
         type: String,
         required: true
-    }],
-    pickUp: [{
+    },
+    pickUp: {
         type: String,
         required: true
-    }],
-    dropOff: [{
+    },
+    dropOff: {
         type: String,
         required: true
-    }],
-    radius: [{
+    },
+    radius: {
         type: String,
         required: true
-    }],
-    perKm: [{
+    },
+    perKm: {
         type: String,
         required: true
-    }]
+    }
 });
 
 module.exports = mongoose.model("shareRide", shareRidePostsSchema);

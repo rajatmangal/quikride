@@ -36,8 +36,8 @@ router.post('/driver/registration', authentication.checkAuthentication, async (r
         }
     });
     console.log(posts);
-    var driver_reg  = new driversModel({username: req.user.username, 
-        fullNameOnLicencse: req.body.fullNameOnLicencse, licenseClass:req.body.licenseClass, 
+    var driver_reg  = new driversModel({username: req.user.username, userid: req.user._id, 
+        fullNameOnLicense: req.body.fullNameOnLicense, licenseClass:req.body.licenseClass, 
         licenseNumber: req.body.licenseNumber});
     await driversModel.create(driver_reg, (err, pos)=>{
         if(err) {
