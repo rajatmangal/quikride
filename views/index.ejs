@@ -1,13 +1,84 @@
 <%- include ('partials/header') %>
-   
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+        * element that contains the map. */
+        #map {
+            height: 90vh;
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
     <div class="row">
         <div class="col-lg-4">
-qwwdq
+            <% for(var i=0; i<posts.length; i++) {%>
+                <div class="card posts-cards">
+                    <h5 class="card-header"><%= posts[i].username %></h5>
+                    <div class="card-body">
+                    <h5 class="card-title"><%= posts[i].usermessage %></h5>
+                    <p class="card-text">
+                        Pick Up Location: <%= posts[i].pickuplocation %>
+                        <br>
+                        Drop Off Location: <%= posts[i].dropofflocation %>
+                    </p>
+                    <a href="/chat/<%= posts[i].userId %>"  class="btn btn-primary">Chat</a>
+                    </div>
+                </div>
+            <% } %>
         </div>
         <div class="col-lg-8">
-            qwwdq
+            <div id="map"></div>
         </div>
     </div>
+    <script>
+        var map;
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 49.17, lng: -122.87},
+            zoom: 12
+            });
+            infoWindow = new google.maps.InfoWindow;
+
+            // markers will be added in the future from database
+            var myLatLng = {lat: 49.17, lng: -122.87};
+
+            var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: 'Hello World!'
+            });
+
+            // Try HTML5 geolocation.
+            if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+                };
+                map.setCenter(pos);
+            }, function() {
+                handleLocationError(true, infoWindow, map.getCenter());
+            });
+            } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter());
+            }
+
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(browserHasGeolocation ?
+                                'Error: The Geolocation service failed.' :
+                                'Error: Your browser doesn\'t support geolocation.');
+            infoWindow.open(map);
+        }
+
+        }
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCESc_JeBGh3Hw1N-b-vhn0xJ83_QzVhno&callback=initMap"
+        async defer></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
     <script src="/js/io.js"></script>

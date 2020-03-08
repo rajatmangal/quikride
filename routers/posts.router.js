@@ -33,7 +33,7 @@ router.post('/post/create', authentication.checkAuthentication, async (req, res)
         res.status(400).send(error.details[0].message);
         return;
     }
-    var post  = new postsModel({username: req.user.username, pickuplocation: req.body.pickUpLocation, 
+    var post  = new postsModel({username: req.user.username, userId:req.user._id.toString(), pickuplocation: req.body.pickUpLocation, 
         dropofflocation:req.body.dropOffLocation, 
         usermessage: req.body.description, ridecost: 0});
     await postsModel.create(post, (err, pos)=>{

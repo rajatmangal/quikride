@@ -12,3 +12,15 @@
     text-decoration: none;
     color: #858796;
 }
+
+.posts-cards {
+    margin: 5px 5px;
+}
+
+.col-lg-8 {
+    padding-left: 0;
+}
+
+.col-lg-4 {
+    padding-right: 0;
+}
