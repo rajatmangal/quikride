@@ -19,18 +19,18 @@
                     <div class="form-group row">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control form-control-user" id="PickUpLocation" placeholder="Pick Up Location" name="pickUpLocation" required>
+                        <input type="text" class="form-control form-control-user" id="PickUpLocation" placeholder="Pick Up Location" name="pickupLocation" required>
                       </div>
                     <div class="form-group">
-                      <input type="text" class="form-control form-control-user" id="DropOffLocation" placeholder="Drop Off Location" name="dropOffLocation" required>
+                      <input type="text" class="form-control form-control-user" id="DropOffLocation" placeholder="Drop Off Location" name="dropoffLocation" required>
                     </div>
                     <div class="form-group">
                         <textarea type="textarea" class="form-control" id="Description" placeholder="Message" name="description" rows="3" required></textarea>
                         </div>
-                    <input type="hidden" name="pickUpLocationLat" id="pickUpLocationLat">
-                    <input type="hidden" name="pickUpLocationLon" id="pickUpLocationLon">
-                    <input type="hidden" name="dropOffLocationLat" id="dropOffLocationLat">
-                    <input type="hidden" name="dropOffLocationLon" id="dropOffLocationLon">
+                    <input type="hidden" name="pickupLocationLat" id="pickUpLocationLat">
+                    <input type="hidden" name="pickupLocationLng" id="pickUpLocationLng">
+                    <input type="hidden" name="dropoffLocationLat" id="dropOffLocationLat">
+                    <input type="hidden" name="dropoffLocationLng" id="dropOffLocationLng">
                     <button type="submit" class="btn btn-primary btn-user btn-block">Post!</button>
                 </div>
               </div>
@@ -64,7 +64,8 @@
               window.alert("No details available for input: '" + place.name + "'");
               return;
             } else {
-
+              document.getElementById('pickUpLocationLat').value = place.geometry.location.lat();
+              document.getElementById('pickUpLocationLng').value = place.geometry.location.lng();
             }
             
           });
@@ -77,6 +78,9 @@
             if (!place.geometry) {
               window.alert("No details available for input: '" + place.name + "'");
               return;
+            } else {
+              document.getElementById('dropOffLocationLat').value = place.geometry.location.lat();
+              document.getElementById('dropOffLocationLng').value = place.geometry.location.lng();
             }
             
           });
