@@ -11,7 +11,6 @@ router.get('/post/create', authentication.checkAuthentication, async (req, res)=
         return res.render('createPost.ejs', {user: req.user, isDriver: true});
     }
     return res.render('createPost.ejs', {user: req.user, isDriver:false});
-    console.log('reached!');
 });
 
 router.get('/posts', authentication.checkAuthentication, async (req, res)=>{
