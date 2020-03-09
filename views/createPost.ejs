@@ -27,6 +27,10 @@
                     <div class="form-group">
                         <textarea type="textarea" class="form-control" id="Description" placeholder="Message" name="description" rows="3" required></textarea>
                         </div>
+                    <input type="hidden" name="pickUpLocationLat" id="pickUpLocationLat">
+                    <input type="hidden" name="pickUpLocationLon" id="pickUpLocationLon">
+                    <input type="hidden" name="dropOffLocationLat" id="dropOffLocationLat">
+                    <input type="hidden" name="dropOffLocationLon" id="dropOffLocationLon">
                     <button type="submit" class="btn btn-primary btn-user btn-block">Post!</button>
                 </div>
               </div>
@@ -37,14 +41,10 @@
     
       </div>
       <script>
-        // This example requires the Places library. Include the libraries=places
-        // parameter when you first load the API. For example:
-        // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-  
         function initMap() {
           //To turn google place api on, replace the API key at the bottom and uncomment these 2 lines
-          //var pickup = document.getElementById('PickUpLocation');
-          //var dropoff = document.getElementById('DropOffLocation');
+          var pickup = document.getElementById('PickUpLocation');
+          var dropoff = document.getElementById('DropOffLocation');
   
           var autocomplete = new google.maps.places.Autocomplete(pickup);
           var autocomplete2 = new google.maps.places.Autocomplete(dropoff);
@@ -63,6 +63,8 @@
             if (!place.geometry) {
               window.alert("No details available for input: '" + place.name + "'");
               return;
+            } else {
+
             }
             
           });
@@ -80,5 +82,5 @@
           });
         }
       </script>
-      <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY&libraries=places&callback=initMap" async defer></script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCESc_JeBGh3Hw1N-b-vhn0xJ83_QzVhno&libraries=places&callback=initMap" async defer></script>
 <%- include ('partials/footer') %>

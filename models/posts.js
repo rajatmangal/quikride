@@ -14,7 +14,23 @@ var postsSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    pickuplocationLat: {
+        type: String,
+        required: true
+    },
+    pickuplocationLon: {
+        type: String,
+        required: true
+    },
     dropofflocation: {
+        type: String,
+        required: true
+    },
+    dropofflocationLat: {
+        type: String,
+        required: true
+    },
+    dropofflocationLon: {
         type: String,
         required: true
     },
