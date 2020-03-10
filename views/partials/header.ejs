@@ -56,7 +56,9 @@
                 <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-envelope fa-fw"></i>
                 <!-- Counter - Messages -->
-                <span class="badge badge-danger badge-counter"></span>
+                <% if(unread !== 0) {%>
+                  <span class="badge badge-danger badge-counter" id="badge"><%=unread%></span>
+                <% } %>
                 </a>
                 <!-- Dropdown - Messages -->
                 <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown"  id="message-dropdown">
@@ -67,14 +69,19 @@
                     <% for (var i = 0 ; i < messagesList.length && i < 4 ; i++) { %>
                     <a class="dropdown-item d-flex align-items-center" href="/chat/<%=messagesList[i].id%>">
                         <div class="dropdown-list-image mr-3">
-                        <img class="rounded-circle" src="https://source.unsplash.com/fn_BT9fwg_E/60x60" alt="">
+                        <img class="rounded-circle" src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179865.jpg" alt="">
                         <div class="status-indicator bg-success"></div>
                         </div>
                         <div class="font-weight-bold">
-                        <div class="text-truncate"><%= messagesList[i].last_message%></div>
-                        <div class="small text-gray-500"><%= messagesList[i].last_sender%> · <%=moment(messagesList[i].last_updated).format('MMMM Do YYYY, h:mm:ss a');%></div>
+                          <div class="text-truncate">
+                            <%= messagesList[i].last_message%>
+                            <% if(!messagesList[i].message_read && messagesList[i].last_sender !== user.username) { %>
+                              <span class="badge badge-pill badge-danger">New</span>
+                            <% } %>
+                          </div>
+                          <div class="small text-gray-500"><%= messagesList[i].users[0]%> · <%=moment(messagesList[i].last_updated).format('MMMM Do YYYY, h:mm:ss a');%></div>
                         </div>
-                    </a>
+                      </a>
                     <% } %>
                     <div id = "additionalMessages">
                     <% for (var i = 4 ; i < messagesList.length ; i++) { %>
@@ -84,8 +91,13 @@
                             <div class="status-indicator bg-success"></div>
                         </div>
                         <div class="font-weight-bold">
-                            <div class="text-truncate"><%= messagesList[i].last_message%></div>
-                            <div class="small text-gray-500"><%= messagesList[i].last_sender%> · <%=moment(messagesList[i].last_updated).format('MMMM Do YYYY, h:mm:ss a');%></div>
+                            <div class="text-truncate">
+                              <%= messagesList[i].last_message%>
+                              <% if(!messagesList[i].message_read && messagesList[i].last_sender !== user.username) { %>
+                                <span class="badge badge-pill badge-danger">New</span>
+                              <% } %>
+                            </div>
+                            <div class="small text-gray-500"><%= messagesList[i].users[0]%> · <%=moment(messagesList[i].last_updated).format('MMMM Do YYYY, h:mm:ss a');%></div>
                         </div>
                         </a>
                     <% } %>

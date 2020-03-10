@@ -23,8 +23,9 @@ router.get('/', authentication.checkAuthentication, (req,res) => {
                     return;
                 }
             });
+            var unread = await chatUtil.unreadMessages(res2, req.user.username);
             res.locals.title = "Home Page";
-            res.render('index.ejs',{ user: req.user, messagesList: sender,moment:moment, posts: posts1});
+            res.render('index.ejs',{ user: req.user, messagesList: sender,moment:moment, posts: posts1, unread:unread});
         }
     });
 });
