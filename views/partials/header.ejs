@@ -58,7 +58,10 @@
                 <!-- Counter - Messages -->
                 <% if(unread !== 0) {%>
                   <span class="badge badge-danger badge-counter" id="badge"><%=unread%></span>
+                <% } else { %>
+                  <span class="badge badge-danger badge-counter" id="badge"></span>
                 <% } %>
+
                 </a>
                 <!-- Dropdown - Messages -->
                 <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown"  id="message-dropdown">
