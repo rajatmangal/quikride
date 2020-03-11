@@ -4,12 +4,10 @@ var passportLocalMongoose = require('passport-local-mongoose');
 
 var UserSchema = new mongoose.Schema({
   firstName: {
-    type : String,
-    required : true
+    type : String
   },
   lastName: {
-    type : String,
-    required : true
+    type : String
   },
   username: {
     type : String,
@@ -45,6 +43,10 @@ var UserSchema = new mongoose.Schema({
     default:''
   },
   facebookId: {
+    type: String,
+    default: ''
+  },
+  googleId: {
     type: String,
     default: ''
   },
