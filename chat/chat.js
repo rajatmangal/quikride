@@ -9,9 +9,6 @@ const moment = require('moment');
 function connectChat(server) {
     const io = socketIO(server);
     io.on('connection', (socket) => {
-        // console.log(server);
-        // console.log(socket);
-        console.log('New Websocket Connection');
         socket.on('join', (id) => {
             socket.join(id.room);
             //io.to.emit (send message to everyone in room)
@@ -27,7 +24,7 @@ function connectChat(server) {
                      throw err;
                  }
                  else {
-                    thread.update({group_name: message.id},{$set: {last_updated: new Date().getTime(), last_message: message.message, last_sender: message.username}}, async function(err, result) {
+                    thread.update({group_name: message.id},{$set: {last_updated: new Date().getTime(), last_message: message.message, last_sender: message.username, message_read: false}}, async function(err, result) {
                         if(err) {
                             throw err;
                         }
@@ -67,7 +64,7 @@ function connectChat(server) {
                      throw err;
                  }
                  else {
-                    thread.update({group_name: coords.id},{$set: {last_updated: new Date().getTime(), last_message: url, last_sender: coords.username}}, function(err, result) {
+                    thread.update({group_name: coords.id},{$set: {last_updated: new Date().getTime(), last_message: url, last_sender: coords.username, message_read: false}}, function(err, result) {
                         if(err) {
                             throw err;
                         }
@@ -82,6 +79,16 @@ function connectChat(server) {
             
         });
 
+        socket.on("read", (id) => {
+            thread.find({group_name: id.id} , async (err, res) => {
+                if(err) throw err;
+                if(res[0].last_sender !== id.username) {
+                    await thread.updateOne({group_name: id.id},{$set: {message_read: true}}, function(err, result) {
+                        if(err) throw err;
+                    });
+                }
+            })
+        })
         // socket.on('user', async (user) => {
         //     await thread.update({username: user},{$set: {socket_id: socket.id}}, function(err, result) {
         //         if(err) {

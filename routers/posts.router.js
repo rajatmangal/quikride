@@ -3,7 +3,6 @@ const postsModel = require('../models/posts');
 const driversModel = require('../models/drivers');
 const authentication = require('../utils/authentication.util');
 const Joi = require('joi');
-const Client = require("@googlemaps/google-maps-services-js").Client;
 const router = new express.Router();
 
 router.get('/post/create', authentication.checkAuthentication, async (req, res)=>{

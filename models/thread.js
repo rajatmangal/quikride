@@ -32,6 +32,9 @@ var threadSchema = new mongoose.Schema({
     id: {
         type: String,
         required : true
+    },
+    message_read: {
+        type: Boolean
     }
 });
 

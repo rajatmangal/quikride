@@ -10,12 +10,12 @@ const sendLoc = document.getElementById("sendLoc");
 const messages = document.getElementById("messages");
 const messageTemplate = document.getElementById("message-template").innerHTML;
 const locationTemplate = document.getElementById("location-template").innerHTML;
-const username = document.getElementById("userId").innerText;
+const username = document.getElementById("username").innerText;
 // console.log("UserId is", username);
 messages.scrollTop = messages.scrollHeight - messages.clientHeight;
 
 socket.on('message', (message) => {
-    // console.log(message);
+    console.log(message);
     const html = Mustache.render(messageTemplate, {
         message: message.text,
         time: moment(message.createdAt).format('MMMM Do YYYY h:mm a'),
@@ -77,6 +77,10 @@ sendLoc.addEventListener('click', (e) => {
         })
     });
 });
+socket.emit("read", {
+    id: id,
+    username: username
+ });
 
 
 socket.emit("join", {room:id});
