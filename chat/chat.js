@@ -9,9 +9,6 @@ const moment = require('moment');
 function connectChat(server) {
     const io = socketIO(server);
     io.on('connection', (socket) => {
-        // console.log(server);
-        // console.log(socket);
-        console.log('New Websocket Connection');
         socket.on('join', (id) => {
             socket.join(id.room);
             //io.to.emit (send message to everyone in room)
@@ -85,14 +82,9 @@ function connectChat(server) {
         socket.on("read", (id) => {
             thread.find({group_name: id.id} , async (err, res) => {
                 if(err) throw err;
-                console.log(res[0].last_sender)
-                console.log(id.username)
                 if(res[0].last_sender !== id.username) {
-                    console.log(id.id)
-                    console.log("I am here")
                     await thread.updateOne({group_name: id.id},{$set: {message_read: true}}, function(err, result) {
                         if(err) throw err;
-                        console.log(result);
                     });
                 }
             })
