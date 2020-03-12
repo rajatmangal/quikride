@@ -1,0 +1,66 @@
+<%- include ('header') %>
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+    <div class="container">
+        <div>
+            <div class="col-md-12 col-xs-12" align="center">
+                <div class="outter"><br/> <img class="circle" src="http://lorempixel.com/output/people-q-c-100-100-1.jpg" /></div>   
+                <h1>Hi <%= user["username"] %></h1>
+            </div>
+
+            <div align="right">
+                <a class="btn-floating btn-large waves-effect waves-light red" href="/profile/<%= user["username"] %>"><i class="material-icons">edit</i></a>
+            </div>
+
+            <div align="center">
+                <div class="col-md-3 col-xs-4 follow line" align="center">
+                    <h4 font-fam>
+                        FirstName: <br/> <span><%= user["firstName"] %></span>
+                    </h4>
+                </div>
+                <div class="col-md-3 col-xs-6 follow line" align="center">
+                    <h4>
+                        LastName: <br/> <span><%= user["lastName"] %></span>
+                    </h4>
+                </div>
+                <div class="col-md-3 col-xs-6 follow line" align="center">
+                    <h4>
+                        Username: <br/> <span><%= user["username"] %></span>
+                    </h4>
+                </div>
+                <div class="col-md-3 col-xs-6 follow line" align="center">
+                    <h4>
+                        Email: <br/> <span><%= user["email"] %></span>
+                    </h4>
+                </div>
+            </div>
+            
+            
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+           
+            <div align = "center">
+                <ul class="collection with-header">
+                    <li class="collection-header"><h4>Your Trips History</h4></li>
+                    <li class="collection-item">trip 1</li>
+                    <li class="collection-item">trip 2</li>
+                    <li class="collection-item">trip 3</li>
+                    <li class="collection-item">trip 4</li>
+                </ul>
+            </div>
+            
+            
+                
+        </div>
+    </div>
+
+
+<%- include ('footer') %>

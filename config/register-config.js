@@ -7,6 +7,30 @@ const User = require('../models/user');
 var randomString = require('random-string');
 const mailer = require('./mailer-config');
 
+function checkUsername(username){
+    if(username.length < 6 || username.length > 20) {
+        return false
+    }
+    return true
+}
+
+function checkPassword(password){
+    var passwordCheck =  new passwordValidator();
+    passwordCheck
+        .is().min(8)                                    // Minimum length 8
+        .is().max(20)                                  // Maximum length 100
+        .has().uppercase()                              // Must have uppercase letters
+        .has().lowercase()
+        .has().symbols()                              // Must have lowercase letters
+        .has().digits()                                 // Must have digits
+        .has().not().spaces()                           // Should not have spaces
+        .is().not().oneOf(['Passw0rd', 'Password123']); // Blacklist these values
+    return passwordCheck.validate(password)
+}
+
+async function hashPassword(password){
+    return await bcrypt.hash(password,10);
+}
 
 async function registerUser(req, res) {
     try{
@@ -73,3 +97,6 @@ async function registerUser(req, res) {
 
 
 module.exports.registerUser = registerUser;
+module.exports.checkUsername = checkUsername;
+module.exports.checkPassword = checkPassword;
+module.exports.hashPassword = hashPassword;
