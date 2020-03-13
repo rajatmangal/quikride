@@ -78,7 +78,7 @@ router.delete('/logout', (req,res) => {
     res.redirect('/home');
 })
 
-router.get('/:name', authentication.checkAuthentication, (req,res) => {
+router.get('/profile/:name', authentication.checkAuthentication, (req,res) => {
     res.locals.title = "profile";
     // retrieve user info
     User.find({username: req.params.name}, (err, user) => {
@@ -89,7 +89,7 @@ router.get('/:name', authentication.checkAuthentication, (req,res) => {
 });
 
 // authentication.checkAuthentication, 
-router.get('/profile/:name', (req,res) => {
+router.get('/profile/edit/:name', (req,res) => {
     res.locals.title = "editProfile";
     // update user info
     User.find({username: req.params.name}, (err, user) => {
