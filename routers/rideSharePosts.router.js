@@ -40,4 +40,12 @@ router.post('/post/create/rideshare', authentication.checkAuthentication, async 
     });
 });
 
+router.get('/posts/search', authentication.checkAuthentication, async (req, res)=>{
+    var pickUpLat = req.query.pickUpLat;
+    var pickUpLon = req.query.pickUpLon;
+    var dropOffLng = req.query.dropOffLat;
+    var dropOffLng = req.query.dropOffLng;
+    //postsModel.find()
+});
+
 module.exports = router ;
