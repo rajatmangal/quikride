@@ -77,10 +77,10 @@
                         </div>
                         <div class="font-weight-bold">
                           <div class="text-truncate">
-                            <%= messagesList[i].last_message%>
                             <% if(!messagesList[i].message_read && messagesList[i].last_sender !== user.username) { %>
                               <span class="badge badge-pill badge-danger">New</span>
                             <% } %>
+                            <%= messagesList[i].last_message%>
                           </div>
                           <div class="small text-gray-500"><%= messagesList[i].users[0]%> · <%=moment(messagesList[i].last_updated).format('MMMM Do YYYY, h:mm:ss a');%></div>
                         </div>
@@ -95,10 +95,10 @@
                         </div>
                         <div class="font-weight-bold">
                             <div class="text-truncate">
-                              <%= messagesList[i].last_message%>
                               <% if(!messagesList[i].message_read && messagesList[i].last_sender !== user.username) { %>
                                 <span class="badge badge-pill badge-danger">New</span>
                               <% } %>
+                              <%= messagesList[i].last_message%>
                             </div>
                             <div class="small text-gray-500"><%= messagesList[i].users[0]%> · <%=moment(messagesList[i].last_updated).format('MMMM Do YYYY, h:mm:ss a');%></div>
                         </div>
