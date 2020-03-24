@@ -11,9 +11,17 @@ var shareRidePostsSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    pickUpPoint: {
+        type: { type: String },
+        coordinates: []
+    },
     dropOff: {
         type: String,
         required: true
+    },
+    dropOffPoint: {
+        type: { type: String },
+        coordinates: []
     },
     radius: {
         type: String,
@@ -44,5 +52,8 @@ var shareRidePostsSchema = new mongoose.Schema({
         required: true
     },
 });
+
+shareRidePostsSchema.index({"pickUpPoint": "2dsphere"});
+shareRidePostsSchema.index({"dropOffPoint": "2dsphere"});
 
 module.exports = mongoose.model("shareRide", shareRidePostsSchema);

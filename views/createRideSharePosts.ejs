@@ -19,9 +19,14 @@
                     <div class="form-group">
                       <input type="text" class="form-control form-control-user" id="dropOff" placeholder="Drop Off Location" name="dropOff" required>
                     </div>
-                    <div class="form-group">
-                        <input type="number" class="form-control form-control-user" id="radius" placeholder="Radius for Pickup and DropOff" name="radius" required>
-                    </div>
+                    <div class="form-group form-inline">
+                        <label class="mr-3">Radius</label><select class="form-control" id="radius" placeholder="Radius (km)" name="radius" required>
+                          <option value="0">0 km</option>
+                          <option value="1">1 km</option>
+                          <option value="3">3 km</option>
+                          <option value="5">5 km</option>
+                          </select>
+                      </div>>
                     <div class="form-group">
                       <input type="number" class="form-control form-control-user" id="seats" placeholder="Number of Seats Available" name="seats" required>
                     </div>
@@ -46,10 +51,16 @@
                           <input type="checkbox" class="custom-control-input" id="customCheck2" name="luggage">
                           <label class="custom-control-label" for="customCheck2">Luggage Option available</label>
                         </div>
+>>>>>>> views/createRideSharePosts.ejs
                       </div>
                     </center>
                     <br>
                     <button type="submit" class="btn btn-primary btn-user btn-block">Post!</button>
+                    <input type="hidden" name="pickupLocationLat" id="pickUpLocationLat">
+                    <input type="hidden" name="pickupLocationLng" id="pickUpLocationLng">
+                    <input type="hidden" name="dropoffLocationLat" id="dropOffLocationLat">
+                    <input type="hidden" name="dropoffLocationLng" id="dropOffLocationLng">
+                    </form>
                 </div>
               </div>
               <div class="col-lg-2"></div>
@@ -58,6 +69,10 @@
         </div>
     
       </div>
+<<<<<<< views/createRideSharePosts.ejs
+
+=======
+>>>>>>> views/createRideSharePosts.ejs
       <script>
         function initMap() {
           //To turn google place api on, replace the API key at the bottom and uncomment these 2 lines

@@ -67,10 +67,14 @@ router.post('/post/create/rideshare', authentication.checkAuthentication, async 
     }
     var post  = new postsModel({username: req.user.username, pickUp: req.body.pickUp, 
         dropOff:req.body.dropOff, radius: req.body.radius, perKm: req.body.perKm,
+        pickUpPoint: {type: "Point", coordinates: [parseFloat(req.body.pickupLocationLng), parseFloat(req.body.pickupLocationLat),] },
+        dropOffPoint: {type: "Point", coordinates: [parseFloat(req.body.dropoffLocationLng), parseFloat(req.body.dropoffLocationLat)] },
         smoking:smoking, luggage: luggage, usermessage: req.body.message,
         date:req.body.date, seats:req.body.seats});
     await postsModel.create(post, (err, pos)=>{
+        console.log(err);
         if(err) {
+            console.log(err);
             req.flash('error', err.message);
             return ;
         }
@@ -78,6 +82,41 @@ router.post('/post/create/rideshare', authentication.checkAuthentication, async 
         console.log(pos)
         return res.redirect('/postride/'+pos._id);
     });
+});
+
+router.get('/posts/search', authentication.checkAuthentication, async (req, res)=>{
+    var pickUpLat = parseFloat(req.query.pickUpLat);
+    var pickUpLon = parseFloat(req.query.pickUpLon);
+    var dropOffLat = parseFloat(req.query.dropOffLat);
+    var dropOffLng = parseFloat(req.query.dropOffLng);
+    var query = {};
+    if (pickUpLat && pickUpLon) {
+        query.pickUpPoint = {
+            $near: {
+                $gemometry: { 
+                    type: "Point",
+                    coordinates: [pickUpLon, pickUpLat]
+                }
+            }
+        };
+    }
+
+    if (dropOffLat && dropOffLng) {
+        query.dropOffPoint = {
+            $near: {
+                $gemometry: { 
+                    type: "Point",
+                    coordinates: [dropOffLng, dropOffLat]
+                }
+            }
+        }
+    }
+    var posts = await postsModel.find(query, (err, res)=>{
+        if(err){
+            return res.status(404).send('No Ride Share posts found!');
+        }
+    });
+    return res.json(posts);
 });
 
 module.exports = router ;

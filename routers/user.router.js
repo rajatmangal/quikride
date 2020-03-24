@@ -6,20 +6,56 @@ const regConfig = require('../config/register-config')
 const thread = require('../models/thread');
 const messages = require('../models/messages');
 const posts = require('../models/posts');
+const postsModel = require('../models/shareRidePosts');
 const router = new express.Router();
 const moment = require("moment");
 const chatUtil = require("../chat/chat-utils");
 
 router.get('/', authentication.checkAuthentication, (req,res) => {
+
+    var pickUpLat = parseFloat(req.query.pickupLocationLat);
+    var pickUpLon = parseFloat(req.query.pickupLocationLng);
+    var dropOffLat = parseFloat(req.query.dropoffLocationLat);
+    var dropOffLng = parseFloat(req.query.dropoffLocationLng);
+
+    var postsQuery = {};
+    if (pickUpLat && pickUpLon) {
+        postsQuery.pickUpPoint = {
+            $near: {
+                $geometry: { 
+                    type: "Point",
+                    coordinates: [-119.2720107, 50.2670137],
+                },
+                $maxDistance: 10000,
+            }
+        };
+    }
+    if (dropOffLat && dropOffLng) {
+        postsQuery.dropOffPoint = {
+            $near: {
+                $geometry: { 
+                    type: "Point",
+                    coordinates: [dropOffLng, dropOffLat],
+                },
+                $maxDistance: 10000,
+            }
+        }
+    }
+    if (pickUpLat && pickUpLon && dropOffLat && dropOffLng) {
+        var tempPostsQuery = {$and: []};
+        tempPostsQuery.$and = [{pickUpPoint: postsQuery.pickUpPoint}, {dropOffPoint: postsQuery.dropOffPoint}];
+        postsQuery = {pickUpPoint: postsQuery.pickUpPoint};
+    }
+
     thread.find({ users: req.user.username}, async (err,res2) => {
         if(res2 == null) {
             res.locals.title = "Home Page";
             res.render('index.ejs',{ name: req.user.username , messages: [] });
         } else {
             var sender = await chatUtil.generateMessages(res2, req.user.username);
-            const posts1 = await posts.find({}, (err, res5)=>{
+            const posts1 = await postsModel.find(postsQuery, (err, res5)=>{
                 if(err){
-                    res.status(404).send('No posts found!');
+                    console.log(err);
                     return;
                 }
             });
