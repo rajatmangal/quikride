@@ -13,31 +13,38 @@ const chatUtil = require("../chat/chat-utils");
 
 router.get('/', authentication.checkAuthentication, (req,res) => {
 
-    var pickUpLat = parseFloat(req.query.pickUpLat);
-    var pickUpLon = parseFloat(req.query.pickUpLon);
-    var dropOffLat = parseFloat(req.query.dropOffLat);
-    var dropOffLng = parseFloat(req.query.dropOffLng);
+    var pickUpLat = parseFloat(req.query.pickupLocationLat);
+    var pickUpLon = parseFloat(req.query.pickupLocationLng);
+    var dropOffLat = parseFloat(req.query.dropoffLocationLat);
+    var dropOffLng = parseFloat(req.query.dropoffLocationLng);
+
     var postsQuery = {};
     if (pickUpLat && pickUpLon) {
         postsQuery.pickUpPoint = {
             $near: {
-                $gemometry: { 
+                $geometry: { 
                     type: "Point",
-                    coordinates: [pickUpLon, pickUpLat]
-                }
+                    coordinates: [-119.2720107, 50.2670137],
+                },
+                $maxDistance: 10000,
             }
         };
     }
-
     if (dropOffLat && dropOffLng) {
         postsQuery.dropOffPoint = {
             $near: {
-                $gemometry: { 
+                $geometry: { 
                     type: "Point",
-                    coordinates: [dropOffLng, dropOffLat]
-                }
+                    coordinates: [dropOffLng, dropOffLat],
+                },
+                $maxDistance: 10000,
             }
         }
+    }
+    if (pickUpLat && pickUpLon && dropOffLat && dropOffLng) {
+        var tempPostsQuery = {$and: []};
+        tempPostsQuery.$and = [{pickUpPoint: postsQuery.pickUpPoint}, {dropOffPoint: postsQuery.dropOffPoint}];
+        postsQuery = {pickUpPoint: postsQuery.pickUpPoint};
     }
 
     thread.find({ users: req.user.username}, async (err,res2) => {
@@ -48,7 +55,7 @@ router.get('/', authentication.checkAuthentication, (req,res) => {
             var sender = await chatUtil.generateMessages(res2, req.user.username);
             const posts1 = await postsModel.find(postsQuery, (err, res5)=>{
                 if(err){
-                    res.status(404).send('No posts found!');
+                    console.log(err);
                     return;
                 }
             });
