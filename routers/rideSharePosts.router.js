@@ -49,7 +49,7 @@ router.post('/post/create/rideshare', authentication.checkAuthentication, async 
     });
 });
 
-router.get('/posts/search', async (req, res)=>{
+router.get('/posts/search', authentication.checkAuthentication, async (req, res)=>{
     var pickUpLat = parseFloat(req.query.pickUpLat);
     var pickUpLon = parseFloat(req.query.pickUpLon);
     var dropOffLat = parseFloat(req.query.dropOffLat);
@@ -65,7 +65,7 @@ router.get('/posts/search', async (req, res)=>{
             }
         };
     }
-    
+
     if (dropOffLat && dropOffLng) {
         query.dropOffPoint = {
             $near: {
