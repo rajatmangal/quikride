@@ -13,14 +13,40 @@ const chatUtil = require("../chat/chat-utils");
 
 router.get('/', authentication.checkAuthentication, (req,res) => {
 
-    
+    var pickUpLat = parseFloat(req.query.pickUpLat);
+    var pickUpLon = parseFloat(req.query.pickUpLon);
+    var dropOffLat = parseFloat(req.query.dropOffLat);
+    var dropOffLng = parseFloat(req.query.dropOffLng);
+    var postsQuery = {};
+    if (pickUpLat && pickUpLon) {
+        postsQuery.pickUpPoint = {
+            $near: {
+                $gemometry: { 
+                    type: "Point",
+                    coordinates: [pickUpLon, pickUpLat]
+                }
+            }
+        };
+    }
+
+    if (dropOffLat && dropOffLng) {
+        postsQuery.dropOffPoint = {
+            $near: {
+                $gemometry: { 
+                    type: "Point",
+                    coordinates: [dropOffLng, dropOffLat]
+                }
+            }
+        }
+    }
+
     thread.find({ users: req.user.username}, async (err,res2) => {
         if(res2 == null) {
             res.locals.title = "Home Page";
             res.render('index.ejs',{ name: req.user.username , messages: [] });
         } else {
             var sender = await chatUtil.generateMessages(res2, req.user.username);
-            const posts1 = await postsModel.find({}, (err, res5)=>{
+            const posts1 = await postsModel.find(postsQuery, (err, res5)=>{
                 if(err){
                     res.status(404).send('No posts found!');
                     return;
