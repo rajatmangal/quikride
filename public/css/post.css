@@ -1,0 +1,37 @@
+.container {
+    color: black
+}
+.heading {
+    font-size: xx-large;
+}
+
+.details {
+    margin-left: 3rem
+}
+
+.img {
+    height: 10rem;
+    width: 10rem;
+}
+
+.strong {
+    font-weight: 600;
+}
+
+.attr {
+    color: #4C4C4C;
+}
+
+.textarea {
+    min-width: 28em;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 28em;
+    /* overflow: scroll;
+    display: block;/* or inline-block */
+    /*text-overflow: ellipsis;
+    word-wrap: break-word;
+    overflow: hidden;
+    line-height: 1.8em;
+    width: 25em; */
+}

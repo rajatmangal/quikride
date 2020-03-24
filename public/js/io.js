@@ -16,12 +16,12 @@ function fillMessages(length, messages2, message) {
                     <div class="status-indicator bg-success"></div>
                 </div>
                 <div class="font-weight-bold">
-                <div class="text-truncate">
-                   ${message.messages[i].last_message} `;
+                <div class="text-truncate">`
         if(!message.messages[i].message_read && message.messages[i].last_sender !== id) {
             m+=`<span class="badge badge-pill badge-danger">New</span>`
         }
-        m+=`   
+        m+=` 
+                ${message.messages[i].last_message}  
                 </div>
                 <div class="small text-gray-500">${message.messages[i].last_sender} · ${moment(message.messages[i].last_updated).format('MMMM Do YYYY, h:mm:ss a')}</div>
                 </div>

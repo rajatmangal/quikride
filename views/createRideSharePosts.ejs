@@ -20,11 +20,35 @@
                       <input type="text" class="form-control form-control-user" id="dropOff" placeholder="Drop Off Location" name="dropOff" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control form-control-user" id="radius" placeholder="Radius" name="radius" required>
+                        <input type="number" class="form-control form-control-user" id="radius" placeholder="Radius for Pickup and DropOff" name="radius" required>
+                    </div>
+                    <div class="form-group">
+                      <input type="number" class="form-control form-control-user" id="seats" placeholder="Number of Seats Available" name="seats" required>
+                    </div>
+                    <div class="form-group">
+                      <input type="text" class="form-control form-control-user" id="perKm" placeholder="$/seat" name="perKm" required>
+                    </div>
+                    <div class="form-group">
+                      <textarea type="textarea" class="form-control" id="Description" placeholder="Message" name="message" rows="3" required></textarea>
+                    </div>
+                    <center>Date of Pickup</center>
+                    <div class="form-group">
+                      <input type="date" class="form-control form-control-user" id="Date" placeholder="Pickup Date (Please Write in format dd/mm/yyyy)" name="date" required>
+                    </div>
+                    <center>
+                      Preferences
+                      <div class="row">
+                        <div class="custom-control custom-checkbox col-6">
+                          <input type="checkbox" class="custom-control-input" id="customCheck1" name="smoking">
+                          <label class="custom-control-label" for="customCheck1">No Smoking</label>
+                        </div>
+                        <div class="custom-control custom-checkbox col-6">
+                          <input type="checkbox" class="custom-control-input" id="customCheck2" name="luggage">
+                          <label class="custom-control-label" for="customCheck2">Luggage Option available</label>
+                        </div>
                       </div>
-                      <div class="form-group">
-                        <input type="text" class="form-control form-control-user" id="perKm" placeholder="$/Km" name="perKm" required>
-                      </div>
+                    </center>
+                    <br>
                     <button type="submit" class="btn btn-primary btn-user btn-block">Post!</button>
                 </div>
               </div>
@@ -34,4 +58,51 @@
         </div>
     
       </div>
+      <script>
+        function initMap() {
+          //To turn google place api on, replace the API key at the bottom and uncomment these 2 lines
+          var pickup = document.getElementById('pickUp');
+          var dropoff = document.getElementById('dropOff');
+  
+          var autocomplete = new google.maps.places.Autocomplete(pickup);
+          var autocomplete2 = new google.maps.places.Autocomplete(dropoff);
+  
+          // Bind the map's bounds (viewport) property to the autocomplete object,
+          // so that the autocomplete requests use the current map bounds for the
+          // bounds option in the request.
+  
+          // Set the data fields to return when the user selects a place.
+          autocomplete.setFields(
+              ['address_components', 'geometry', 'icon', 'name']);
+  
+          autocomplete.addListener('place_changed', function() {
+
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+              window.alert("No details available for input: '" + place.name + "'");
+              return;
+            } else {
+              document.getElementById('pickUpLocationLat').value = place.geometry.location.lat();
+              document.getElementById('pickUpLocationLng').value = place.geometry.location.lng();
+            }
+            
+          });
+          autocomplete2.setFields(
+              ['address_components', 'geometry', 'icon', 'name']);
+  
+          autocomplete2.addListener('place_changed', function() {
+
+            var place = autocomplete2.getPlace();
+            if (!place.geometry) {
+              window.alert("No details available for input: '" + place.name + "'");
+              return;
+            } else {
+              document.getElementById('dropOffLocationLat').value = place.geometry.location.lat();
+              document.getElementById('dropOffLocationLng').value = place.geometry.location.lng();
+            }
+            
+          });
+        }
+      </script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCESc_JeBGh3Hw1N-b-vhn0xJ83_QzVhno&libraries=places&callback=initMap" async defer></script>
 <%- include ('partials/footer') %>

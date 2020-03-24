@@ -37,7 +37,7 @@ async function resetPassword(req, res) {
 
             user.password = hashedPassword;
             user.resetPasswordToken = '';
-            user.linkExpires = null;
+            user.linkExpires = 0;
             await user.save();
             console.log('New password saved');
             return res.redirect('/login');
