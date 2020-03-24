@@ -30,7 +30,7 @@ router.post('/forgot', authentication.checkNotAuthenticated, async (req,res) => 
         }
         var token = randomString();
         user.resetPasswordToken = token;
-        user.linkExpires = Date.now() + 3600000; //1 hour
+        user.linkExpires = new Date().getTime() + 3600000; //1 hour
         await user.save();
         const html = `Reset your password by clicking this link (link expires in 1 hour): <a href="http://localhost:3000/reset/${token}" target="_blank">http://localhost:3000/reset/${token}</a>`;
         await mailer.sendEmail('donotreply@quikride.com', forgot, 'Quikride: reset password', html);
@@ -45,7 +45,7 @@ router.post('/forgot', authentication.checkNotAuthenticated, async (req,res) => 
 });
 
 router.get('/reset/:token', authentication.checkNotAuthenticated, async (req,res) => {
-    var user = await User.findOne({ resetPasswordToken: req.params.token, linkExpires: { $gt: Date.now() }});
+    var user = await User.findOne({ resetPasswordToken: req.params.token, linkExpires: { $gt: new Date().getTime() }});
     if (!user) {
         req.flash('error', 'Password reset token is invalid or has expired.');
         return res.redirect('/forgot');
