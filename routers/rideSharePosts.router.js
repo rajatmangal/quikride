@@ -13,7 +13,7 @@ router.get('/post/create/rideshare', authentication.checkAuthentication, (req, r
     return res.render('createRideSharePosts.ejs', {user: req.user});
 });
 
-router.get('/posts/rideshare', authentication.checkAuthentication, async (req, res)=>{
+router.get('/postride', authentication.checkAuthentication, async (req, res)=>{
     if(!req.user.isDriver)  {
         return res.redirect('/')
     }
@@ -24,7 +24,7 @@ router.get('/posts/rideshare', authentication.checkAuthentication, async (req, r
     });
     console.log(posts);
     res.locals.title = "Posts";
-    return res.render('rideSharePosts.ejs', {user: req.user,posts: posts});
+    return res.render('postDisplay.ejs', {user: req.user,posts: posts});
 });
 
 router.post('/post/create/rideshare', authentication.checkAuthentication, async (req, res)=>{

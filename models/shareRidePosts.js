@@ -22,7 +22,19 @@ var shareRidePostsSchema = new mongoose.Schema({
     perKm: {
         type: String,
         required: true
-    }
+    },
+    smoking: {
+        type: Boolean,
+        required: true
+    },
+    luggage: {
+        type: Boolean,
+        required: true
+    },
+    perKm: {
+        type: String,
+        required: true
+    },
 });
 
 module.exports = mongoose.model("shareRide", shareRidePostsSchema);
