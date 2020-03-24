@@ -11,24 +11,55 @@
                 <h3 class="heading1">Trip Details:</h3>
             </div>
             <div class="row">
-                <div class="details">
-                    <span class="strong">Pickup:</span>
+                <!-- <div class="details"> -->
+                <div class ="col-lg-3 details">
+                    <span class="strong">Pickup: </span>
                     <br>
-                    <span class="strong">Dropoff:</span>
+                    <span class="strong">Dropoff: </span>
                     <br>
-                    <span class="strong">Date:</span>
+                    <span class="strong">Date: </span>
                     <br>
-                    <span class="strong">Description:</span>
+                    <span class="strong">Number of seats available: </span>
                     <br>
-                    <span class="strong">Preferences:</span>
+                    <span class="strong">Estimated Cost per seat: </span>
                     <br>
-                    <span class="strong">Number of seats available:</span>
-                    <br>
-                    <span class="strong">Estimated Cost per seat:</span>
+                    <span class="strong textarea">Description: </span>
                     <br>
                 </div>
+                <div class="col-lg-2">
+                    <span class="attr"><%= posts.pickUp %></span>
+                    <br>
+                    <span class="attr"><%= posts.dropOff %></span>
+                    <br>
+                    <span class="attr"><%= posts.date %></span>
+                    <br>
+                    <span class="attr"><%= posts.seats %></span>
+                    <br>
+                    <span class="attr"><%= posts.perKm %></span>
+                    <br>
+                    <div class="attr textarea"><%= posts.usermessage %></div>
+                </div>
+                <!-- </div> -->
             </div>
             <br><br>
+            <% if (posts.luggage === "on" || posts.smoking === "on") {%> 
+                <div class="row">
+                    <h3>Preferences</h3>
+                </div>
+                <div class="row">
+                    <% if (posts.luggage === "on") {%>
+                        <div class="col-4">
+                            <i class="fas fa-suitcase"></i> Luggage Option Available
+                        </div>
+                    <% } %> 
+                    <% if (posts.smoking === "on") {%>
+                        <div class="col-4">
+                            <i class="fas fa-smoking-ban"></i> No Smoking
+                        </div>
+                    <% } %> 
+                </div>
+                <br><br>
+            <% } %> 
             <div class="row">
                 <h3>Driver Details:</h3>
             </div>
@@ -36,7 +67,7 @@
                 <div class="col-2">
                     <img class="rounded-circle img" src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179865.jpg" alt="">
                 </div>
-                <div class="col-6">
+                <div class="col-4">
                     <div class="details">
                         <span class="strong">Name:</span>
                         <br>
@@ -45,15 +76,28 @@
                         <span class="strong">Rating:</span> 
                     </div>
                 </div>
+                <div class="col-4">
+                    <div class="details">
+                        <span class="attr"><%= driver[0].fullNameOnLicense %> </span>
+                        <br>
+                        <span class="attr"><%= driver[0].totalRides %></span>
+                        <br>
+                        <span class="attr"><%= driver[0].rating%></span> 
+                    </div>
+                </div>
             </div>
             <br>
-            <h3 class="row">
-                Message for name: 
-            </h3>
-            <div class="form-group">
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-            </div>
-            <button type="button" class="btn btn-primary">Send Request</button>
+            <% if (user.username !== posts.username) {%>
+                <h3 class="row">
+                    Message for name: 
+                </h3>
+                <div class="form-group">
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
+                <button type="button" class="btn btn-primary">Send Request</button>
+            <% } else { %>
+                <button type="button" class="btn btn-primary">Edit Post</button>
+            <% } %>  
         </div>
         <div></div>
     </div>
