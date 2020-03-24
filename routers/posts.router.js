@@ -22,7 +22,7 @@ router.get('/posts', authentication.checkAuthentication, async (req, res)=>{
     });
     console.log(posts);
     res.locals.title = "Posts";
-    res.render('posts.ejs', {user: req.user, posts: posts});
+    res.render('postDisplay.ejs', {user: req.user, posts: posts});
 });
 
 router.post('/post/create', authentication.checkAuthentication, async (req, res)=>{

@@ -5,7 +5,7 @@ if(process.env.NODE_ENV !== 'production') {
 const http = require('http');
 const express = require('express');
 const passport = require('passport');
-const flash = require('express-flash');
+const flash = require('express-flash-messages');
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const methodOverride = require('method-override')
