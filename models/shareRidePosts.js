@@ -33,4 +33,7 @@ var shareRidePostsSchema = new mongoose.Schema({
     }
 });
 
+shareRidePostsSchema.index({"pickUpPoint": "2dsphere"});
+shareRidePostsSchema.index({"dropOffPoint": "2dsphere"});
+
 module.exports = mongoose.model("shareRide", shareRidePostsSchema);

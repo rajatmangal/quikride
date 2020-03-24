@@ -28,8 +28,15 @@ router.get('/posts/rideshare', authentication.checkAuthentication, async (req, r
 });
 
 router.post('/post/create/rideshare', authentication.checkAuthentication, async (req, res)=>{
-    var post  = new postsModel({username: req.user.username, pickUp: req.body.pickUp, 
-        dropOff:req.body.dropOff, radius: req.body.radius, perKm: req.body.perKm});
+    var post  = new postsModel({
+        username: req.user.username, 
+        pickUp: req.body.pickUp,
+        pickUpPoint: {"type": "Point", "coordinates": [25.1973, 55.2793] },
+        dropOff:req.body.dropOff, 
+        dropOffPoint: {"type": "Point", "coordinates": [25.1973, 55.2793] },
+        radius: req.body.radius, 
+        perKm: req.body.perKm
+    });
     await postsModel.create(post, (err, pos)=>{
         if(err) {
             req.flash('error', err.message);
