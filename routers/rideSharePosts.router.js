@@ -28,16 +28,21 @@ router.get('/postride', authentication.checkAuthentication, async (req, res)=>{
 });
 
 router.post('/post/create/rideshare', authentication.checkAuthentication, async (req, res)=>{
-    var post  = new postsModel({username: req.user.username, pickUp: req.body.pickUp, 
-        dropOff:req.body.dropOff, radius: req.body.radius, perKm: req.body.perKm});
-    await postsModel.create(post, (err, pos)=>{
-        if(err) {
-            req.flash('error', err.message);
-            return ;
-        }
-        console.log("New Post Saved");
-        return res.redirect('/posts/rideshare');
-    });
+    console.log(req.body.smoking);
+    console.log(req.body.date);
+    console.log(new date(req.body.date).toTime());
+    // var post  = new postsModel({username: req.user.username, pickUp: req.body.pickUp, 
+    //     dropOff:req.body.dropOff, radius: req.body.radius, perKm: req.body.perKm,
+    //     smoking:req.body.smoking, luggage: req.body.luggage, usermessage: req.body.message,
+    //     date:req.body.date});
+    // await postsModel.create(post, (err, pos)=>{
+    //     if(err) {
+    //         req.flash('error', err.message);
+    //         return ;
+    //     }
+    //     console.log("New Post Saved");
+    //     return res.redirect('/posts/rideshare');
+    // });
 });
 
 module.exports = router ;
