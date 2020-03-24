@@ -39,7 +39,7 @@ var UserSchema = new mongoose.Schema({
     default: ''
   },
   linkExpires: {
-    type : Date,
+    type : Number,
     default:''
   },
   facebookId: {
