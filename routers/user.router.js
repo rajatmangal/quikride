@@ -6,18 +6,21 @@ const regConfig = require('../config/register-config')
 const thread = require('../models/thread');
 const messages = require('../models/messages');
 const posts = require('../models/posts');
+const postsModel = require('../models/shareRidePosts');
 const router = new express.Router();
 const moment = require("moment");
 const chatUtil = require("../chat/chat-utils");
 
 router.get('/', authentication.checkAuthentication, (req,res) => {
+
+    
     thread.find({ users: req.user.username}, async (err,res2) => {
         if(res2 == null) {
             res.locals.title = "Home Page";
             res.render('index.ejs',{ name: req.user.username , messages: [] });
         } else {
             var sender = await chatUtil.generateMessages(res2, req.user.username);
-            const posts1 = await posts.find({}, (err, res5)=>{
+            const posts1 = await postsModel.find({}, (err, res5)=>{
                 if(err){
                     res.status(404).send('No posts found!');
                     return;

@@ -17,6 +17,21 @@
         }
     </style>
     <div class="row">
+        <div class="col-sm-12 mt-3 mb-3">
+            <form class="form-inline" action="/" method="GET">
+                <label class="mr-2 ml-2"><strong>Search For Ride</strong></label>
+                <input class="form-control mb-2 mr-sm-2" placeholder="From" type="text" id="pickUp">
+                <input class="form-control mb-2 mr-sm-2" placeholder="To" type="text" id="dropOff">
+                <!-- <input class="form-control mb-2 mr-sm-2" placeholder="Time (Optional)" type="datetime-local" name="time"> -->
+                <input type="hidden" name="pickupLocationLat" id="pickUpLocationLat">
+                <input type="hidden" name="pickupLocationLng" id="pickUpLocationLng">
+                <input type="hidden" name="dropoffLocationLat" id="dropOffLocationLat">
+                <input type="hidden" name="dropoffLocationLng" id="dropOffLocationLng">
+                <button type="submit" class="btn btn-primary mb-2">Search</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-lg-4">
             <div id="posts">
                 <% for(var i=0; i<posts.length; i++) {%>
@@ -80,9 +95,52 @@
                 infoWindow.open(map);
             }
 
+          //To turn google place api on, replace the API key at the bottom and uncomment these 2 lines
+          var pickup = document.getElementById('pickUp');
+          var dropoff = document.getElementById('dropOff');
+  
+          var autocomplete = new google.maps.places.Autocomplete(pickup);
+          var autocomplete2 = new google.maps.places.Autocomplete(dropoff);
+  
+          // Bind the map's bounds (viewport) property to the autocomplete object,
+          // so that the autocomplete requests use the current map bounds for the
+          // bounds option in the request.
+  
+          // Set the data fields to return when the user selects a place.
+          autocomplete.setFields(
+              ['address_components', 'geometry', 'icon', 'name']);
+  
+          autocomplete.addListener('place_changed', function() {
+
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+              window.alert("No details available for input: '" + place.name + "'");
+              return;
+            } else {
+              document.getElementById('pickUpLocationLat').value = place.geometry.location.lat();
+              document.getElementById('pickUpLocationLng').value = place.geometry.location.lng();
+            }
+            
+          });
+          autocomplete2.setFields(
+              ['address_components', 'geometry', 'icon', 'name']);
+  
+          autocomplete2.addListener('place_changed', function() {
+
+            var place = autocomplete2.getPlace();
+            if (!place.geometry) {
+              window.alert("No details available for input: '" + place.name + "'");
+              return;
+            } else {
+              document.getElementById('dropOffLocationLat').value = place.geometry.location.lat();
+              document.getElementById('dropOffLocationLng').value = place.geometry.location.lng();
+            }
+            
+          });
+
         }
         </script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCESc_JeBGh3Hw1N-b-vhn0xJ83_QzVhno&callback=initMap"
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCESc_JeBGh3Hw1N-b-vhn0xJ83_QzVhno&libraries=places&callback=initMap"
         async defer></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
