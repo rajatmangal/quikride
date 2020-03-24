@@ -31,14 +31,16 @@ router.post('/post/create/rideshare', authentication.checkAuthentication, async 
     var post  = new postsModel({
         username: req.user.username, 
         pickUp: req.body.pickUp,
-        pickUpPoint: {"type": "Point", "coordinates": [25.1973, 55.2793] },
+        pickUpPoint: {type: "Point", coordinates: [parseFloat(req.body.pickupLocationLng), parseFloat(req.body.pickupLocationLat),] },
         dropOff:req.body.dropOff, 
-        dropOffPoint: {"type": "Point", "coordinates": [25.1973, 55.2793] },
+        dropOffPoint: {type: "Point", coordinates: [parseFloat(req.body.dropoffLocationLng), parseFloat(req.body.dropoffLocationLat)] },
         radius: req.body.radius, 
         perKm: req.body.perKm
     });
     await postsModel.create(post, (err, pos)=>{
+        console.log(err);
         if(err) {
+            console.log(err);
             req.flash('error', err.message);
             return ;
         }
@@ -47,12 +49,39 @@ router.post('/post/create/rideshare', authentication.checkAuthentication, async 
     });
 });
 
-router.get('/posts/search', authentication.checkAuthentication, async (req, res)=>{
-    var pickUpLat = req.query.pickUpLat;
-    var pickUpLon = req.query.pickUpLon;
-    var dropOffLng = req.query.dropOffLat;
-    var dropOffLng = req.query.dropOffLng;
-    //postsModel.find()
+router.get('/posts/search', async (req, res)=>{
+    var pickUpLat = parseFloat(req.query.pickUpLat);
+    var pickUpLon = parseFloat(req.query.pickUpLon);
+    var dropOffLat = parseFloat(req.query.dropOffLat);
+    var dropOffLng = parseFloat(req.query.dropOffLng);
+    var query = {};
+    if (pickUpLat && pickUpLon) {
+        query.pickUpPoint = {
+            $near: {
+                $gemometry: { 
+                    type: "Point",
+                    coordinates: [pickUpLon, pickUpLat]
+                }
+            }
+        };
+    }
+    
+    if (dropOffLat && dropOffLng) {
+        query.dropOffPoint = {
+            $near: {
+                $gemometry: { 
+                    type: "Point",
+                    coordinates: [dropOffLng, dropOffLat]
+                }
+            }
+        }
+    }
+    var posts = await postsModel.find(query, (err, res)=>{
+        if(err){
+            return res.status(404).send('No Ride Share posts found!');
+        }
+    });
+    return res.json(posts);
 });
 
 module.exports = router ;
