@@ -19,14 +19,6 @@
                     <div class="form-group">
                       <input type="text" class="form-control form-control-user" id="dropOff" placeholder="Drop Off Location" name="dropOff" required>
                     </div>
-                    <div class="form-group form-inline">
-                        <label class="mr-3">Radius</label><select class="form-control" id="radius" placeholder="Radius (km)" name="radius" required>
-                          <option value="0">0 km</option>
-                          <option value="1">1 km</option>
-                          <option value="3">3 km</option>
-                          <option value="5">5 km</option>
-                          </select>
-                      </div>>
                     <div class="form-group">
                       <input type="number" class="form-control form-control-user" id="seats" placeholder="Number of Seats Available" name="seats" required>
                     </div>
@@ -36,7 +28,17 @@
                     <div class="form-group">
                       <textarea type="textarea" class="form-control" id="Description" placeholder="Message" name="message" rows="3" required></textarea>
                     </div>
-                    <center>Date of Pickup</center>
+                    <center>
+                      <div class="form-group">
+                        <label class="mr-3 ">Radius</label>
+                        <select class="form-control" id="radius" placeholder="Radius (km)" name="radius" required>
+                          <option value="0">0 km</option>
+                          <option value="1">1 km</option>
+                          <option value="3">3 km</option>
+                          <option value="5">5 km</option>
+                        </select>
+                    </div>
+                      Date of Pickup</center>
                     <div class="form-group">
                       <input type="date" class="form-control form-control-user" id="Date" placeholder="Pickup Date (Please Write in format dd/mm/yyyy)" name="date" required>
                     </div>
@@ -50,8 +52,6 @@
                         <div class="custom-control custom-checkbox col-6">
                           <input type="checkbox" class="custom-control-input" id="customCheck2" name="luggage">
                           <label class="custom-control-label" for="customCheck2">Luggage Option available</label>
-                        </div>
->>>>>>> views/createRideSharePosts.ejs
                       </div>
                     </center>
                     <br>
