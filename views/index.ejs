@@ -35,7 +35,8 @@
         <div class="col-lg-4">
             <div id="posts">
                 <% for(var i=0; i<posts.length; i++) {%>
-                    <div class="card posts-cards">
+                    <div class="card posts-cards" onclick="updateMarkers(<%= posts[i].pickUpPoint.coordinates[1] %>,<%= posts[i].pickUpPoint.coordinates[0] %>, 
+                    <%= posts[i].dropOffPoint.coordinates[1] %>,<%= posts[i].dropOffPoint.coordinates[0] %>)">
                         <h5 class="card-header"><%= posts[i].username %></h5>
                         <div class="card-body">
                         <h5 class="card-title"><%= posts[i].usermessage %></h5>
@@ -56,6 +57,15 @@
     </div>
     <script>
         var map;
+        var pickUpMarker;
+        var dropOffMarker;
+
+        function updateMarkers(pickUpLat, pickUpLng, dropOffLat, dropOffLng) {
+            var pickUpPosition = {lat: parseFloat(pickUpLat), lng: parseFloat(pickUpLng)};
+            var dropOffPosition = {lat: parseFloat(dropOffLat), lng: parseFloat(dropOffLng)};
+            pickUpMarker.setPosition(pickUpPosition);
+            dropOffMarker.setPosition(dropOffPosition);
+        }
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: 49.17, lng: -122.87},
@@ -66,10 +76,16 @@
             // markers will be added in the future from database
             var myLatLng = {lat: 49.17, lng: -122.87};
 
-            var marker = new google.maps.Marker({
+            pickUpMarker = new google.maps.Marker({
                 position: myLatLng,
                 map: map,
-                title: 'Hello World!'
+                title: 'Pickup'
+            });
+
+            dropOffMarker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: 'Dropoff'
             });
 
             // Try HTML5 geolocation.
