@@ -1,0 +1,19 @@
+.container {
+    color: black
+}
+.heading {
+    font-size: xx-large;
+}
+
+.details {
+    margin-left: 3rem
+}
+
+.img {
+    height: 10rem;
+    width: 10rem;
+}
+
+.strong {
+    font-weight: 600;
+}

@@ -20,11 +20,35 @@
                       <input type="text" class="form-control form-control-user" id="dropOff" placeholder="Drop Off Location" name="dropOff" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control form-control-user" id="radius" placeholder="Radius" name="radius" required>
+                        <input type="text" class="form-control form-control-user" id="radius" placeholder="Radius for Pickup and DropOff" name="radius" required>
+                    </div>
+                    <div class="form-group">
+                      <input type="text" class="form-control form-control-user" id="radius" placeholder="Number of Seats Available" name="seats" required>
+                    </div>
+                    <div class="form-group">
+                      <input type="text" class="form-control form-control-user" id="perKm" placeholder="$/seat" name="perKm" required>
+                    </div>
+                    <div class="form-group">
+                      <textarea type="textarea" class="form-control" id="Description" placeholder="Message" name="description" rows="3" required></textarea>
+                    </div>
+                    <center>Date of Pickup</center>
+                    <div class="form-group">
+                      <input type="date" class="form-control form-control-user" id="Date" placeholder="Pickup Date (Please Write in format dd/mm/yyyy)" name="date" required>
+                    </div>
+                    <center>
+                      Preferences
+                      <div class="row">
+                        <div class="custom-control custom-checkbox col-6">
+                          <input type="checkbox" class="custom-control-input" id="customCheck1" name="smoking">
+                          <label class="custom-control-label" for="customCheck1">No Smoking</label>
+                        </div>
+                        <div class="custom-control custom-checkbox col-6">
+                          <input type="checkbox" class="custom-control-input" id="customCheck1" name="luggage">
+                          <label class="custom-control-label" for="customCheck1">Luggage Option available</label>
+                        </div>
                       </div>
-                      <div class="form-group">
-                        <input type="text" class="form-control form-control-user" id="perKm" placeholder="$/Km" name="perKm" required>
-                      </div>
+                    </center>
+                    <br>
                     <button type="submit" class="btn btn-primary btn-user btn-block">Post!</button>
                 </div>
               </div>
