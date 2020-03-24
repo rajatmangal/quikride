@@ -24,11 +24,11 @@ var shareRidePostsSchema = new mongoose.Schema({
         required: true
     },
     smoking: {
-        type: Boolean,
+        type: String,
         required: true
     },
     luggage: {
-        type: Boolean,
+        type: String,
         required: true
     },
     seats: {
@@ -40,7 +40,7 @@ var shareRidePostsSchema = new mongoose.Schema({
         required: true
     },
     date: {
-        type: Number,
+        type: String,
         required: true
     },
 });
