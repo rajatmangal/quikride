@@ -31,8 +31,16 @@ var shareRidePostsSchema = new mongoose.Schema({
         type: Boolean,
         required: true
     },
-    perKm: {
+    seats: {
+        type: Number,
+        required: true
+    },
+    usermessage: {
         type: String,
+        required: true
+    },
+    date: {
+        type: Number,
         required: true
     },
 });
