@@ -13,8 +13,8 @@
                   <h5 class="card-title"><strong>Drop off: </strong><%= requests[i].dropoff%></h5>
                   <p class="card-text"><strong>Message: </strong><%= requests[i].message%></p>
                   <form  method="post">
-                    <button type="submit" formaction="/accept/<%= requests[i].id %>" class="btn btn-success">Accept</button>
-                    <buttton type="submit" formaction="/reject/<%= requests[i].id %>" class="btn btn-danger">Reject</buttton>
+                    <button type="submit" name="accept" formaction="/accept/<%= requests[i].id %>" class="btn btn-success">Accept</button>
+                    <button type="submit" name="reject" formaction="/reject/<%= requests[i].id %>" class="btn btn-danger">Reject</button>
                   </form>
                 </div>
               </div>

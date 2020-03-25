@@ -1,0 +1,62 @@
+<%- include ('partials/header') %>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <div >
+        <h2 style="margin:auto; text-align: center;">My Log:</h2>
+        <h4 style="margin-left:10px; margin-top: 25px; text-align: left;">Active:</h4>
+    </div>
+    <div>
+        <%for(var i=0; i<activeRequests.length; i++){%>
+            <div class="card" style="width: 70rem; margin:auto; margin-bottom: 10px;">
+                <div class="card-header">
+                  <%= activeRequests[i].rider%>
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title"><strong>Pick Up: </strong><%= activeRequests[i].pickup%></h5>
+                  <h5 class="card-title"><strong>Drop off: </strong><%= activeRequests[i].dropoff%></h5>
+                  <p class="card-text"><strong>Message: </strong><%= activeRequests[i].message%></p>
+                  <form  method="post">
+                      <%if(activeRequests[i].status==="accepted"){%>
+                        <button type="submit" formaction="/start/<%= activeRequests[i].id %>" class="btn btn-success">Start</button>
+                      <%} if(activeRequests[i].status==="started") {%>
+                    <button type="submit" formaction="/end/<%= activeRequests[i].id %>" class="btn btn-warning">End</button>
+                    <%}%>
+                  </form>
+                </div>
+        <%}%>
+    </div>
+    <div style="clear: left; float:left;">
+        <h4 style="margin-left:10px; margin-top: 25px; text-align: left; clear: left;">History:</h4>
+        <div class="dropdown show" style="margin-left: 10px;">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Type:
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" href="/userLogs/rejected">Rejected</a>
+              <a type="button" class="dropdown-item" href="/userLogs/ended">Completed</a>
+              <a type="button" class="dropdown-item" href="/userLogs/accepted">Accepted</a>
+            </div>
+          </div>
+          <br>
+          <div>
+            <%for(var i=0; i<historical.length; i++){%>
+                <div class="card" style="width: 25rem; margin:auto; margin-bottom: 10px;">
+                    <div class="card-header">
+                      <%= historical[i].rider%>
+                    </div>
+                    <div class="card-body">
+                      <h5 class="card-title"><strong>Pick Up: </strong><%= historical[i].pickup%></h5>
+                      <h5 class="card-title"><strong>Drop off: </strong><%= historical[i].dropoff%></h5>
+                      <p class="card-text"><strong>Message: </strong><%= historical[i].message%></p>
+                      <form  method="post">
+                          <%if(historical[i].status==="accepted"){%>
+                            <button type="submit" formaction="/start/<%= historical[i].id %>" class="btn btn-success">Start</button>
+                          <%} if(historical[i].status==="started") {%>
+                        <buttton type="submit" formaction="/end/<%= historical[i].id %>" class="btn btn-warning">End</buttton>
+                        <%}%>
+                      </form>
+                    </div>
+            <%}%>
+        </div>
+    </div>
+<%- include ('partials/footer') %>

@@ -12,7 +12,7 @@ router.get('/pickUprequests', authentication.checkAuthentication, async (req, re
             return;
         }
     });
-    res.render('pickUpRequests.ejs', {requests: requests});
+    return res.render('pickUpRequests.ejs', {requests: requests});
 });
 
 router.post('/accept/:id', authentication.checkAuthentication, async (req, res)=>{
@@ -24,10 +24,10 @@ router.post('/accept/:id', authentication.checkAuthentication, async (req, res)=
             return;
         }
     });
-    res.end();
+    return res.redirect('/userLogs');
 });
 
-router.post('/rejext/:id', authentication.checkAuthentication, async (req, res)=>{
+router.post('/reject/:id', authentication.checkAuthentication, async (req, res)=>{
     var id = req.params.id ;
     console.log(id);
     const waiter = await ridesModel.findOneAndUpdate({id: id}, {status:"rejected"}, {useFindAndModify: false}, (err, res)=>{
@@ -36,7 +36,7 @@ router.post('/rejext/:id', authentication.checkAuthentication, async (req, res)=
             return;
         }
     });
-    res.end();
+    return res.redirect('/pickUprequests');
 });
 
 module.exports = router ;
