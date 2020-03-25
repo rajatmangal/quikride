@@ -43,7 +43,7 @@ router.get('/postride/:id', authentication.checkAuthentication, async (req, res)
 router.post('/postride/:id', authentication.checkAuthentication, async (req, res)=>{
     console.log("Hello")
     var post  = new ride({rider:req.body.rider, driver:req.body.driver, message:req.body.message
-                                , pickup: req.body.pickup, dropoff:req.body.dropoff, id: req.params.id});
+                                , pickup: req.body.pickup, dropoff:req.body.dropoff, id: req.params.id, status:"pending"});
     console.log(post)
     await ride.create(post, (err, pos)=>{
         if(err) {
