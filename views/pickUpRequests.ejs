@@ -11,10 +11,14 @@
                 <div class="card-body">
                   <h5 class="card-title"><strong>Pick Up: </strong><%= requests[i].pickup%></h5>
                   <h5 class="card-title"><strong>Drop off: </strong><%= requests[i].dropoff%></h5>
-                  <p class="card-text"><strong>Message: </strong><%= requests[i].message%></p>
+                  <p class="card-text"><strong>Message: </strong><%= requests[i].message %></p>
                   <form  method="post">
-                    <button type="submit" name="accept" formaction="/accept/<%= requests[i].id %>" class="btn btn-success">Accept</button>
-                    <button type="submit" name="reject" formaction="/reject/<%= requests[i].id %>" class="btn btn-danger">Reject</button>
+                    <% if(isDriver) {%>
+                        <button type="submit" name="reject" formaction="/reject/<%= requests[i]._id %>" class="btn btn-danger">Reject</button>
+                        <button type="submit" name="accept" formaction="/accept/<%= requests[i]._id %>" class="btn btn-success">Accept</button>
+                    <%}else {%>
+                        <button type="submit" name="cancel" formaction="/cancel/<%= requests[i]._id %>" class="btn btn-danger">Cancel</button>
+                    <%}%>
                   </form>
                 </div>
               </div>

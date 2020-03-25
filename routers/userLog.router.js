@@ -5,22 +5,35 @@ const Joi = require('joi');
 const router = new express.Router();
 
 router.get('/userLogs', authentication.checkAuthentication, async (req, res)=>{
-    const activeRequests = await ridesModel.find({$and:[{driver: req.user.username}, 
-                                {status:"started"}]}, 
-            (err, res)=>{
-                if(err){
-                    //Todo:: handle error
-                    return;
-                }
-            });
+    const isDriver = req.user.isDriver;
+    activeRequests = []
+    if(isDriver){
+        activeRequests = await ridesModel.find({$and:[{driver: req.user.username}, 
+            {status:"started"}]}, 
+        (err, res)=>{
+        if(err){
+            //Todo:: handle error
+            return;
+        }
+        });
+    }else{
+        activeRequests = await ridesModel.find({$and:[{rider: req.user.username}, 
+            {status:"started"}]}, 
+        (err, res)=>{
+        if(err){
+            //Todo:: handle error
+            return;
+        }
+        });
+    }
     res.locals.title = "User Log";
-    return res.render('userLog.ejs', {activeRequests: activeRequests, historical: []});
+    return res.render('userLog.ejs', {activeRequests: activeRequests, historical: [], isDriver: isDriver});
 });
 
 router.post('/start/:id', authentication.checkAuthentication, async (req, res)=>{
     var id = req.params.id ;
     console.log('id is' + id);
-    const waiter = await ridesModel.findOneAndUpdate({id: id}, {status:"started"}, {useFindAndModify: false}, (err, res)=>{
+    const waiter = await ridesModel.findOneAndUpdate({_id: id}, {status:"started"}, {useFindAndModify: false}, (err, res)=>{
         if(err){
             //Todo :: Handle Error
             return;
@@ -33,7 +46,7 @@ router.post('/start/:id', authentication.checkAuthentication, async (req, res)=>
 router.post('/end/:id', authentication.checkAuthentication, async (req, res)=>{
     var id = req.params.id ;
     console.log('id is' + id);
-    const waiter = await ridesModel.findOneAndUpdate({id: id}, {status:"ended"}, {useFindAndModify: false}, (err, res)=>{
+    const waiter = await ridesModel.findOneAndUpdate({_id: id}, {status:"ended"}, {useFindAndModify: false}, (err, res)=>{
         if(err){
             //Todo :: Handle Error
             return;

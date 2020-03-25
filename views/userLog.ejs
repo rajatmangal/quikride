@@ -15,13 +15,15 @@
                   <h5 class="card-title"><strong>Pick Up: </strong><%= activeRequests[i].pickup%></h5>
                   <h5 class="card-title"><strong>Drop off: </strong><%= activeRequests[i].dropoff%></h5>
                   <p class="card-text"><strong>Message: </strong><%= activeRequests[i].message%></p>
+                  <%if (isDriver) {%>
                   <form  method="post">
                       <%if(activeRequests[i].status==="accepted"){%>
-                        <button type="submit" formaction="/start/<%= activeRequests[i].id %>" class="btn btn-success">Start</button>
+                        <button type="submit" formaction="/start/<%= activeRequests[i]._id %>" class="btn btn-success">Start</button>
                       <%} if(activeRequests[i].status==="started") {%>
-                    <button type="submit" formaction="/end/<%= activeRequests[i].id %>" class="btn btn-warning">End</button>
+                    <button type="submit" formaction="/end/<%= activeRequests[i]._id %>" class="btn btn-warning">End</button>
                     <%}%>
                   </form>
+                  <%}%>
                 </div>
         <%}%>
     </div>
@@ -49,11 +51,9 @@
                       <h5 class="card-title"><strong>Drop off: </strong><%= historical[i].dropoff%></h5>
                       <p class="card-text"><strong>Message: </strong><%= historical[i].message%></p>
                       <form  method="post">
-                          <%if(historical[i].status==="accepted"){%>
-                            <button type="submit" formaction="/start/<%= historical[i].id %>" class="btn btn-success">Start</button>
-                          <%} if(historical[i].status==="started") {%>
-                        <buttton type="submit" formaction="/end/<%= historical[i].id %>" class="btn btn-warning">End</buttton>
-                        <%}%>
+                          <%if(historical[i].status==="accepted" && activeRequests.length === 0){%>
+                            <button type="submit" formaction="/start/<%= historical[i]._id %>" class="btn btn-success">Start</button>
+                          <%}%>
                       </form>
                     </div>
             <%}%>
