@@ -37,6 +37,7 @@
               <a class="dropdown-item" href="/userLogs/rejected">Rejected</a>
               <a type="button" class="dropdown-item" href="/userLogs/ended">Completed</a>
               <a type="button" class="dropdown-item" href="/userLogs/accepted">Accepted</a>
+              <a type="button" class="dropdown-item" href="/userLogs/canceled">Canceled</a>
             </div>
           </div>
           <br>
@@ -50,11 +51,19 @@
                       <h5 class="card-title"><strong>Pick Up: </strong><%= historical[i].pickup%></h5>
                       <h5 class="card-title"><strong>Drop off: </strong><%= historical[i].dropoff%></h5>
                       <p class="card-text"><strong>Message: </strong><%= historical[i].message%></p>
-                      <form  method="post">
+                      <%if(isDriver){%>
+                        <form  method="post">
                           <%if(historical[i].status==="accepted" && activeRequests.length === 0){%>
                             <button type="submit" formaction="/start/<%= historical[i]._id %>" class="btn btn-success">Start</button>
                           <%}%>
-                      </form>
+                        </form>
+                      <%} else {%>
+                        <form  method="post">
+                          <%if(historical[i].status==="accepted"){%>
+                            <button type="submit" formaction="/canceled/<%= historical[i]._id %>" class="btn btn-danger">Cancel</button>
+                          <%}%>
+                        </form>
+                      <%}%>
                     </div>
             <%}%>
         </div>
