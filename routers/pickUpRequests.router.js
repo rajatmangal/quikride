@@ -12,10 +12,31 @@ router.get('/pickUprequests', authentication.checkAuthentication, async (req, re
             return;
         }
     });
-    console.log(requests);
-    // res.end();
     res.render('pickUpRequests.ejs', {requests: requests});
 });
 
+router.post('/accept/:id', authentication.checkAuthentication, async (req, res)=>{
+    var id = req.params.id ;
+    console.log(id);
+    const waiter = await ridesModel.findOneAndUpdate({id: id}, {status:"accepted"}, {useFindAndModify: false}, (err, res)=>{
+        if(err){
+            //Todo :: Handle Error
+            return;
+        }
+    });
+    res.end();
+});
+
+router.post('/rejext/:id', authentication.checkAuthentication, async (req, res)=>{
+    var id = req.params.id ;
+    console.log(id);
+    const waiter = await ridesModel.findOneAndUpdate({id: id}, {status:"rejected"}, {useFindAndModify: false}, (err, res)=>{
+        if(err){
+            //Todo :: Handle Error
+            return;
+        }
+    });
+    res.end();
+});
 
 module.exports = router ;
