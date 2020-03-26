@@ -49,66 +49,7 @@
             </div>
           </li>
           
-          <% if(typeof messagesList != "undefined") {%> 
-            <!-- Nav Item - Messages -->
-            <li class="nav-item dropdown no-arrow mx-1">
-                <a data-toggle="tooltip" title="Tooltip on top" class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-car"></i>
-                <!-- Counter - Messages -->
-                <% if(unread !== 0) {%>
-                  <span class="badge badge-danger badge-counter" id="badge"><%=unread%></span>
-                <% } else { %>
-                  <span class="badge badge-danger badge-counter" id="badge"></span>
-                <% } %>
-
-                </a>
-                <!-- Dropdown - Messages -->
-                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown"  id="message-dropdown">
-                <h6 class="dropdown-header">
-                    Ride Requests
-                </h6>
-                <div id = "messages">
-                    <% for (var i = 0 ; i < messagesList.length && i < 4 ; i++) { %>
-                    <a class="dropdown-item d-flex align-items-center" href="/chat/<%=messagesList[i].id%>">
-                        <div class="dropdown-list-image mr-3">
-                        <img class="rounded-circle" src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179865.jpg" alt="">
-                        <div class="status-indicator bg-success"></div>
-                        </div>
-                        <div class="font-weight-bold">
-                          <div class="text-truncate">
-                            <% if(!messagesList[i].message_read && messagesList[i].last_sender !== user.username) { %>
-                              <span class="badge badge-pill badge-danger">New</span>
-                            <% } %>
-                            <%= messagesList[i].last_message%>
-                          </div>
-                          <div class="small text-gray-500"><%= messagesList[i].users[0]%> · <%=moment(messagesList[i].last_updated).format('MMMM Do YYYY, h:mm:ss a');%></div>
-                        </div>
-                      </a>
-                    <% } %>
-                    <div id = "additionalMessages">
-                    <% for (var i = 4 ; i < messagesList.length ; i++) { %>
-                        <a class="dropdown-item d-flex align-items-center" href="/chat/<%=messagesList[i].id%>">
-                        <div class="dropdown-list-image mr-3">
-                            <img class="rounded-circle" src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179865.jpg" alt="">
-                            <div class="status-indicator bg-success"></div>
-                        </div>
-                        <div class="font-weight-bold">
-                            <div class="text-truncate">
-                              <% if(!messagesList[i].message_read && messagesList[i].last_sender !== user.username) { %>
-                                <span class="badge badge-pill badge-danger">New</span>
-                              <% } %>
-                              <%= messagesList[i].last_message%>
-                            </div>
-                            <div class="small text-gray-500"><%= messagesList[i].users[0]%> · <%=moment(messagesList[i].last_updated).format('MMMM Do YYYY, h:mm:ss a');%></div>
-                        </div>
-                        </a>
-                    <% } %>
-                    </div>
-                    <a class="dropdown-item text-center small text-gray-500" id="readMore">Read More Messages</a>
-                </div>
-                </div>
-            </li>
-         <% } %> 
+  
 
           <!-- Nav Item - Alerts -->
           <% if(typeof messagesList != "undefined") {%> 

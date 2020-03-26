@@ -47,7 +47,7 @@ router.get('/chat/:id', authentication.checkAuthentication, async (req,res) => {
                  }
                  else {
                     res.locals.title = "Chat";
-                    res.render('chat.ejs', {user: req.user, id: req.user._id.toString()+ req.params.id, userId: user1.username})
+                    res.render('chat.ejs', {user: req.user, id: req.user._id.toString()+ req.params.id, userId: user1.username, messages: []})
                  }
              });
             
