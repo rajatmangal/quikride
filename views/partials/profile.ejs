@@ -1,0 +1,63 @@
+<%- include ('header') %>
+
+    <!-- Compiled and minified CSS -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/home.min.css">
+    <link href="css/sb-admin-2.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i"> -->
+
+    <!--<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">-->
+
+    <div class="container">
+        <div>
+            <div class="col-sm-12 col-xs-12" align="center">
+                <div class="outter"><br/> <img class="circle" src="http://lorempixel.com/output/people-q-c-100-100-1.jpg" /></div>   
+                <h1>Hi <%= user["username"] %></h1>
+            </div>
+
+            <div align="right">
+                <a class="btn-floating btn-large waves-effect waves-light red" href="/profile/edit/<%= user["username"] %>"><i class="material-icons">edit</i></a>
+            </div>
+
+            <div class = "row">
+            <!--<div align="center">-->
+                <div class="col-sm-3 col-xs-4 follow line" align="center">
+                    <h4 font-fam>
+                        FirstName: <br/> <span><%= user["firstName"] %></span>
+                    </h4>
+                </div>
+                <div class="col-sm-3 col-xs-6 follow line" align="center">
+                    <h4>
+                        LastName: <br/> <span><%= user["lastName"] %></span>
+                    </h4>
+                </div>
+                <div class="col-sm-3 col-xs-6 follow line" align="center">
+                    <h4>
+                        Username: <br/> <span><%= user["username"] %></span>
+                    </h4>
+                </div>
+                <div class="col-sm-3 col-xs-6 follow line" align="center">
+                    <h4>
+                        Email: <br/> <span><%= user["email"] %></span>
+                    </h4>
+                </div>
+            </div>
+        
+            
+            
+            <br>
+            <br>
+            <br>
+            <br>
+            
+            
+                
+        </div>
+    </div>
+
+
+<%- include ('footer') %>
