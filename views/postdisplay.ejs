@@ -108,12 +108,13 @@
                         <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Your message for driver" name="message" rows="3"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Send Request</button>
+                    <a href="/chat/<%= posts.userId %>"  class="btn btn-primary">Chat</a>
                 </form>
             <% } else { %>
                 <button type="button" class="btn btn-primary">Edit Post</button>
             <% } %>  
         </div>
-        <div></div>
+        <br>
     </div>
     <script>
         function initMap() {
