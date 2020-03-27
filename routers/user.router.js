@@ -11,6 +11,7 @@ const router = new express.Router();
 const moment = require("moment");
 const chatUtil = require("../chat/chat-utils");
 const User = require('../models/user');
+const geoLocation = require("../utils/geoLocation");
 
 router.get('/', authentication.checkAuthentication, (req,res) => {
 
@@ -20,33 +21,6 @@ router.get('/', authentication.checkAuthentication, (req,res) => {
     var dropOffLng = parseFloat(req.query.dropoffLocationLng);
 
     var postsQuery = {};
-    if (pickUpLat && pickUpLon) {
-        postsQuery.pickUpPoint = {
-            $near: {
-                $geometry: { 
-                    type: "Point",
-                    coordinates: [-119.2720107, 50.2670137],
-                },
-                $maxDistance: 10000,
-            }
-        };
-    }
-    if (dropOffLat && dropOffLng) {
-        postsQuery.dropOffPoint = {
-            $near: {
-                $geometry: { 
-                    type: "Point",
-                    coordinates: [dropOffLng, dropOffLat],
-                },
-                $maxDistance: 10000,
-            }
-        }
-    }
-    if (pickUpLat && pickUpLon && dropOffLat && dropOffLng) {
-        var tempPostsQuery = {$and: []};
-        tempPostsQuery.$and = [{pickUpPoint: postsQuery.pickUpPoint}, {dropOffPoint: postsQuery.dropOffPoint}];
-        postsQuery = {pickUpPoint: postsQuery.pickUpPoint};
-    }
 
     thread.find({ users: req.user.username}, async (err,res2) => {
         if(res2 == null) {
@@ -54,15 +28,31 @@ router.get('/', authentication.checkAuthentication, (req,res) => {
             res.render('index.ejs',{ name: req.user.username , messages: [] });
         } else {
             var sender = await chatUtil.generateMessages(res2, req.user.username);
-            const posts1 = await postsModel.find(postsQuery, (err, res5)=>{
+            var allPosts = await postsModel.find(postsQuery, (err, res5)=>{
                 if(err){
                     console.log(err);
                     return;
                 }
             });
+            var filteredPosts = [];
+            if (pickUpLat && pickUpLon && dropOffLat && dropOffLng) {
+                for (var i = 0; i < allPosts.length; i++) {
+                    var post = allPosts[i];
+                    var pickUpDistance = geoLocation.getDistanceFromLatLonInKm(pickUpLat, pickUpLon, post.pickUpPoint.coordinates[1], post.pickUpPoint.coordinates[0]);
+                    var dropOffDistance = geoLocation.getDistanceFromLatLonInKm(dropOffLat, dropOffLng, post.dropOffPoint.coordinates[1], post.dropOffPoint.coordinates[0]);
+                    console.log(pickUpDistance);
+                    console.log(dropOffDistance);
+                    if (pickUpDistance < post.radius && dropOffDistance < post.radius) {
+                        filteredPosts.push(post);
+                    }
+                }
+            } else {
+                filteredPosts = allPosts;
+            }
+
             var unread = await chatUtil.unreadMessages(res2, req.user.username);
             res.locals.title = "Home Page";
-            res.render('index.ejs',{ user: req.user, messagesList: sender,moment:moment, posts: posts1, unread:unread});
+            res.render('index.ejs',{ user: req.user, messagesList: sender,moment:moment, posts: filteredPosts, unread:unread});
         }
     });
 });
