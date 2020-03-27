@@ -30,7 +30,27 @@ var shareRidePostsSchema = new mongoose.Schema({
     perKm: {
         type: String,
         required: true
-    }
+    },
+    smoking: {
+        type: String,
+        required: true
+    },
+    luggage: {
+        type: String,
+        required: true
+    },
+    seats: {
+        type: Number,
+        required: true
+    },
+    usermessage: {
+        type: String,
+        required: true
+    },
+    date: {
+        type: String,
+        required: true
+    },
 });
 
 shareRidePostsSchema.index({"pickUpPoint": "2dsphere"});

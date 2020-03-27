@@ -1,0 +1,164 @@
+<%- include ('partials/header') %>
+    <link rel="stylesheet" href="/css/post.css">
+    <br>
+    <div class="container">
+        <div class="col">
+            <!-- image here -->
+            <div class="row heading">
+                <em>Request to book a ride with name:</em>
+            </div>
+            <div class="row">
+                <h3 class="heading1">Trip Details:</h3>
+            </div>
+            <div class="row">
+                <!-- <div class="details"> -->
+                <div class ="col-lg-3 details">
+                    <span class="strong">Pickup: </span>
+                    <br>
+                    <span class="strong">Dropoff: </span>
+                    <br>
+                    <span class="strong">Date: </span>
+                    <br>
+                    <span class="strong">Number of seats available: </span>
+                    <br>
+                    <span class="strong">Estimated Cost per seat: </span>
+                    <br>
+                    <span class="strong textarea">Description: </span>
+                    <br>
+                </div>
+                <div class="col-lg-2">
+                    <span class="attr"><%= posts.pickUp %></span>
+                    <br>
+                    <span class="attr"><%= posts.dropOff %></span>
+                    <br>
+                    <span class="attr"><%= posts.date %></span>
+                    <br>
+                    <span class="attr"><%= posts.seats %></span>
+                    <br>
+                    <span class="attr"><%= posts.perKm %></span>
+                    <br>
+                    <div class="attr textarea"><%= posts.usermessage %></div>
+                </div>
+                <!-- </div> -->
+            </div>
+            <br><br>
+            <% if (posts.luggage === "on" || posts.smoking === "on") {%> 
+                <div class="row">
+                    <h3>Preferences</h3>
+                </div>
+                <div class="row">
+                    <% if (posts.luggage === "on") {%>
+                        <div class="col-4">
+                            <i class="fas fa-suitcase"></i> Luggage Option Available
+                        </div>
+                    <% } %> 
+                    <% if (posts.smoking === "on") {%>
+                        <div class="col-4">
+                            <i class="fas fa-smoking-ban"></i> No Smoking
+                        </div>
+                    <% } %> 
+                </div>
+                <br><br>
+            <% } %> 
+            <div class="row">
+                <h3>Driver Details:</h3>
+            </div>
+            <div class="row"> 
+                <div class="col-2">
+                    <img class="rounded-circle img" src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179865.jpg" alt="">
+                </div>
+                <div class="col-4">
+                    <div class="details">
+                        <span class="strong">Name:</span>
+                        <br>
+                        <span class="strong">Number of Rides Completed:</span>
+                        <br>
+                        <span class="strong">Rating:</span> 
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="details">
+                        <span class="attr"><%= driver[0].fullNameOnLicense %> </span>
+                        <br>
+                        <span class="attr"><%= driver[0].totalRides %></span>
+                        <br>
+                        <span class="attr"><%= driver[0].rating%></span> 
+                    </div>
+                </div>
+            </div>
+            <br>
+            <% if (user.username !== posts.username) {%>
+                <h3 class="row">
+                    Details of your trip: 
+                </h3>
+                <form action="/postride/<%= posts._id %>" method="post">
+                    <div class="form-group">
+                            <input type="text" class="form-control form-control-user" id="rider" name="rider" value="<%= user.username %>"  style="display: none;">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-user" id="driver" name="driver" value="<%= driver[0].username %>" style="display: none;">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-user" placeholder="Your Pickup Location" id="pickup" name="pickup" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-user" placeholder="Your Drop Off Location"id="dropoff" name="dropoff" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Your message for driver" name="message" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Request</button>
+                </form>
+            <% } else { %>
+                <button type="button" class="btn btn-primary">Edit Post</button>
+            <% } %>  
+        </div>
+        <div></div>
+    </div>
+    <script>
+        function initMap() {
+          //To turn google place api on, replace the API key at the bottom and uncomment these 2 lines
+          var pickup = document.getElementById('pickup');
+          var dropoff = document.getElementById('dropoff');
+  
+          var autocomplete = new google.maps.places.Autocomplete(pickup);
+          var autocomplete2 = new google.maps.places.Autocomplete(dropoff);
+  
+          // Bind the map's bounds (viewport) property to the autocomplete object,
+          // so that the autocomplete requests use the current map bounds for the
+          // bounds option in the request.
+  
+          // Set the data fields to return when the user selects a place.
+          autocomplete.setFields(
+              ['address_components', 'geometry', 'icon', 'name']);
+  
+          autocomplete.addListener('place_changed', function() {
+
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+              window.alert("No details available for input: '" + place.name + "'");
+              return;
+            } else {
+              document.getElementById('pickUpLocationLat').value = place.geometry.location.lat();
+              document.getElementById('pickUpLocationLng').value = place.geometry.location.lng();
+            }
+            
+          });
+          autocomplete2.setFields(
+              ['address_components', 'geometry', 'icon', 'name']);
+  
+          autocomplete2.addListener('place_changed', function() {
+
+            var place = autocomplete2.getPlace();
+            if (!place.geometry) {
+              window.alert("No details available for input: '" + place.name + "'");
+              return;
+            } else {
+              document.getElementById('dropOffLocationLat').value = place.geometry.location.lat();
+              document.getElementById('dropOffLocationLng').value = place.geometry.location.lng();
+            }
+            
+          });
+        }
+      </script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCESc_JeBGh3Hw1N-b-vhn0xJ83_QzVhno&libraries=places&callback=initMap" async defer></script>
