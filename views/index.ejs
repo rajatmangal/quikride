@@ -77,15 +77,21 @@
             var myLatLng = {lat: 49.17, lng: -122.87};
 
             pickUpMarker = new google.maps.Marker({
-                position: myLatLng,
+                //position: myLatLng,
                 map: map,
-                title: 'Pickup'
+                title: 'Pickup',
+                icon: {
+                    url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+                }
             });
 
             dropOffMarker = new google.maps.Marker({
                 position: myLatLng,
                 map: map,
-                title: 'Dropoff'
+                title: 'Dropoff',
+                icon: {
+                    url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                }
             });
 
             // Try HTML5 geolocation.
