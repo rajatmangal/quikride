@@ -28,6 +28,9 @@
                 <input type="hidden" name="dropoffLocationLat" id="dropOffLocationLat">
                 <input type="hidden" name="dropoffLocationLng" id="dropOffLocationLng">
                 <button type="submit" class="btn btn-primary mb-2">Search</button>
+                <% if (!req.query.pickUpLocationLat) { %>
+                    <button type="submit" class="btn ml-3 btn-outline-secondary mb-2">Clear</button>
+                <% } %>
             </form>
         </div>
     </div>

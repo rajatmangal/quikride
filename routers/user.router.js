@@ -40,8 +40,6 @@ router.get('/', authentication.checkAuthentication, (req,res) => {
                     var post = allPosts[i];
                     var pickUpDistance = geoLocation.getDistanceFromLatLonInKm(pickUpLat, pickUpLon, post.pickUpPoint.coordinates[1], post.pickUpPoint.coordinates[0]);
                     var dropOffDistance = geoLocation.getDistanceFromLatLonInKm(dropOffLat, dropOffLng, post.dropOffPoint.coordinates[1], post.dropOffPoint.coordinates[0]);
-                    console.log(pickUpDistance);
-                    console.log(dropOffDistance);
                     if (pickUpDistance < post.radius && dropOffDistance < post.radius) {
                         filteredPosts.push(post);
                     }
@@ -52,7 +50,7 @@ router.get('/', authentication.checkAuthentication, (req,res) => {
 
             var unread = await chatUtil.unreadMessages(res2, req.user.username);
             res.locals.title = "Home Page";
-            res.render('index.ejs',{ user: req.user, messagesList: sender,moment:moment, posts: filteredPosts, unread:unread});
+            res.render('index.ejs',{ user: req.user, messagesList: sender,moment:moment, posts: filteredPosts, unread:unread, req: req});
         }
     });
 });
