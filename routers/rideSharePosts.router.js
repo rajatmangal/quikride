@@ -65,7 +65,7 @@ router.post('/post/create/rideshare', authentication.checkAuthentication, async 
     if(req.body.smoking != 'on') {
         smoking = "off"
     }
-    var post  = new postsModel({username: req.user.username, pickUp: req.body.pickUp, 
+    var post  = new postsModel({username: req.user.username, userId: req.user._id, pickUp: req.body.pickUp, 
         dropOff:req.body.dropOff, radius: req.body.radius, perKm: req.body.perKm,
         pickUpPoint: {type: "Point", coordinates: [parseFloat(req.body.pickupLocationLng), parseFloat(req.body.pickupLocationLat),] },
         dropOffPoint: {type: "Point", coordinates: [parseFloat(req.body.dropoffLocationLng), parseFloat(req.body.dropoffLocationLat)] },

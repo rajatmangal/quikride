@@ -14,7 +14,7 @@
 }
 
 .posts-cards {
-    margin: 5px 5px;
+    margin: 5px 10px;
 }
 
 .col-lg-8 {
@@ -23,4 +23,20 @@
 
 .col-lg-4 {
     padding-right: 0;
+}
+
+.price {
+    display: inline-block;
+    margin-right: 1rem;
+    color: #4E73DF;
+    font-style: italic;
+}
+.postpic {
+    height: 8rem;
+    widht: 8rem;
+}
+
+.vertical-line {
+    border-left: 1px dashed;
+    height: 90%;
 }

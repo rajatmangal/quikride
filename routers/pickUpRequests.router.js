@@ -27,7 +27,7 @@ router.get('/pickUprequests', authentication.checkAuthentication, async (req, re
     }
     
     console.log(isDriver);
-    return res.render('pickUpRequests.ejs', {requests: requests, isDriver:isDriver});
+    return res.render('pickUpRequests.ejs', {requests: requests, isDriver:isDriver, user:req.user});
 });
 
 router.post('/accept/:id', authentication.checkAuthentication, async (req, res)=>{

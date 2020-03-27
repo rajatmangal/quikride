@@ -7,18 +7,20 @@ const router = new express.Router();
 //To Do: 1. verify input data 2. 
 var userFound = false ;
 router.get('/driver/registration', authentication.checkAuthentication, async (req, res)=>{
+    const posts = await driversModel.find({username: req.user.username}, (err, res)=>{
+        if(err){
+            res.status(404).send('No posts found!');
+            return;
+        }
+    });
     if(req.user.isDriver){
-        userFound = true ;
-        res.locals.title="Driver exists.";
-        res.render('registerDriver.ejs', {
-            userfound: true,
-            user: req.user,
-        });
-        return ;
-    }else{
+        return res.redirect('/');        
+    } else if(posts.length != 0) {
         res.locals.title= "Register as a driver";
-        res.render('registerDriver.ejs', {user: req.user,userfound:false});
-        return;
+        return res.render('registerDriver.ejs', {user: req.user, userfound:true});
+    } else {
+        res.locals.title= "Register as a driver";
+        return res.render('registerDriver.ejs', {user: req.user, userfound:false});
     }
 });
 
