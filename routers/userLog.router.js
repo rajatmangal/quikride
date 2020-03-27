@@ -10,9 +10,11 @@ router.get('/userLogs', authentication.checkAuthentication, async (req, res)=>{
     var query = {};
     if(isDriver){
         query = {$and: [{driver:req.user.username}, {status:'started'}]};
+        queryStarted = {$and:[{driver: req.user.username}]};
     }
     else{
         query = {$and: [{rider:req.user.username}, {status:'started'}]};
+        queryStarted = {$and:[{rider: req.user.username}]};
     }
     activeRequests = await ridesModel.find(query, 
     (err, res)=>{
@@ -21,8 +23,14 @@ router.get('/userLogs', authentication.checkAuthentication, async (req, res)=>{
             return;
         }
     });
+    const historical = await ridesModel.find(queryStarted, (err, res)=>{
+        if(err){
+            //Todo: handle error
+            return ;
+        }
+    });     
     res.locals.title = "User Log";
-    return res.render('userLog.ejs', {activeRequests: activeRequests, historical: [], isDriver: isDriver});
+    return res.render('userLog.ejs', {activeRequests: activeRequests, historical: historical, isDriver: isDriver, user:req.user});
 });
 
 router.post('/start/:id', authentication.checkAuthentication, async (req, res)=>{
@@ -88,7 +96,7 @@ router.get('/userLogs/accepted', authentication.checkAuthentication, async (req,
                 }
             });
     res.locals.title = "Accepted Requests";
-    return res.render('userLog.ejs', {activeRequests: activeRequests, historical: historical, isDriver:isDriver});
+    return res.render('userLog.ejs', {activeRequests: activeRequests, historical: historical, isDriver:isDriver, user:req.user});
 });
 
 router.get('/userLogs/rejected', authentication.checkAuthentication, async (req, res)=>{
@@ -117,7 +125,7 @@ router.get('/userLogs/rejected', authentication.checkAuthentication, async (req,
                 }
             });
     res.locals.title = "Rejected Requests";
-    return res.render('userLog.ejs', {activeRequests: activeRequests, historical: historical, isDriver:isDriver});
+    return res.render('userLog.ejs', {activeRequests: activeRequests, historical: historical, isDriver:isDriver, user:req.user});
 });
 
 router.get('/userLogs/ended', authentication.checkAuthentication, async (req, res)=>{
@@ -146,7 +154,7 @@ router.get('/userLogs/ended', authentication.checkAuthentication, async (req, re
                 }
             });
     res.locals.title = "Ended Requests";
-    return res.render('userLog.ejs', {activeRequests: activeRequests, historical: historical, isDriver:isDriver});
+    return res.render('userLog.ejs', {activeRequests: activeRequests, historical: historical, isDriver:isDriver, user:req.user});
 });
 
 router.get('/userLogs/canceled', authentication.checkAuthentication, async (req, res)=>{
@@ -175,7 +183,7 @@ router.get('/userLogs/canceled', authentication.checkAuthentication, async (req,
                 }
             });
     res.locals.title = "Canceled Requests";
-    return res.render('userLog.ejs', {activeRequests: activeRequests, historical: historical, isDriver:isDriver});
+    return res.render('userLog.ejs', {activeRequests: activeRequests, historical: historical, isDriver:isDriver, user:req.user});
 });
 
 module.exports = router ;

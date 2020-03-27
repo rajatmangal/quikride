@@ -15,6 +15,7 @@
             margin: 0;
             padding: 0;
         }
+        
     </style>
     <div class="row">
         <div class="col-sm-12 mt-3 mb-3">
@@ -32,133 +33,58 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-6">
             <div id="posts">
                 <% for(var i=0; i<posts.length; i++) {%>
                     <div class="card posts-cards" onclick="updateMarkers(<%= posts[i].pickUpPoint.coordinates[1] %>,<%= posts[i].pickUpPoint.coordinates[0] %>, 
                     <%= posts[i].dropOffPoint.coordinates[1] %>,<%= posts[i].dropOffPoint.coordinates[0] %>)">
-                        <h5 class="card-header"><%= posts[i].username %></h5>
                         <div class="card-body">
-                        <h5 class="card-title"><%= posts[i].usermessage %></h5>
-                        <p class="card-text">
-                            Pick Up Location: <%= posts[i].pickUp %>
-                            <br>
-                            Drop Off Location: <%= posts[i].dropOff %>
-                        </p>
-                        <a href="/chat/<%= posts[i].userId %>"  class="btn btn-primary">Chat</a>
-                        <a href="/chat/<%= posts[i].userId %>"  class="btn btn-primary">Request Ride</a>
+                            <div class="row">
+                                <div class="col-3">
+                                    <img class="rounded-circle postpic" src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179865.jpg" alt="">
+                                    <br>
+                                    <br>
+                                    Posted By: <%=posts[i].username%>
+                                </div>
+                                <div class="col-1">
+                                    <div class="vertical-line"></div>
+                                </div>
+                                <div class="col-5">
+                                    Leaving: <%= posts[i].date %>
+                                    <br>
+                                    <br>
+                                    <p class="card-text">
+                                        Pick Up Location: <%= posts[i].pickUp %>
+                                        <br>
+                                        Drop Off Location: <%= posts[i].dropOff %>
+                                    </p>
+                                    <br>
+                                    <a href="/chat/<%= posts[i].userId %>"  class="btn btn-primary">Chat</a>
+                                    <a href="/postride/<%= posts[i].id %>"  class="btn btn-primary">Request Ride</a>
+                                </div>
+                                <div class="col-1">
+                                    <div class="vertical-line"></div>
+                                </div>
+                                <div class="col-2">
+                                    <br>
+                                    <span><h2 class="price"><%= posts[i].perKm %></h2>$/seat</span>
+                                    <br>
+                                    <br>
+                                    <h2 class="price"><%= posts[i].seats %></h2> Seats Left
+                                </div>
+                            </div>
                         </div>
                     </div>
                 <% } %>
             </div>
         </div>
-        <div class="col-lg-8">
+        <div class="col-lg-6">
             <div id="map"></div>
         </div>
     </div>
-    <script>
-        var map;
-        var pickUpMarker;
-        var dropOffMarker;
-
-        function updateMarkers(pickUpLat, pickUpLng, dropOffLat, dropOffLng) {
-            var pickUpPosition = {lat: parseFloat(pickUpLat), lng: parseFloat(pickUpLng)};
-            var dropOffPosition = {lat: parseFloat(dropOffLat), lng: parseFloat(dropOffLng)};
-            pickUpMarker.setPosition(pickUpPosition);
-            dropOffMarker.setPosition(dropOffPosition);
-        }
-        function initMap() {
-            map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: 49.17, lng: -122.87},
-            zoom: 12
-            });
-            infoWindow = new google.maps.InfoWindow;
-
-            // markers will be added in the future from database
-            var myLatLng = {lat: 49.17, lng: -122.87};
-
-            pickUpMarker = new google.maps.Marker({
-                position: myLatLng,
-                map: map,
-                title: 'Pickup'
-            });
-
-            dropOffMarker = new google.maps.Marker({
-                position: myLatLng,
-                map: map,
-                title: 'Dropoff'
-            });
-
-            // Try HTML5 geolocation.
-            if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                var pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-                };
-                map.setCenter(pos);
-            }, function() {
-                handleLocationError(true, infoWindow, map.getCenter());
-            });
-            } else {
-            // Browser doesn't support Geolocation
-            handleLocationError(false, infoWindow, map.getCenter());
-            }
-            function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-                infoWindow.setPosition(pos);
-                infoWindow.setContent(browserHasGeolocation ?
-                                    'Error: The Geolocation service failed.' :
-                                    'Error: Your browser doesn\'t support geolocation.');
-                infoWindow.open(map);
-            }
-
-          //To turn google place api on, replace the API key at the bottom and uncomment these 2 lines
-          var pickup = document.getElementById('pickUp');
-          var dropoff = document.getElementById('dropOff');
-  
-          var autocomplete = new google.maps.places.Autocomplete(pickup);
-          var autocomplete2 = new google.maps.places.Autocomplete(dropoff);
-  
-          // Bind the map's bounds (viewport) property to the autocomplete object,
-          // so that the autocomplete requests use the current map bounds for the
-          // bounds option in the request.
-  
-          // Set the data fields to return when the user selects a place.
-          autocomplete.setFields(
-              ['address_components', 'geometry', 'icon', 'name']);
-  
-          autocomplete.addListener('place_changed', function() {
-
-            var place = autocomplete.getPlace();
-            if (!place.geometry) {
-              window.alert("No details available for input: '" + place.name + "'");
-              return;
-            } else {
-              document.getElementById('pickUpLocationLat').value = place.geometry.location.lat();
-              document.getElementById('pickUpLocationLng').value = place.geometry.location.lng();
-            }
-            
-          });
-          autocomplete2.setFields(
-              ['address_components', 'geometry', 'icon', 'name']);
-  
-          autocomplete2.addListener('place_changed', function() {
-
-            var place = autocomplete2.getPlace();
-            if (!place.geometry) {
-              window.alert("No details available for input: '" + place.name + "'");
-              return;
-            } else {
-              document.getElementById('dropOffLocationLat').value = place.geometry.location.lat();
-              document.getElementById('dropOffLocationLng').value = place.geometry.location.lng();
-            }
-            
-          });
-
-        }
-        </script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCESc_JeBGh3Hw1N-b-vhn0xJ83_QzVhno&libraries=places&callback=initMap"
-        async defer></script>
+    <script src="/js/map.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCESc_JeBGh3Hw1N-b-vhn0xJ83_QzVhno&libraries=places&callback=initMap"
+    async defer></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
     <script src="/js/io.js"></script>
