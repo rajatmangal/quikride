@@ -39,28 +39,16 @@ router.get('/postride/:id', authentication.checkAuthentication, async (req, res)
         }
     });
     res.locals.title = "Posts";
-    return res.render('postDisplay.ejs', {user: req.user, driver: driver,posts: posts[0]});
-});
-
-router.post('/postride/:id', authentication.checkAuthentication, async (req, res)=>{
-    var groupId;
-    var id1 = await User.findOne({username: req.body.rider}, (err, pos) => {
+    var id2 = await User.findOne({username: driver[0].username}, (err, pos)=> {
         if(err) {
             console.log(err);
         }
     })
-    console.log("Id1 is ", id1);
-    var id2 = await User.findOne({username: req.body.driver}, (err, pos)=> {
-        if(err) {
-            console.log(err);
-        }
-    })
-    console.log("Id2 is ", id2);
-    await thread.findOne({$or: [{'group_name': id1._id.toString()+ id2._id.toString()}, {'group_name':  id2._id.toString()+ id1._id.toString()}]}, async(err,res1) => {
+    await thread.findOne({$or: [{'group_name': req.user._id.toString()+ id2._id.toString()}, {'group_name':  id2._id.toString()+ req.user._id.toString()}]}, async(err,res1) => {
         console.log("res1 is ", res1);
         if(res1===null) {
-            groupId = id2._id.toString()+ id1._id.toString()
-            var newThread = new thread({ users: [req.body.rider, req.body.driver], group_name: id2._id.toString()+ id1._id.toString(), created_by: new mongoose.Types.ObjectId(), created_at: new Date().getTime(), id: id1._id, last_message: "", last_sender: "", last_updated: new Date().getTime()});
+            groupId = id2._id.toString()+ req.user._id.toString()
+            var newThread = new thread({ users: [req.body.rider, req.body.driver], group_name: id2._id.toString()+ req.user._id.toString(), created_by: new mongoose.Types.ObjectId(), created_at: new Date().getTime(), id: id1._id, last_message: "", last_sender: "", last_updated: new Date().getTime()});
             await thread.create(newThread, (err,res2) => {
                  if(err) {
                      throw err;
@@ -71,9 +59,12 @@ router.post('/postride/:id', authentication.checkAuthentication, async (req, res
         }
 
     });
-    console.log("GroupId is "+ groupId);
+    return res.render('postDisplay.ejs', {user: req.user, driver: driver,posts: posts[0], groupId:groupId});
+});
+
+router.post('/postride/:id', authentication.checkAuthentication, async (req, res)=>{
     var post  = new ride({rider:req.body.rider, driver:req.body.driver, message:req.body.message
-                                , pickup: req.body.pickup, dropoff:req.body.dropoff, id: req.params.id, status:"pending", groupId: groupId});
+                                , pickup: req.body.pickup, dropoff:req.body.dropoff, id: req.params.id, status:"pending", groupId: req.body.groupId});
     console.log(post)
     await ride.create(post, (err, pos)=>{
         if(err) {
