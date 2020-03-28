@@ -1,0 +1,57 @@
+<%- include ('partials/header') %>
+    <br>
+    <div class="container-fluid">
+        <center><h1 class="text-dark mb-4"><%= driver["fullNameOnLicense"] %>'s Driver Profile</h1></center>
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-4">
+                <div class="card mb-12">
+                    <!-- <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179865.jpg" width="160" height="160"> -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <div class="card shadow mb-3">
+                    <div class="card-header py-3">
+                        <center><p class="text-primary m-0 font-weight-bold">Driver Profile</p></center>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label for="username"><strong>Username</strong></label>
+                                    <input class="form-control" type="text" value=<%= driver["username"] %> name="username" disabled>
+                                </div>
+                                <label for="full_name"><strong>Name As Seen on License</strong></label>
+                                <input class="form-control" type="text" value="<%= driver["fullNameOnLicense"] %>" name="full_name" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="license_number"><strong>License Number</strong></label>
+                                <input class="form-control" type="text" value=<%= driver["licenseNumber"] %> name="license_number" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="license_class"><strong>License Class</strong></label>
+                                <input class="form-control" type="text" value=<%= driver["licenseClass"] %> name="license_class" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="car_name"><strong>Car Name</strong></label>
+                                <input class="form-control" type="text" value=<%= driver["carName"] %> name="car_name" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="car_model"><strong>Car Model</strong></label>
+                                <input class="form-control" type="text" value=<%= driver["carModel"] %> name="car_model" disabled>
+                            </div>
+                            <center><div class="form-group"><button class="btn btn-primary" type="button" onclick="window.location.href = '/profile/driver/edit/<%= driver["username"] %>';">Edit Driver's Profile</button></div></center>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3"></div>
+        </div>
+
+<%- include ('partials/footer') %>
