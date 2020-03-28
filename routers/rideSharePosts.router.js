@@ -1,6 +1,8 @@
 const express = require('express');
 const postsModel = require('../models/shareRidePosts');
 const drivers = require('../models/drivers');
+const User = require('../models/user');
+const thread = require('../models/thread');
 const ride = require('../models/ridesrequest');
 const authentication = require('../utils/authentication.util');
 const chatUtil = require('../chat/chat-utils');
@@ -41,16 +43,43 @@ router.get('/postride/:id', authentication.checkAuthentication, async (req, res)
 });
 
 router.post('/postride/:id', authentication.checkAuthentication, async (req, res)=>{
-    console.log("Hello")
+    var groupId;
+    var id1 = await User.findOne({username: req.body.rider}, (err, pos) => {
+        if(err) {
+            console.log(err);
+        }
+    })
+    console.log("Id1 is ", id1);
+    var id2 = await User.findOne({username: req.body.driver}, (err, pos)=> {
+        if(err) {
+            console.log(err);
+        }
+    })
+    console.log("Id2 is ", id2);
+    await thread.findOne({$or: [{'group_name': id1._id.toString()+ id2._id.toString()}, {'group_name':  id2._id.toString()+ id1._id.toString()}]}, async(err,res1) => {
+        console.log("res1 is ", res1);
+        if(res1===null) {
+            groupId = id2._id.toString()+ id1._id.toString()
+            var newThread = new thread({ users: [req.body.rider, req.body.driver], group_name: id2._id.toString()+ id1._id.toString(), created_by: new mongoose.Types.ObjectId(), created_at: new Date().getTime(), id: id1._id, last_message: "", last_sender: "", last_updated: new Date().getTime()});
+            await thread.create(newThread, (err,res2) => {
+                 if(err) {
+                     throw err;
+                 }
+             });
+        } else {
+            groupId = res1.group_name;
+        }
+
+    });
+    console.log("GroupId is "+ groupId);
     var post  = new ride({rider:req.body.rider, driver:req.body.driver, message:req.body.message
-                                , pickup: req.body.pickup, dropoff:req.body.dropoff, id: req.params.id, status:"pending"});
+                                , pickup: req.body.pickup, dropoff:req.body.dropoff, id: req.params.id, status:"pending", groupId: groupId});
     console.log(post)
     await ride.create(post, (err, pos)=>{
         if(err) {
             console.log(err);
             return ;
         }
-        console.log("hrllo")
         req.flash('success', "Request successfully Sent.");
         return res.redirect('/postride/'+req.params.id);
     });
