@@ -14,7 +14,6 @@ const User = require('../models/user');
 const geoLocation = require("../utils/geoLocation");
 
 router.get('/', authentication.checkAuthentication, (req,res) => {
-
     var pickUpLat = parseFloat(req.query.pickupLocationLat);
     var pickUpLon = parseFloat(req.query.pickupLocationLng);
     var dropOffLat = parseFloat(req.query.dropoffLocationLat);
@@ -145,28 +144,27 @@ router.post('/profile/edit/:name', async (req,res) => {
 
         var message = undefined;
         
-        // udpate last name 
+        // update last name 
         if (req.body.fname != ''){
             const filter = { username: req.params.name };
             const update = { firstName: req.body.fname};
             updateUser(filter, update);
         }
-        // udpate first name 
+        // update first name 
         if (req.body.lname != ''){
             const filter = { username: req.params.name };
             const update = { lastName: req.body.lname};
             updateUser(filter, update);
         }
         
-        // udpate password
+        // update password
         if (req.body.newPassword !== req.body.newPassword2){
             message = "Those Passwords didn't match. Please try again.";
             return res.render('editProfile.ejs', {user: user[0], message: message});  
         }
         if (req.body.newPassword == req.body.newPassword2 && req.body.newPassword != '' && req.body.newPassword2 != '')    {
             if (!regConfig.checkPassword(req.body.newPassword)){
-                message = "Your password must have a least length of 8 and should include at least 1 digit, \
-1 Uppercase Letter ,1 Lowercase Letter and 1 special character.";  
+                message = "Your password must have a least length of 8 and should include at least 1 digit, 1 Uppercase Letter ,1 Lowercase Letter and 1 special character.";  
                 return res.render('editProfile.ejs', {user: user[0], message: message});   
             }
             // hash and update password, send an email to confirm password changed

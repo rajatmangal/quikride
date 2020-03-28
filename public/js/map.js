@@ -1,4 +1,4 @@
-        var map;
+var map;
         var pickUpMarker;
         var dropOffMarker;
 
@@ -7,6 +7,10 @@
             var dropOffPosition = {lat: parseFloat(dropOffLat), lng: parseFloat(dropOffLng)};
             pickUpMarker.setPosition(pickUpPosition);
             dropOffMarker.setPosition(dropOffPosition);
+            var bounds = new google.maps.LatLngBounds();
+            bounds.extend(pickUpMarker.position);
+            bounds.extend(dropOffMarker.position);
+            map.fitBounds(bounds);
         }
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
@@ -19,15 +23,21 @@
             var myLatLng = {lat: 49.17, lng: -122.87};
 
             pickUpMarker = new google.maps.Marker({
-                position: myLatLng,
+                //position: myLatLng,
                 map: map,
-                title: 'Pickup'
+                title: 'Pickup',
+                icon: {
+                    url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+                }
             });
 
             dropOffMarker = new google.maps.Marker({
                 position: myLatLng,
                 map: map,
-                title: 'Dropoff'
+                title: 'Dropoff',
+                icon: {
+                    url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                }
             });
 
             // Try HTML5 geolocation.
@@ -52,6 +62,11 @@
                                     'Error: Your browser doesn\'t support geolocation.');
                 infoWindow.open(map);
             }
+
+            <% if (posts.length > 0) { %>
+            updateMarkers(<%= posts[0].pickUpPoint.coordinates[1] %>,<%= posts[0].pickUpPoint.coordinates[0] %>, 
+                    <%= posts[0].dropOffPoint.coordinates[1] %>,<%= posts[0].dropOffPoint.coordinates[0] %>);
+            <% } %>
 
           //To turn google place api on, replace the API key at the bottom and uncomment these 2 lines
           var pickup = document.getElementById('pickUp');

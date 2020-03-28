@@ -91,12 +91,15 @@
                 <h3 class="row">
                     Details of your trip: 
                 </h3>
-                <form action="/postride/<%= posts._id %>" method="post">
+                <form id="form" action="/postride/<%= posts._id %>" method="post">
                     <div class="form-group">
                             <input type="text" class="form-control form-control-user" id="rider" name="rider" value="<%= user.username %>"  style="display: none;">
                     </div>
                     <div class="form-group">
                         <input type="text" class="form-control form-control-user" id="driver" name="driver" value="<%= driver[0].username %>" style="display: none;">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-user" id="groupId" name="groupId" value="<%= groupId %>" style="display: none;">
                     </div>
                     <div class="form-group">
                         <input type="text" class="form-control form-control-user" placeholder="Your Pickup Location" id="pickup" name="pickup" required>
@@ -107,15 +110,15 @@
                     <div class="form-group">
                         <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Your message for driver" name="message" rows="3"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Send Request</button>
+                    <button type="button" id="btnsubmit" class="btn btn-primary">Send Request</button>
                     <a href="/chat/<%= posts.userId %>"  class="btn btn-primary">Chat</a>
                 </form>
-            <% } else { %>
-                <button type="button" class="btn btn-primary">Edit Post</button>
             <% } %>  
         </div>
         <br>
     </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/io3.js"></script>
     <script>
         function initMap() {
           //To turn google place api on, replace the API key at the bottom and uncomment these 2 lines
@@ -163,3 +166,4 @@
         }
       </script>
       <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCESc_JeBGh3Hw1N-b-vhn0xJ83_QzVhno&libraries=places&callback=initMap" async defer></script>
+<%- include ('partials/footer') %>

@@ -40,3 +40,10 @@
     border-left: 1px dashed;
     height: 90%;
 }
+
+.bottom-footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    padding: 10px 0
+}

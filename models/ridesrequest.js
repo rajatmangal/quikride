@@ -29,6 +29,10 @@ var ridesSchema = new mongoose.Schema({
     status:{
         type: String,
         required: true
+    },
+    groupId:{
+        type: String,
+        required: true
     }
 });
 
