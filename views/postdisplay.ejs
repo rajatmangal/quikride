@@ -113,8 +113,6 @@
                     <button type="button" id="btnsubmit" class="btn btn-primary">Send Request</button>
                     <a href="/chat/<%= posts.userId %>"  class="btn btn-primary">Chat</a>
                 </form>
-            <% } else { %>
-                <button type="button" class="btn btn-primary">Edit Post</button>
             <% } %>  
         </div>
         <br>
@@ -168,3 +166,4 @@
         }
       </script>
       <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCESc_JeBGh3Hw1N-b-vhn0xJ83_QzVhno&libraries=places&callback=initMap" async defer></script>
+<%- include ('partials/footer') %>
