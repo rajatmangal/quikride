@@ -1,0 +1,67 @@
+<%- include ('partials/header') %>
+
+<script>
+ 
+</script>
+
+    <div class="container">
+        <p class="red"> 
+            <% if(typeof message != 'undefined') { %>
+                <%= message %>
+            <% } %> 
+        </p>
+    </div>
+    <br>
+    <div class="container-fluid">
+        <center><h1 class="text-dark mb-4"><%= driver["fullNameOnLicense"] %>'s Driver Profile</h1></center>
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-4">
+             
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <div class="card shadow mb-3">
+                    <div class="card-header py-3">
+                        <center><p class="text-primary m-0 font-weight-bold">Driver's Profile</p></center>
+                    </div>
+                    <div class="card-body">
+                        <form action="/profile/driver/edit/<%= driver["username"] %>" method='POST'>
+                            <div class="form-group">
+                                <label for="uname"><strong>Username</strong></label>
+                                <input class="form-control" type="text" value=<%= driver["username"] %> name="uname" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="full_name"><strong>Name As Seen on License</strong></label>
+                                <input class="form-control" type="text" value="<%= driver["fullNameOnLicense"] %>" name="full_name" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="license_number"><strong>License Number</strong></label>
+                                <input class="form-control" type="text" value=<%= driver["licenseNumber"] %> name="license_number" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="license_class"><strong>License Class</strong></label>
+                                <input class="form-control" type="text" value=<%= driver["licenseClass"] %> name="license_class" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="car_name"><strong>Car Name</strong></label>
+                                <input class="form-control" type="text" value=<%= driver["carName"] %> name="car_name">
+                            </div>
+                            <div class="form-group">
+                                <label for="car_model"><strong>Car Model</strong></label>
+                                <input class="form-control" type="text" value=<%= driver["carModel"] %> name="car_model">
+                            </div>
+                            <center><div class="form-group"><button class="btn btn-primary" type="submit" onclick="window.location.href = '/profile/driver/edit/<%= driver["username"] %>';">Edit Driver Profile</button></div></center>
+                            <center><label for="car_model"><strong>To change license information, please email quikride123@gmail.com and include a copy of your current license. We will process your request as soon as possible.</strong></label></center>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3"></div>
+        </div>
+
+<%- include ('partials/footer') %>

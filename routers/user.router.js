@@ -11,6 +11,7 @@ const router = new express.Router();
 const moment = require("moment");
 const chatUtil = require("../chat/chat-utils");
 const User = require('../models/user');
+const Driver = require('../models/drivers');
 const geoLocation = require("../utils/geoLocation");
 
 router.get('/', authentication.checkAuthentication, (req,res) => {
@@ -106,7 +107,6 @@ router.get('/profile/:name', authentication.checkAuthentication, (req,res) => {
     // retrieve user info
     User.find({username: req.params.name}, (err, user) => {
         if (err) return handleError(err);
-        console.log('user is: ', user);
         res.render('profile.ejs', {user: user[0]});
     })
 });
@@ -117,13 +117,38 @@ router.get('/profile/edit/:name', (req,res) => {
     // update user info
     User.find({username: req.params.name}, (err, user) => {
         if (err) return handleError(err);
-        console.log('user is: ', user);
         res.render('editProfile.ejs', {user: user[0]});
+    })
+});
+
+router.get('/profile/driver/:name', authentication.checkAuthentication, (req,res) => {
+    res.locals.title = "profile";
+    // retrieve user and driver info
+    Driver.find({username: req.params.name}, async (err, driver) => {
+        if (err) return handleError(err);
+        var user = await User.find({username: req.params.name});
+        res.render('driverProfile.ejs', {user: user[0], driver: driver[0]});
+    })
+});
+
+// authentication.checkAuthentication, 
+router.get('/profile/driver/edit/:name', (req,res) => {
+    res.locals.title = "editProfile";
+    // update driver info
+    Driver.find({username: req.params.name}, async (err, driver) => {
+        if (err) return handleError(err);
+        var user = await User.find({username: req.params.name});
+        res.render('editDriverProfile.ejs', {user: user[0], driver: driver[0]});
     })
 });
 
 async function updateUser(filter, update){
     doc = await User.findOneAndUpdate(filter, update);
+    return doc;
+}
+
+async function updateDriver(filter, update){
+    doc = await Driver.findOneAndUpdate(filter, update);
     return doc;
 }
 
@@ -134,10 +159,6 @@ async function findUser(filter){
 
 
 router.post('/profile/edit/:name', async (req,res) => {
-    console.log('If password changed, go back to login');
-    console.log('others changed, go back to user profile');
-    console.log('If email changed, send validation and update after validate?');
-    newUsername = req.params.name
     returnToLogin = false
     User.find({username: req.params.name}, (err, user) => {
         if (err) return handleError(err);
@@ -176,8 +197,29 @@ router.post('/profile/edit/:name', async (req,res) => {
                 updateUser(filter, update);
             }); 
         }
-        console.log(req.user);
         return res.redirect('/profile/'+req.user.username);
+    })
+});
+
+router.post('/profile/driver/edit/:name', async (req,res) => {
+    returnToLogin = false
+    Driver.find({username: req.params.name}, (err, driver) => {
+        if (err) return handleError(err);
+        
+        // update car name 
+        if (req.body.car_name != ''){
+            const filter = { username: req.params.name };
+            const update = { carName: req.body.car_name};
+            updateDriver(filter, update);
+        }
+        // update car model 
+        if (req.body.car_model != ''){
+            const filter = { username: req.params.name };
+            const update = { carModel: req.body.car_model};
+            updateDriver(filter, update);
+        }
+        
+        return res.redirect('/profile/driver/'+req.params.name);
     })
 });
 

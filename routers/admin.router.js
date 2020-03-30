@@ -3,6 +3,7 @@ const AdminBroExpress = require('admin-bro-expressjs');
 const AdminBroMongoose = require('admin-bro-mongoose')
 const mongoose = require('mongoose');
 const users = require('../models/user')
+const drivers = require('../models/drivers')
 const messages = require('../models/messages')
 const thread = require('../models/thread')
 AdminBro.registerAdapter(AdminBroMongoose)
@@ -22,6 +23,15 @@ const adminBro = new AdminBro({
         }
       }
   },
+  {
+    resource: drivers,
+    options:{
+      parent: {
+          name: 'Users Management',
+          icon: 'fas fa-users',
+      }
+    }
+},
   {
     resource: messages,
     options:{
