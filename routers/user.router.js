@@ -172,11 +172,11 @@ async function findUser(filter){
 
 
 router.post('/profile/edit/:name', upload, authentication.checkAuthentication, async (req,res) => {
-    var success=req.body.fieldname + "updated successfully";
+    // var success=req.file.filename + "updated successfully";
     console.log(req.body.fname);
     console.log(req.body.lname);
     // console.log(req.body.newPassword);
-    console.log(success);
+    console.log(req.file == undefined);
     returnToLogin = false
     User.find({username: req.params.name}, async (err, user) => {
         if (err) return handleError(err);
@@ -193,6 +193,12 @@ router.post('/profile/edit/:name', upload, authentication.checkAuthentication, a
         if (req.body.lname != ''){
             const filter = { username: req.params.name };
             const update = { lastName: req.body.lname};
+            await updateUser(filter, update);
+        }
+
+        if (req.file != undefined){
+            const filter = { username: req.params.name };
+            const update = { profilePic: req.file.filename};
             await updateUser(filter, update);
         }
         

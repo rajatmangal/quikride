@@ -6,7 +6,12 @@
             <div class="col-4"></div>
             <div class="col-4">
                 <div class="card mb-12">
-                    <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179865.jpg" width="160" height="160">
+                    <div class="card-body text-center shadow">
+                        <% if(user["profilePic"] != "") { %>
+                            <img class="rounded-circle mb-3 mt-4" src="/uploads/<%= user["profilePic"] %>" width="160" height="160">
+                        <% } else { %>
+                            <img class="rounded-circle mb-3 mt-4" src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179865.jpg" width="160" height="160">
+                        <% } %>
                     </div>
                 </div>
             </div>
