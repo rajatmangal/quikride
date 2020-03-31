@@ -60,7 +60,7 @@ router.get('/', authentication.checkAuthentication, (req,res) => {
             } else {
                 filteredPosts = allPosts;
             }
-
+            console.log(filteredPosts);
             var unread = await chatUtil.unreadMessages(res2, req.user.username);
             res.locals.title = "Home Page";
             res.render('index.ejs',{ user: req.user, messagesList: sender,moment:moment, posts: filteredPosts, unread:unread, req: req});

@@ -44,7 +44,11 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-3">
-                                    <img class="rounded-circle postpic" src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179865.jpg" alt="">
+                                    <% if(posts[i].profilePic != "") { %>
+                                        <img class="rounded-circle postpic" src="/uploads/<%= posts[i]["profilePic"] %>" alt="">
+                                    <% } else { %>
+                                        <img class="rounded-circle postpic" src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179865.jpg" alt="">
+                                    <% } %>
                                     <br>
                                     <br>
                                     Posted By: <%=posts[i].username%>

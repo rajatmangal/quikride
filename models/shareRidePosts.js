@@ -55,6 +55,10 @@ var shareRidePostsSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    profilePic:{
+        type: String,
+        required: true
+    }
 });
 
 shareRidePostsSchema.index({"pickUpPoint": "2dsphere"});
