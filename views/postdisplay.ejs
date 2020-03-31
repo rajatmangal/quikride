@@ -117,7 +117,9 @@
                     <button type="button" id="btnsubmit" class="btn btn-primary">Send Request</button>
                     <a href="/chat/<%= posts.userId %>"  class="btn btn-primary">Chat</a>
                 </form>
-            <% } %>  
+            <% } else { %>
+                <a href="/postride/edit/<%= posts._id %>"  class="btn btn-primary">Edit Post</a>
+            <% } %>   
         </div>
         <br>
     </div>
