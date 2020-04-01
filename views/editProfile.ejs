@@ -32,8 +32,11 @@
                 <div class="col-4">
                     <div class="card mb-12">
                         <div class="card-body text-center shadow">
-                            <img id="profile_pic" class="rounded-circle mb-3 mt-4" src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179865.jpg" alt="profile picture"
-                            width="160" height="160">
+                            <% if(user["profilePic"] != "") { %>
+                                    <img id="profile_pic" class="rounded-circle mb-3 mt-4" src="/uploads/<%= user["profilePic"] %>" alt="profile picture" width="160" height="160">
+                              <% } else { %>
+                                    <img id="profile_pic" class="rounded-circle mb-3 mt-4" src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179865.jpg" alt="profile picture" width="160" height="160">
+                              <% } %>
                                 <!-- <button class="btn btn-primary btn-sm" type="button">Change Photo</button> -->
                                 <input id="imgUpload" name="file" type="file" accept="image/png, image/jpeg" onchange="readURL(this);"/>​
                         </div>
