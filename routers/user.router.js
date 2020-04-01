@@ -13,6 +13,19 @@ const chatUtil = require("../chat/chat-utils");
 const User = require('../models/user');
 const Driver = require('../models/drivers');
 const geoLocation = require("../utils/geoLocation");
+var multer  = require('multer')
+var path = require('path');
+var Storage = multer.diskStorage({
+    destination: './public/uploads/',
+    filename: (req, file, cb) => {
+        // cb(null, file.fieldname + path.extname(file.originalname));
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+var upload = multer({
+    storage: Storage
+}).single('file')
 
 router.get('/', authentication.checkAuthentication, (req,res) => {
     var pickUpLat = parseFloat(req.query.pickupLocationLat);
@@ -47,7 +60,7 @@ router.get('/', authentication.checkAuthentication, (req,res) => {
             } else {
                 filteredPosts = allPosts;
             }
-
+            console.log(filteredPosts);
             var unread = await chatUtil.unreadMessages(res2, req.user.username);
             res.locals.title = "Home Page";
             res.render('index.ejs',{ user: req.user, messagesList: sender,moment:moment, posts: filteredPosts, unread:unread, req: req});
@@ -112,7 +125,7 @@ router.get('/profile/:name', authentication.checkAuthentication, (req,res) => {
 });
 
 // authentication.checkAuthentication, 
-router.get('/profile/edit/:name', (req,res) => {
+router.get('/profile/edit/:name', authentication.checkAuthentication, (req,res) => {
     res.locals.title = "editProfile";
     // update user info
     User.find({username: req.params.name}, (err, user) => {
@@ -132,7 +145,7 @@ router.get('/profile/driver/:name', authentication.checkAuthentication, (req,res
 });
 
 // authentication.checkAuthentication, 
-router.get('/profile/driver/edit/:name', (req,res) => {
+router.get('/profile/driver/edit/:name', authentication.checkAuthentication, (req,res) => {
     res.locals.title = "editProfile";
     // update driver info
     Driver.find({username: req.params.name}, async (err, driver) => {
@@ -158,9 +171,14 @@ async function findUser(filter){
 }
 
 
-router.post('/profile/edit/:name', async (req,res) => {
+router.post('/profile/edit/:name', upload, authentication.checkAuthentication, async (req,res) => {
+    // var success=req.file.filename + "updated successfully";
+    console.log(req.body.fname);
+    console.log(req.body.lname);
+    // console.log(req.body.newPassword);
+    console.log(req.file == undefined);
     returnToLogin = false
-    User.find({username: req.params.name}, (err, user) => {
+    User.find({username: req.params.name}, async (err, user) => {
         if (err) return handleError(err);
 
         var message = undefined;
@@ -169,13 +187,19 @@ router.post('/profile/edit/:name', async (req,res) => {
         if (req.body.fname != ''){
             const filter = { username: req.params.name };
             const update = { firstName: req.body.fname};
-            updateUser(filter, update);
+            await updateUser(filter, update);
         }
         // update first name 
         if (req.body.lname != ''){
             const filter = { username: req.params.name };
             const update = { lastName: req.body.lname};
-            updateUser(filter, update);
+            await updateUser(filter, update);
+        }
+
+        if (req.file != undefined){
+            const filter = { username: req.params.name };
+            const update = { profilePic: req.file.filename};
+            await updateUser(filter, update);
         }
         
         // update password
@@ -184,24 +208,26 @@ router.post('/profile/edit/:name', async (req,res) => {
             return res.render('editProfile.ejs', {user: user[0], message: message});  
         }
         if (req.body.newPassword == req.body.newPassword2 && req.body.newPassword != '' && req.body.newPassword2 != '')    {
+            console.log(req.body.newPassword);
+            console.log(regConfig.checkPassword(req.body.newPassword));
             if (!regConfig.checkPassword(req.body.newPassword)){
                 message = "Your password must have a least length of 8 and should include at least 1 digit, 1 Uppercase Letter ,1 Lowercase Letter and 1 special character.";  
                 return res.render('editProfile.ejs', {user: user[0], message: message});   
             }
             // hash and update password, send an email to confirm password changed
             returnToLogin = true;
-            regConfig.hashPassword(req.body.newPassword).then(function(hashedPassword){
+            regConfig.hashPassword(req.body.newPassword).then(async function(hashedPassword){
                 const filter = { username: req.params.name };
                 const update = { password: hashedPassword};
                 console.log('hashed password is now : ', hashedPassword);      
-                updateUser(filter, update);
+                await updateUser(filter, update);
             }); 
         }
         return res.redirect('/profile/'+req.user.username);
     })
 });
 
-router.post('/profile/driver/edit/:name', async (req,res) => {
+router.post('/profile/driver/edit/:name', authentication.checkAuthentication, async (req,res) => {
     returnToLogin = false
     Driver.find({username: req.params.name}, (err, driver) => {
         if (err) return handleError(err);

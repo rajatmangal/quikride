@@ -65,7 +65,11 @@
             </div>
             <div class="row"> 
                 <div class="col-2">
-                    <img class="rounded-circle img" src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179865.jpg" alt="">
+                    <% if(posts.profilePic != "") { %>
+                        <img class="rounded-circle img" src="/uploads/<%= posts.profilePic %>" alt="">
+                    <% } else { %>
+                        <img class="rounded-circle img" src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179865.jpg" alt="">
+                    <% } %>
                 </div>
                 <div class="col-4">
                     <div class="details">
@@ -113,7 +117,9 @@
                     <button type="button" id="btnsubmit" class="btn btn-primary">Send Request</button>
                     <a href="/chat/<%= posts.userId %>"  class="btn btn-primary">Chat</a>
                 </form>
-            <% } %>  
+            <% } else { %>
+                <a href="/postride/edit/<%= posts._id %>"  class="btn btn-primary">Edit Post</a>
+            <% } %>   
         </div>
         <br>
     </div>

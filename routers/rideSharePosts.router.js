@@ -80,16 +80,16 @@ router.post('/post/create/rideshare', authentication.checkAuthentication, async 
     let smoking = req.body.smoking;
     let luggage = req.body.luggage;
     if(req.body.luggage != 'on') {
-        luggage = "off"
+        luggage = "off";
     }
     if(req.body.smoking != 'on') {
-        smoking = "off"
+        smoking = "off";
     }
     var post  = new postsModel({username: req.user.username, userId: req.user._id, pickUp: req.body.pickUp, 
         dropOff:req.body.dropOff, radius: req.body.radius, perKm: req.body.perKm,
         pickUpPoint: {type: "Point", coordinates: [parseFloat(req.body.pickupLocationLng), parseFloat(req.body.pickupLocationLat),] },
         dropOffPoint: {type: "Point", coordinates: [parseFloat(req.body.dropoffLocationLng), parseFloat(req.body.dropoffLocationLat)] },
-        smoking:smoking, luggage: luggage, usermessage: req.body.message,
+        smoking:smoking, luggage: luggage, usermessage: req.body.message, profilePic: req.user.profilePic,
         date:req.body.date, seats:req.body.seats});
     await postsModel.create(post, (err, pos)=>{
         console.log(err);
@@ -101,6 +101,56 @@ router.post('/post/create/rideshare', authentication.checkAuthentication, async 
         console.log("New Post Saved");
         console.log(pos)
         return res.redirect('/postride/'+pos._id);
+    });
+});
+
+
+router.get('/myrideposts', authentication.checkAuthentication, async(req, res)=>{
+    const posts = await postsModel.find({username: req.user.username}, (err, res)=>{
+        if(err){
+            return res.status(404).send('No Ride Share posts found!');
+        }
+    });
+    res.locals.title = "My Ride Posts";
+    return res.render('myRidePosts.ejs', {user: req.user, posts: posts});
+});
+
+
+router.get('/postride/edit/:id', authentication.checkAuthentication, async (req, res)=>{
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        req.flash('error', "This post is either do not exist or is no longer available.");
+        return res.redirect('/')
+    }
+    const posts = await postsModel.find({_id: mongoose.Types.ObjectId(req.params.id)}, (err, res)=>{
+        if(err){
+            return res.status(404).send('No Ride Share posts found!');
+        }
+    });
+    if(posts.length == 0) {
+        req.flash('error', "This post is either do not exist or is no longer available.");
+        return res.redirect('/')
+    }
+    res.locals.title = "Edit Post";
+    return res.render('editRideShare.ejs', {user: req.user, posts: posts[0]});
+});
+
+router.post('/postride/edit/:id', authentication.checkAuthentication, async (req, res)=>{
+    let smoking = req.body.smoking;
+    let luggage = req.body.luggage;
+    if(req.body.luggage != 'on') {
+        luggage = "off";
+    }
+    if(req.body.smoking != 'on') {
+        smoking = "off";
+    }
+    var filter= {_id: req.params.id};
+    var update= {pickUp: req.body.pickUp, dropOff:req.body.dropOff, radius: req.body.radius, perKm: req.body.perKm,
+        pickUpPoint: {type: "Point", coordinates: [parseFloat(req.body.pickupLocationLng), parseFloat(req.body.pickupLocationLat),] },
+        dropOffPoint: {type: "Point", coordinates: [parseFloat(req.body.dropoffLocationLng), parseFloat(req.body.dropoffLocationLat)] },
+        smoking:smoking, luggage: luggage, usermessage: req.body.message, date:req.body.date, seats:req.body.seats};
+    await postsModel.findOneAndUpdate(filter, update, function(err, doc) {
+        if (err) return res.send(500, {error: err});
+        return res.redirect('/postride/'+req.params.id);
     });
 });
 

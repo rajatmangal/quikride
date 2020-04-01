@@ -1,0 +1,87 @@
+<%- include ('partials/header') %>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <div class="container">
+        <div class="card o-hidden border-0 shadow-lg my-5">
+          <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+              <div class="col-lg-2"></div>
+              <div class="col-lg-8">
+                <div class="p-5">
+                  <div class="text-center">
+                    <h1 class="h4 text-gray-900 mb-4">Edit Post!</h1>
+                  </div>
+                  <form class="user" action="/posts/edit/<%= posts._id %> " method='POST'>
+                    <div class="form-group row">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-user" id="PickUpLocation" value="<%= posts.pickuplocation %>" placeholder="Pick Up Location" name="pickupLocation" required>
+                      </div>
+                    <div class="form-group">
+                      <input type="text" class="form-control form-control-user" id="DropOffLocation" value="<%= posts.dropofflocation %>" placeholder="Drop Off Location" name="dropoffLocation" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea type="textarea" class="form-control" id="Description" placeholder="Message" name="description" rows="3" required><%= posts.usermessage %></textarea>
+                    </div>
+                    <input type="hidden" name="pickupLocationLat" value="<%= posts.pickupLocationLat %>" id="pickUpLocationLat">
+                    <input type="hidden" name="pickupLocationLng" value="<%= posts.pickupLocationLng %>" id="pickUpLocationLng">
+                    <input type="hidden" name="dropoffLocationLat" value="<%= posts.dropoffLocationLat %>" id="dropOffLocationLat">
+                    <input type="hidden" name="dropoffLocationLng" value="<%= posts.dropoffLocationLng %>" id="dropOffLocationLng">
+                    <button type="submit" class="btn btn-primary btn-user btn-block">Edit Post!</button>
+                </div>
+              </div>
+              <div class="col-lg-2"></div>
+            </div>
+          </div>
+        </div>
+    
+      </div>
+      <script>
+        function initMap() {
+          //To turn google place api on, replace the API key at the bottom and uncomment these 2 lines
+          var pickup = document.getElementById('PickUpLocation');
+          var dropoff = document.getElementById('DropOffLocation');
+  
+          var autocomplete = new google.maps.places.Autocomplete(pickup);
+          var autocomplete2 = new google.maps.places.Autocomplete(dropoff);
+  
+          // Bind the map's bounds (viewport) property to the autocomplete object,
+          // so that the autocomplete requests use the current map bounds for the
+          // bounds option in the request.
+  
+          // Set the data fields to return when the user selects a place.
+          autocomplete.setFields(
+              ['address_components', 'geometry', 'icon', 'name']);
+  
+          autocomplete.addListener('place_changed', function() {
+
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+              window.alert("No details available for input: '" + place.name + "'");
+              return;
+            } else {
+              document.getElementById('pickUpLocationLat').value = place.geometry.location.lat();
+              document.getElementById('pickUpLocationLng').value = place.geometry.location.lng();
+            }
+            
+          });
+          autocomplete2.setFields(
+              ['address_components', 'geometry', 'icon', 'name']);
+  
+          autocomplete2.addListener('place_changed', function() {
+
+            var place = autocomplete2.getPlace();
+            if (!place.geometry) {
+              window.alert("No details available for input: '" + place.name + "'");
+              return;
+            } else {
+              document.getElementById('dropOffLocationLat').value = place.geometry.location.lat();
+              document.getElementById('dropOffLocationLng').value = place.geometry.location.lng();
+            }
+            
+          });
+        }
+      </script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCESc_JeBGh3Hw1N-b-vhn0xJ83_QzVhno&libraries=places&callback=initMap" async defer></script>
+<%- include ('partials/footer') %>

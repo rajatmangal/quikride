@@ -26,60 +26,63 @@
     <br>
     <div class="container-fluid">
         <center><h1 class="text-dark mb-4"><%= user["firstName"] %>'s Profile</h1></center>
-        <div class="row">
-            <div class="col-4"></div>
-            <div class="col-4">
-                <div class="card mb-12">
-                    <div class="card-body text-center shadow">
-                        <img class="rounded-circle mb-3 mt-4" src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179865.jpg" alt="profile picture"
-                        width="160" height="160">
-                            <!-- <button class="btn btn-primary btn-sm" type="button">Change Photo</button> -->
-                            <input id="imgUpload" name="file" type="file" accept="image/png, image/jpeg" onchange="readURL(this);"/>​
+        <form action="/profile/edit/<%= user["username"] %>" method='POST' enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                    <div class="card mb-12">
+                        <div class="card-body text-center shadow">
+                            <% if(user["profilePic"] != "") { %>
+                                    <img id="profile_pic" class="rounded-circle mb-3 mt-4" src="/uploads/<%= user["profilePic"] %>" alt="profile picture" width="160" height="160">
+                              <% } else { %>
+                                    <img id="profile_pic" class="rounded-circle mb-3 mt-4" src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179865.jpg" alt="profile picture" width="160" height="160">
+                              <% } %>
+                                <!-- <button class="btn btn-primary btn-sm" type="button">Change Photo</button> -->
+                                <input id="imgUpload" name="file" type="file" accept="image/png, image/jpeg" onchange="readURL(this);"/>​
+                        </div>
                     </div>
                 </div>
+                <div class="col-4"></div>
             </div>
-            <div class="col-4"></div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-3"></div>
-            <div class="col-6">
-                <div class="card shadow mb-3">
-                    <div class="card-header py-3">
-                        <center><p class="text-primary m-0 font-weight-bold">User Profile</p></center>
-                    </div>
-                    <div class="card-body">
-                        <form action="/profile/edit/<%= user["username"] %>" method='POST'>
-                            <div class="form-group">
-                                <label for="uname"><strong>Username</strong></label>
-                                <input class="form-control" type="text" value=<%= user["username"] %> name="uname" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label for="email"><strong>Email Address</strong></label>
-                                <input class="form-control" type="email" value=<%= user["email"] %> name="email" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label for="fname"><strong>First Name</strong></label>
-                                <input class="form-control" type="text" value=<%= user["firstName"] %> name="fname">
-                            </div>
-                            <div class="form-group">
-                                <label for="lname"><strong>Last Name</strong></label>
-                                <input class="form-control" type="text" value=<%= user["lastName"] %> name="lname">
-                            </div>
-                            <div class="form-group">
-                                <label for="newPassword"><strong>Password</strong></label>
-                                <input id="newPassword" class="form-control" type="password" name="newPassword">
-                            </div>
-                            <div class="form-group">
-                                <label for="newPassword2"><strong>Confirm Password</strong></label>
-                                <input id="newPassword2" class="form-control" type="password" name="newPassword2">
-                            </div>
-                            <center><div class="form-group"><button class="btn btn-primary" type="submit" onclick="window.location.href = '/profile/edit/<%= user["username"] %>';">Edit Profile</button></div></center>
-                        </form>
+            <br>
+            <div class="row">
+                <div class="col-3"></div>
+                <div class="col-6">
+                    <div class="card shadow mb-3">
+                        <div class="card-header py-3">
+                            <center><p class="text-primary m-0 font-weight-bold">User Profile</p></center>
+                        </div>
+                        <div class="card-body">
+                                <div class="form-group">
+                                    <label for="uname"><strong>Username</strong></label>
+                                    <input class="form-control" type="text" value="<%= user["username"] %>" name="uname" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email"><strong>Email Address</strong></label>
+                                    <input class="form-control" type="email" value="<%= user["email"] %>" name="email" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fname"><strong>First Name</strong></label>
+                                    <input class="form-control" type="text" value="<%= user["firstName"] %>" name="fname">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lname"><strong>Last Name</strong></label>
+                                    <input class="form-control" type="text" value="<%= user["lastName"] %>" name="lname">
+                                </div>
+                                <div class="form-group">
+                                    <label for="newPassword"><strong>Password</strong></label>
+                                    <input id="newPassword" class="form-control" type="password" name="newPassword">
+                                </div>
+                                <div class="form-group">
+                                    <label for="newPassword2"><strong>Confirm Password</strong></label>
+                                    <input id="newPassword2" class="form-control" type="password" name="newPassword2">
+                                </div>
+                                <center><div class="form-group"><button class="btn btn-primary" type="submit" onclick="window.location.href = '/profile/edit/<%= user["username"] %>';">Edit Profile</button></div></center>
+                        </div>
                     </div>
                 </div>
+                <div class="col-3"></div>
             </div>
-            <div class="col-3"></div>
-        </div>
+        </form>
 
 <%- include ('partials/footer') %>

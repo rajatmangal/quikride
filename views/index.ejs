@@ -44,7 +44,11 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-3">
-                                    <img class="rounded-circle postpic" src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179865.jpg" alt="">
+                                    <% if(posts[i].profilePic != "") { %>
+                                        <img class="rounded-circle postpic" src="/uploads/<%= posts[i]["profilePic"] %>" alt="">
+                                    <% } else { %>
+                                        <img class="rounded-circle postpic" src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-260nw-418179865.jpg" alt="">
+                                    <% } %>
                                     <br>
                                     <br>
                                     Posted By: <%=posts[i].username%>
@@ -68,12 +72,12 @@
                                 <div class="col-1">
                                     <div class="vertical-line"></div>
                                 </div>
-                                <div class="col-2">
+                                <div class="col-2.5">
                                     <br>
-                                    <span><h2 class="price"><%= posts[i].perKm %></h2>$/seat</span>
+                                    <span><h3 class="price"><%= posts[i].perKm %></h3>$/seat</span>
                                     <br>
                                     <br>
-                                    <h2 class="price"><%= posts[i].seats %></h2> Seats Left
+                                    <h3 class="price"><%= posts[i].seats %></h3> Seats Left
                                 </div>
                             </div>
                         </div>

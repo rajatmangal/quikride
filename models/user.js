@@ -53,6 +53,10 @@ var UserSchema = new mongoose.Schema({
   isDriver: {
     type: Boolean,
     default: false
+  },
+  profilePic: {
+    type: String,
+    default: ''
   }
 });
 

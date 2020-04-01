@@ -1,0 +1,142 @@
+<%- include ('partials/header') %>
+    <div class="container">
+        <div class="card o-hidden border-0 shadow-lg my-5">
+          <div class="card-body p-0">
+            <div class="row">
+              <div class="col-lg-2"></div>
+              <div class="col-lg-8">
+                <div class="p-5">
+                  <div class="text-center">
+                    <h1 class="h4 text-gray-900 mb-4">Create a Ride Share Post!</h1>
+                  </div>
+                  <form class="user" action="/postride/edit/<%= posts._id %> " method='POST'>
+                    <div class="form-group row">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-user" id="pickUp" value="<%= posts.pickUp %>" placeholder="Pick Up Location" name="pickUp" required>
+                      </div>
+                    <div class="form-group">
+                      <input type="text" class="form-control form-control-user" id="dropOff" value="<%= posts.dropOff %>" placeholder="Drop Off Location" name="dropOff" required>
+                    </div>
+                    <div class="form-group">
+                      <input type="number" class="form-control form-control-user" id="seats" value="<%= posts.seats %>" placeholder="Number of Seats Available" name="seats" required>
+                    </div>
+                    <div class="form-group">
+                      <input type="text" class="form-control form-control-user" id="perKm" value="<%= posts.perKm %>" placeholder="$/seat" name="perKm" required>
+                    </div>
+                    <div class="form-group">
+                      <textarea type="textarea" class="form-control" id="Description" placeholder="Message" name="message" rows="3" required><%= posts.usermessage %></textarea>
+                    </div>
+                    <center>
+                      <div class="form-group">
+                        <label class="mr-3 ">Radius</label>
+                        <select class="form-control" id="radius" placeholder="Radius (km)" name="radius" required>
+                          <% if(posts.radius == 0) { %>
+                            <option value="0" selected>0 km</option>
+                          <% } else { %> 
+                            <option value="0">0 km</option>
+                          <% } %>
+                          <% if(posts.radius == 1) { %>
+                            <option value="1" selected>1 km</option>
+                          <% } else { %> 
+                            <option value="1">1 km</option>
+                          <% } %>
+                          <% if(posts.radius == 2) { %>
+                            <option value="2" selected>2 km</option>
+                          <% } else { %> 
+                            <option value="2">2 km</option>
+                          <% } %>
+                          <% if(posts.radius == 3) { %>
+                            <option value="3" selected>3 km</option>
+                          <% } else { %> 
+                            <option value="3">3 km</option>
+                          <% } %>  
+                        </select>
+                    </div>
+                      Date of Pickup</center>
+                    <div class="form-group">
+                      <input type="date" class="form-control form-control-user" id="Date" value="<%= posts.date %>" placeholder="Pickup Date (Please Write in format dd/mm/yyyy)" name="date" required>
+                    </div>
+                    <center>
+                      Preferences
+                      <div class="row">
+                        <div class="custom-control custom-checkbox col-6">
+                            <% if(posts.smoking == 'on') { %>
+                                <input type="checkbox" class="custom-control-input" id="customCheck1" name="smoking" checked="checked">    
+                            <% } else { %> 
+                                <input type="checkbox" class="custom-control-input" id="customCheck1" name="smoking">
+                            <% } %>  
+                            <label class="custom-control-label" for="customCheck1">No Smoking</label>
+                        </div>
+                        <div class="custom-control custom-checkbox col-6">
+                            <% if(posts.luggage == 'on') { %>
+                                <input type="checkbox" class="custom-control-input" id="customCheck2" name="luggage" checked="checked">    
+                            <% } else { %> 
+                                <input type="checkbox" class="custom-control-input" id="customCheck2" name="luggage">
+                            <% } %>
+                            <label class="custom-control-label" for="customCheck2">Luggage Option available</label>
+                      </div>
+                    </center>
+                    <br>
+                    <button type="submit" class="btn btn-primary btn-user btn-block">Edit Post!</button>
+                    <input type="hidden" name="pickupLocationLat" value="<%= posts.pickUpPoint.coordinates[1] %>" id="pickUpLocationLat">
+                    <input type="hidden" name="pickupLocationLng" value="<%= posts.pickUpPoint.coordinates[0] %>" id="pickUpLocationLng">
+                    <input type="hidden" name="dropoffLocationLat" value="<%= posts.dropOffPoint.coordinates[1] %>" id="dropOffLocationLat">
+                    <input type="hidden" name="dropoffLocationLng" value="<%= posts.dropOffPoint.coordinates[0] %>" id="dropOffLocationLng">
+                    </form>
+                </div>
+              </div>
+              <div class="col-lg-2"></div>
+            </div>
+          </div>
+        </div>
+    
+      </div>
+      <script>
+        function initMap() {
+          //To turn google place api on, replace the API key at the bottom and uncomment these 2 lines
+          var pickup = document.getElementById('pickUp');
+          var dropoff = document.getElementById('dropOff');
+  
+          var autocomplete = new google.maps.places.Autocomplete(pickup);
+          var autocomplete2 = new google.maps.places.Autocomplete(dropoff);
+  
+          // Bind the map's bounds (viewport) property to the autocomplete object,
+          // so that the autocomplete requests use the current map bounds for the
+          // bounds option in the request.
+  
+          // Set the data fields to return when the user selects a place.
+          autocomplete.setFields(
+              ['address_components', 'geometry', 'icon', 'name']);
+  
+          autocomplete.addListener('place_changed', function() {
+
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+              window.alert("No details available for input: '" + place.name + "'");
+              return;
+            } else {
+              document.getElementById('pickUpLocationLat').value = place.geometry.location.lat();
+              document.getElementById('pickUpLocationLng').value = place.geometry.location.lng();
+            }
+            
+          });
+          autocomplete2.setFields(
+              ['address_components', 'geometry', 'icon', 'name']);
+  
+          autocomplete2.addListener('place_changed', function() {
+
+            var place = autocomplete2.getPlace();
+            if (!place.geometry) {
+              window.alert("No details available for input: '" + place.name + "'");
+              return;
+            } else {
+              document.getElementById('dropOffLocationLat').value = place.geometry.location.lat();
+              document.getElementById('dropOffLocationLng').value = place.geometry.location.lng();
+            }
+            
+          });
+        }
+      </script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCESc_JeBGh3Hw1N-b-vhn0xJ83_QzVhno&libraries=places&callback=initMap" async defer></script>
+<%- include ('partials/footer') %>
