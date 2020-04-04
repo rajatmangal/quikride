@@ -59,7 +59,7 @@ router.get('/postride/:id', authentication.checkAuthentication, async (req, res)
         }
 
     });
-    return res.render('postDisplay.ejs', {user: req.user, driver: driver,posts: posts[0], groupId:groupId});
+    return res.render('postdisplay.ejs', {user: req.user, driver: driver,posts: posts[0], groupId:groupId});
 });
 
 router.post('/postride/:id', authentication.checkAuthentication, async (req, res)=>{
