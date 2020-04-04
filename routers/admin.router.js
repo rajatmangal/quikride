@@ -6,6 +6,11 @@ const users = require('../models/user')
 const drivers = require('../models/drivers')
 const messages = require('../models/messages')
 const thread = require('../models/thread')
+const rides = require('../models/shareRidePosts')
+const posts = require('../models/posts')
+const rideRequests = require('../models/ridesrequest')
+
+
 AdminBro.registerAdapter(AdminBroMongoose)
 const adminBro = new AdminBro({
   databases: [mongoose],
@@ -47,6 +52,33 @@ const adminBro = new AdminBro({
       parent: {
           name: 'Chat Messenger',
           icon: 'fas fa-comments',
+      }
+    }
+},
+{
+    resource: rides,
+    options:{
+      parent: {
+          name: 'Rides',
+          icon: 'far fa-file',
+      }
+    }
+},
+{
+    resource: posts,
+    options:{
+      parent: {
+          name: 'Rides',
+          icon: 'far fa-file',
+      }
+    }
+},
+{
+    resource: rideRequests,
+    options:{
+      parent: {
+          name: 'Rides',
+          icon: 'far fa-file',
       }
     }
 }],
