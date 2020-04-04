@@ -26,7 +26,7 @@ router.get('/postride/:id', authentication.checkAuthentication, async (req, res)
     }
     const posts = await postsModel.find({_id: mongoose.Types.ObjectId(req.params.id)}, (err, res)=>{
         if(err){
-            return res.status(404).send('No Ride Share posts found!');
+            console.log(err);
         }
     });
     if(posts.length == 0) {
@@ -35,7 +35,7 @@ router.get('/postride/:id', authentication.checkAuthentication, async (req, res)
     }
     const driver = await drivers.find({username: posts[0].username}, (err, res)=>{
         if(err){
-            return res.status(404).send('No Ride Share posts found!');
+            console.log(err);
         }
     });
     res.locals.title = "Posts";
@@ -48,7 +48,8 @@ router.get('/postride/:id', authentication.checkAuthentication, async (req, res)
         console.log("res1 is ", res1);
         if(res1===null) {
             groupId = id2._id.toString()+ req.user._id.toString()
-            var newThread = new thread({ users: [req.body.rider, req.body.driver], group_name: id2._id.toString()+ req.user._id.toString(), created_by: new mongoose.Types.ObjectId(), created_at: new Date().getTime(), id: req.user._id, last_message: "", last_sender: "", last_updated: new Date().getTime()});
+            var newThread = new thread({ users: [req.user.username, id2.username], group_name: id2._id.toString()+ req.user._id.toString(), created_by: new mongoose.Types.ObjectId(), created_at: new Date().getTime(), id: req.user._id, last_message: "", last_sender: "", last_updated: new Date().getTime()});
+            console.log("Hello");
             await thread.create(newThread, (err,res2) => {
                  if(err) {
                      throw err;
