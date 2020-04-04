@@ -48,7 +48,7 @@ router.get('/postride/:id', authentication.checkAuthentication, async (req, res)
         console.log("res1 is ", res1);
         if(res1===null) {
             groupId = id2._id.toString()+ req.user._id.toString()
-            var newThread = new thread({ users: [req.body.rider, req.body.driver], group_name: id2._id.toString()+ req.user._id.toString(), created_by: new mongoose.Types.ObjectId(), created_at: new Date().getTime(), id: id1._id, last_message: "", last_sender: "", last_updated: new Date().getTime()});
+            var newThread = new thread({ users: [req.body.rider, req.body.driver], group_name: id2._id.toString()+ req.user._id.toString(), created_by: new mongoose.Types.ObjectId(), created_at: new Date().getTime(), id: req.user._id, last_message: "", last_sender: "", last_updated: new Date().getTime()});
             await thread.create(newThread, (err,res2) => {
                  if(err) {
                      throw err;
