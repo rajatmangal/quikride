@@ -56,27 +56,27 @@ formData.addEventListener('submit', (e) => {
     }
 });
 
-sendLoc.addEventListener('click', (e) => {
-    if( !navigator.geolocation ) {
-        return alert('Geolocation is not supported by your browser.')
-    }
-    navigator.geolocation.getCurrentPosition( (position) => {
-        // console.log("start");
-        sendMessage.setAttribute('disabled','disabled');
-        sendLoc.setAttribute('disabled','disabled');
-        socket.emit('location', {
-            lat: position.coords.latitude,
-            lon: position.coords.longitude,
-            username:username,
-            id:id
-        }, (message) => {
-            // console.log(message);
-            // console.log("start");
-            sendMessage.removeAttribute('disabled');
-            sendLoc.removeAttribute('disabled');
-        })
-    });
-});
+// sendLoc.addEventListener('click', (e) => {
+//     if( !navigator.geolocation ) {
+//         return alert('Geolocation is not supported by your browser.')
+//     }
+//     navigator.geolocation.getCurrentPosition( (position) => {
+//         // console.log("start");
+//         sendMessage.setAttribute('disabled','disabled');
+//         sendLoc.setAttribute('disabled','disabled');
+//         socket.emit('location', {
+//             lat: position.coords.latitude,
+//             lon: position.coords.longitude,
+//             username:username,
+//             id:id
+//         }, (message) => {
+//             // console.log(message);
+//             // console.log("start");
+//             sendMessage.removeAttribute('disabled');
+//             sendLoc.removeAttribute('disabled');
+//         })
+//     });
+// });
 socket.emit("read", {
     id: id,
     username: username

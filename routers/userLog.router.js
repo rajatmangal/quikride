@@ -65,10 +65,16 @@ router.get('/rate/:id/:rating', authentication.checkAuthentication, async (req, 
     console.log('happy ' + id);
     var rid = (req.params.rating);
     console.log('happy ' + rid);
+    var driver = await ridesModel.findOne({_id: id}, async (err, res1) => {
+        if(err1) {
+            console.log(err);
+        }
+    })
     var rideRating = new rideRatingModel({
         rideRequestId: id,
         rider: req.user.username,
-        rating: rid
+        rating: rid,
+        driver: driver.driver
     });
     await rideRatingModel.create(rideRating, (err, pos)=>{
         if(err) {
