@@ -22,15 +22,7 @@
                       <h5 class="card-title"><strong>Pick Up: </strong><%= activeRequests[i].pickup%></h5>
                       <h5 class="card-title"><strong>Drop off: </strong><%= activeRequests[i].dropoff%></h5>
                       <p class="card-text"><strong>Message: </strong><%= activeRequests[i].message%></p>
-                      <%if (isDriver) {%>
-                      <form  method="post">
-                          <%if(activeRequests[i].status==="accepted"){%>
-                            <button type="submit" formaction="/start/<%= activeRequests[i]._id %>" class="btn btn-success">Start</button>
-                          <%} if(activeRequests[i].status==="started") {%>
-                        <button type="submit" formaction="/end/<%= activeRequests[i]._id %>" class="btn btn-warning">End</button>
-                        <%}%>
-                      </form>
-                      <%} if(rated) {%>
+                      <% if(rated) {%>
                         <p> Rated : <%= rating %></p>
                         <% } if(!rated && !isDriver) {%>
                         <div class="dropdown show" style="margin-left: 10px;" disabled>
@@ -45,6 +37,15 @@
                             <a type="button" class="dropdown-item" href="/rate/<%= activeRequests[0]._id %>/5">5</a>
                           </div>
                         </div>
+                      <%}%>
+                      <%if (isDriver) {%>
+                      <form  method="post">
+                          <%if(activeRequests[i].status==="accepted"){%>
+                            <button type="submit" formaction="/start/<%= activeRequests[i]._id %>" class="btn btn-success">Start</button>
+                          <%} if(activeRequests[i].status==="started") {%>
+                        <button type="submit" formaction="/end/<%= activeRequests[i]._id %>" class="btn btn-warning">End</button>
+                        <%}%>
+                      </form>
                       <%}%>
                     </div>
                   </div>

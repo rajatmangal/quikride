@@ -14,6 +14,10 @@ var rideRating = new mongoose.Schema({
     rating: {
         type: String,
         required: true
+    },
+    driver: {
+        type: String,
+        required: true
     }
 });
 
