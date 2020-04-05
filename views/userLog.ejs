@@ -30,6 +30,21 @@
                         <button type="submit" formaction="/end/<%= activeRequests[i]._id %>" class="btn btn-warning">End</button>
                         <%}%>
                       </form>
+                      <%} if(rated) {%>
+                        <p> Rated : <%= rating %></p>
+                        <% } if(!rated && !isDriver) {%>
+                        <div class="dropdown show" style="margin-left: 10px;" disabled>
+                          <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                            Rate Driver:
+                          </a>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="/rate/<%= activeRequests[0]._id %>/1">1</a>
+                            <a class="dropdown-item" href="/rate/<%= activeRequests[0]._id %>/2">2</a>
+                            <a type="button" class="dropdown-item" href="/rate/<%= activeRequests[0]._id %>/3">3</a>
+                            <a type="button" class="dropdown-item" href="/rate/<%= activeRequests[0]._id %>/4">4</a>
+                            <a type="button" class="dropdown-item" href="/rate/<%= activeRequests[0]._id %>/5">5</a>
+                          </div>
+                        </div>
                       <%}%>
                     </div>
                   </div>
