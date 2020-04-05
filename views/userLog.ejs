@@ -22,6 +22,22 @@
                       <h5 class="card-title"><strong>Pick Up: </strong><%= activeRequests[i].pickup%></h5>
                       <h5 class="card-title"><strong>Drop off: </strong><%= activeRequests[i].dropoff%></h5>
                       <p class="card-text"><strong>Message: </strong><%= activeRequests[i].message%></p>
+                      <% if(rated) {%>
+                        <p> Rated : <%= rating %></p>
+                        <% } if(!rated && !isDriver) {%>
+                        <div class="dropdown show" style="margin-left: 10px;" disabled>
+                          <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                            Rate Driver:
+                          </a>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="/rate/<%= activeRequests[0]._id %>/1">1</a>
+                            <a class="dropdown-item" href="/rate/<%= activeRequests[0]._id %>/2">2</a>
+                            <a type="button" class="dropdown-item" href="/rate/<%= activeRequests[0]._id %>/3">3</a>
+                            <a type="button" class="dropdown-item" href="/rate/<%= activeRequests[0]._id %>/4">4</a>
+                            <a type="button" class="dropdown-item" href="/rate/<%= activeRequests[0]._id %>/5">5</a>
+                          </div>
+                        </div>
+                      <%}%>
                       <%if (isDriver) {%>
                       <form  method="post">
                           <%if(activeRequests[i].status==="accepted"){%>

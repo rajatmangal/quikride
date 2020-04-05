@@ -4,6 +4,7 @@ const drivers = require('../models/drivers');
 const User = require('../models/user');
 const thread = require('../models/thread');
 const ride = require('../models/ridesrequest');
+const rideRating = require('../models/rideRating');
 const authentication = require('../utils/authentication.util');
 const chatUtil = require('../chat/chat-utils');
 const Joi = require('joi');
@@ -60,7 +61,17 @@ router.get('/postride/:id', authentication.checkAuthentication, async (req, res)
         }
 
     });
-    return res.render('postdisplay.ejs', {user: req.user, driver: driver,posts: posts[0], groupId:groupId});
+    ratings = await rideRating.find({driver: driver.username}, async (err, res) => {
+        if(err) {
+            console.log(err);
+        }
+    })
+    var avgRating = 0;
+    for(let i = 0 ; i < ratings.length ; i++) {
+        avgRating += ratings[i].rating;
+    }
+    avgRating = avgRating/ratings.length;
+    return res.render('postdisplay.ejs', {user: req.user, driver: driver,posts: posts[0], groupId:groupId, avgRating:avgRating});
 });
 
 router.post('/postride/:id', authentication.checkAuthentication, async (req, res)=>{

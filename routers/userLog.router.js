@@ -1,5 +1,6 @@
 const express = require('express');
 const ridesModel = require('../models/ridesrequest');
+const rideRatingModel = require('../models/rideRating');
 const authentication = require('../utils/authentication.util');
 const Joi = require('joi');
 const router = new express.Router();
@@ -8,6 +9,8 @@ router.get('/userLogs', authentication.checkAuthentication, async (req, res)=>{
     const isDriver = req.user.isDriver;
     activeRequests = [];
     var query = {};
+    var rated = false ;
+    var rating  = 0 ;
     if(isDriver){
         query = {$and: [{driver:req.user.username}, {status:'started'}]};
         queryStarted = {$and:[{driver: req.user.username}]};
@@ -29,8 +32,20 @@ router.get('/userLogs', authentication.checkAuthentication, async (req, res)=>{
             return ;
         }
     });     
+    if(activeRequests.length > 0 ){
+        const rideRating  = await rideRatingModel.find({rideRequestId: activeRequests[0]._id}, (err, res)=>{
+            if(err){
+                return ;
+            }
+        });
+        if(rideRating.length>0){
+            console.log("rated ");
+            rated = true ;
+            rating =rideRating[0].rating ;
+        }
+    }
     res.locals.title = "User Log";
-    return res.render('userLog.ejs', {activeRequests: activeRequests, historical: historical, isDriver: isDriver, user:req.user});
+    return res.render('userLog.ejs', {activeRequests: activeRequests, historical: historical, isDriver: isDriver, user:req.user, rated:rated, rating: rating});
 });
 
 router.post('/start/:id', authentication.checkAuthentication, async (req, res)=>{
@@ -43,6 +58,33 @@ router.post('/start/:id', authentication.checkAuthentication, async (req, res)=>
         }
     });
     return res.redirect('/userLogs');
+});
+
+router.get('/rate/:id/:rating', authentication.checkAuthentication, async (req, res)=>{
+    var id = (req.params.id);
+    console.log('happy ' + id);
+    var rid = (req.params.rating);
+    console.log('happy ' + rid);
+    var driver = await ridesModel.findOne({_id: id}, async (err, res1) => {
+        if(err1) {
+            console.log(err);
+        }
+    })
+    var rideRating = new rideRatingModel({
+        rideRequestId: id,
+        rider: req.user.username,
+        rating: rid,
+        driver: driver.driver
+    });
+    await rideRatingModel.create(rideRating, (err, pos)=>{
+        if(err) {
+            req.flash('error', err.message);
+            return ;
+        }
+        console.log("New Rating Saved");
+        return res.redirect('/userLogs');
+    });
+    
 });
 
 

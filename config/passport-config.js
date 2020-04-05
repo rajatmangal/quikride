@@ -55,6 +55,7 @@ passport.use(new FacebookStrategy({
         newUser.username = profile.displayName;
         newUser.email = profile.emails[0].value;
         newUser.emailConfirmed = true;
+        newUser.linkExpires = 0;
 
         newUser.save(function(err) {
           if (err) {throw err;}
@@ -82,6 +83,7 @@ passport.use(new GoogleStrategy({
           newUser.username = profile.displayName;
           newUser.email = profile.emails[0].value;
           newUser.emailConfirmed = true;
+          newUser.linkExpires = 0;
 
           newUser.save(function(err) {
             if (err) {throw err;}
