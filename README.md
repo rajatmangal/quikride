@@ -12,12 +12,12 @@ Canada is currently lagging in carpooling technologies and this application atte
 
 ## How to Run the Application:
 * Clone this repository.
-* Now go inside the root folder and do npm install (to install all the required packages).
+* Now go inside the root folder and do `npm install` (to install all the required packages).
 * Make a new .env file in the root repository.
 * Add a variable SESSION_SECRET and assign it to anything for instance 
 	<p align="center">"SESSION_SECRET = "rdcfubuigbuyibuyfhjvuyvkjbivujycv"</p>
 * Make sure that your Mongo Server is up and running on your local host.
-* To Start the app, run npm run start in out CLI.
+* To Start the app, run `npm run start` in out CLI.
 
 ## Technologies Used:
 * Node.js
