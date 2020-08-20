@@ -13,7 +13,7 @@
     "admin-bro": "^1.6.6",
     "admin-bro-expressjs": "^0.4.0",
     "admin-bro-mongoose": "^0.4.0",
-    "bcrypt": "^3.0.8",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "chai": "^4.2.0",
     "cookie-parser": "^1.4.4",
